@@ -9,7 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.4.3"
+    "astro": "^5.4.3",
+    "astro-icon": "^1.1.5"
   },
   "devDependencies": {
     "@unocss/reset": "^66.1.0-beta.3",
