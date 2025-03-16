@@ -8,12 +8,12 @@ const navData = [
     path: "/projects/"
   },
   {
-    name: "Contact us",
-    path: "/contact/"
+    name: "Blog",
+    path: "/blog/"
   },
   {
-    name: "Workflow",
-    path: "/workflow/"
+    name: "Contact",
+    path: "/contact/"
   }
 ]
 
