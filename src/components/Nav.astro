@@ -2,33 +2,37 @@
 import { Icon } from 'astro-icon/components';
 import navData from '../data/navdata';
 import Link from './Link.astro';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
-<nav aria-label="Primary" class="w-full bg-white/80 backdrop-blur-sm shadow-sm">
+<nav aria-label="Primary" class="w-full bg-background/80 backdrop-blur-sm shadow-sm dark:shadow-gray-800">
   <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
     <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity" aria-label="Go home">
       <Icon name="logomark" class="w-12 h-12" />
     </a>
-    <ul class="flex gap-6 items-center">
-      {
-        navData.map((item) => (
-          <li>
-            <Link
-              text={item.name}
-              href={item.path}
-              style="secondary"
-              isFilled={false}
-              data-navLink
-              icon={{
-                name: "lets-icons:alarmclock",
-                side: "left"
-              }}
-              classes="text-gray-700 hover:text-gray-900 transition-colors"
-            />
-          </li>
-        ))
-      }
-    </ul>
+    <div class="flex items-center gap-6">
+      <ul class="flex gap-6 items-center">
+        {
+          navData.map((item) => (
+            <li>
+              <Link
+                text={item.name}
+                href={item.path}
+                style="secondary"
+                isFilled={false}
+                data-navLink
+                icon={{
+                  name: "lets-icons:alarmclock",
+                  side: "left"
+                }}
+                classes="text-text hover:text-text-secondary transition-colors"
+              />
+            </li>
+          ))
+        }
+      </ul>
+      <ThemeToggle />
+    </div>
   </div>
 </nav>
 

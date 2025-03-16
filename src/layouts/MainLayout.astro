@@ -15,7 +15,7 @@ const {
 <!doctype html>
 <html lang="en" class="w-full h-full select-none">
 	<MainHead {title} {description} {image} {robots} {project}/>
-	<body class="flex flex-col min-h-screen w-full m-0">
+	<body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
 		<Nav class="sticky top-0 z-50" />
 		<main class="flex-grow">
 			<slot />
@@ -42,6 +42,26 @@ const {
 </script>
 
 <style is:global>
+	:root {
+		/* 浅色模式变量 */
+		--color-primary: #3b82f6;
+		--color-primary-dark: #2563eb;
+		--color-background: #ffffff;
+		--color-background-secondary: #f3f4f6;
+		--color-text: #1f2937;
+		--color-text-secondary: #4b5563;
+	}
+
+	:root.dark {
+		/* 深色模式变量 */
+		--color-primary: #60a5fa;
+		--color-primary-dark: #3b82f6;
+		--color-background: #111827;
+		--color-background-secondary: #1f2937;
+		--color-text: #f9fafb;
+		--color-text-secondary: #e5e7eb;
+	}
+
 	img {
 		-webkit-user-drag: none;
 		-khtml-user-drag: none;

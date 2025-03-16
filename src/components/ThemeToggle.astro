@@ -1,0 +1,57 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<button 
+  id="theme-toggle" 
+  aria-label="切换深色模式"
+  class="flex items-center justify-center p-2 rounded-full bg-background-secondary text-text hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+>
+  <Icon name="lets-icons:sun" class="w-5 h-5 theme-light hidden" />
+  <Icon name="lets-icons:moon" class="w-5 h-5 theme-dark hidden" />
+</button>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const lightIcon = document.querySelector('.theme-light');
+  const darkIcon = document.querySelector('.theme-dark');
+  
+  // 检查当前主题或系统偏好
+  function getTheme() {
+    if (localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  
+  // 应用主题
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      lightIcon.classList.remove('hidden');
+      darkIcon.classList.add('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      lightIcon.classList.add('hidden');
+      darkIcon.classList.remove('hidden');
+    }
+    localStorage.setItem('theme', theme);
+  }
+  
+  // 初始化主题
+  applyTheme(getTheme());
+  
+  // 监听切换按钮点击
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = getTheme();
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+  });
+  
+  // 监听系统主题偏好变化
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(matches ? 'dark' : 'light');
+    }
+  });
+</script> 
