@@ -19,13 +19,13 @@ import { Icon } from 'astro-icon/components';
   // 檢查當前主題或系統偏好
   function getTheme() {
     if (localStorage.getItem('theme')) {
-      return localStorage.getItem('theme');
+      return localStorage.getItem('theme') ?? 'light';
     }
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   
   // 套用主題
-  function applyTheme(theme: string | null) {
+  function applyTheme(theme: string) {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
       lightIcon?.classList.remove('hidden');
@@ -33,7 +33,7 @@ import { Icon } from 'astro-icon/components';
     } else {
       document.documentElement.classList.remove('dark');
       lightIcon?.classList.add('hidden');
-      darkIcon.classList.remove('hidden');
+      darkIcon?.classList.remove('hidden');
     }
     localStorage.setItem('theme', theme);
   }
