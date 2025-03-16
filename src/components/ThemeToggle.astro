@@ -16,7 +16,7 @@ import { Icon } from 'astro-icon/components';
   const lightIcon = document.querySelector('.theme-light');
   const darkIcon = document.querySelector('.theme-dark');
   
-  // 检查当前主题或系统偏好
+  // 檢查當前主題或系統偏好
   function getTheme() {
     if (localStorage.getItem('theme')) {
       return localStorage.getItem('theme');
@@ -24,31 +24,31 @@ import { Icon } from 'astro-icon/components';
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   
-  // 应用主题
-  function applyTheme(theme) {
+  // 套用主題
+  function applyTheme(theme: string | null) {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
-      lightIcon.classList.remove('hidden');
-      darkIcon.classList.add('hidden');
+      lightIcon?.classList.remove('hidden');
+      darkIcon?.classList.add('hidden');
     } else {
       document.documentElement.classList.remove('dark');
-      lightIcon.classList.add('hidden');
+      lightIcon?.classList.add('hidden');
       darkIcon.classList.remove('hidden');
     }
     localStorage.setItem('theme', theme);
   }
   
-  // 初始化主题
+  // 初始化主題
   applyTheme(getTheme());
   
-  // 监听切换按钮点击
-  themeToggle.addEventListener('click', () => {
+  // 監聽切換按鈕點擊
+  themeToggle?.addEventListener('click', () => {
     const currentTheme = getTheme();
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     applyTheme(newTheme);
   });
   
-  // 监听系统主题偏好变化
+  // 監聽系統主題偏好變化
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
     if (!localStorage.getItem('theme')) {
       applyTheme(matches ? 'dark' : 'light');
