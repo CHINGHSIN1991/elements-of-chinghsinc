@@ -1,0 +1,40 @@
+/* 基礎變量 */
+:root {
+  /* 淺色模式變量 */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-background: #ffffff;
+  --color-background-secondary: #f3f4f6;
+  --color-text: #1f2937;
+  --color-text-secondary: #4b5563;
+}
+
+/* 深色模式變量 */
+:root.dark {
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-background: #111827;
+  --color-background-secondary: #1f2937;
+  --color-text: #f9fafb;
+  --color-text-secondary: #e5e7eb;
+}
+
+/* 全局樣式 */
+html {
+  @apply w-full h-full select-none;
+}
+
+body {
+  @apply flex flex-col min-h-screen w-full m-0 
+         bg-background text-text 
+         transition-colors duration-300;
+}
+
+/* 禁用圖片拖拽 */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}

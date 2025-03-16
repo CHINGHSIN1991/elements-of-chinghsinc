@@ -4,6 +4,10 @@ import MainHead from "./MainHead.astro"
 import Nav from "../components/Nav.astro"
 import Footer from "../components/Footer.astro"
 
+// styles import
+import "../styles/theme.css"
+import "../styles/components.css"
+
 const {
   title = "My Astro Blog",
   description = "My musings about the Astro framework",
@@ -41,32 +45,3 @@ const {
 	document.addEventListener('dragstart', disableSelection);
 </script>
 
-<style is:global>
-	:root {
-		/* 浅色模式变量 */
-		--color-primary: #3b82f6;
-		--color-primary-dark: #2563eb;
-		--color-background: #ffffff;
-		--color-background-secondary: #f3f4f6;
-		--color-text: #1f2937;
-		--color-text-secondary: #4b5563;
-	}
-
-	:root.dark {
-		/* 深色模式变量 */
-		--color-primary: #60a5fa;
-		--color-primary-dark: #3b82f6;
-		--color-background: #111827;
-		--color-background-secondary: #1f2937;
-		--color-text: #f9fafb;
-		--color-text-secondary: #e5e7eb;
-	}
-
-	img {
-		-webkit-user-drag: none;
-		-khtml-user-drag: none;
-		-moz-user-drag: none;
-		-o-user-drag: none;
-		user-drag: none;
-	}
-</style>

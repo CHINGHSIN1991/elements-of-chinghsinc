@@ -1,0 +1,56 @@
+/* 專案卡片樣式 */
+.project-card {
+  @apply bg-background-secondary 
+         rounded-lg overflow-hidden 
+         shadow-md hover:shadow-lg 
+         transition-shadow duration-300;
+}
+
+/* 頭部橫幅樣式 */
+.page-header {
+  @apply relative w-full h-[60vh] min-h-[400px] mb-8;
+}
+
+.header-overlay {
+  @apply absolute inset-0 bg-black/50;
+}
+
+.header-content {
+  @apply relative h-full max-w-7xl mx-auto px-4 
+         flex flex-col justify-end pb-16;
+}
+
+/* 標籤樣式 */
+.tag {
+  @apply px-3 py-1 rounded-full text-sm 
+         bg-primary text-white;
+}
+
+.tag-secondary {
+  @apply px-3 py-1 rounded-full text-sm 
+         bg-background-secondary/20 text-white;
+}
+
+/* 網格布局 */
+.auto-grid {
+  @apply grid gap-4 my-8;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* 側邊欄樣式 */
+.sidebar {
+  @apply w-80 space-y-8;
+}
+
+.sidebar-widget {
+  @apply bg-background-secondary p-6 rounded-lg;
+}
+
+/* 主題切換按鈕 */
+.theme-toggle {
+  @apply flex items-center justify-center p-2 
+         rounded-full bg-background-secondary 
+         text-text hover:bg-gray-200 
+         dark:hover:bg-gray-700 
+         transition-colors;
+}
