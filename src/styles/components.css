@@ -54,3 +54,59 @@
          dark:hover:bg-gray-700 
          transition-colors;
 }
+
+/* 使用 UnoCSS 特性的新組件 */
+
+/* 玻璃效果卡片 */
+.glass-card {
+  @apply glass-0.2 backdrop-blur rounded-xl p-6;
+}
+
+/* 漸變按鈕 */
+.gradient-btn {
+  @apply btn bg-gradient-to-r from-blue-500 to-purple-500 
+         text-white hover:(from-blue-600 to-purple-600)
+         dark:(from-blue-400 to-purple-400);
+}
+
+/* 動畫卡片 */
+.animated-card {
+  @apply card transition-all duration-300 
+         hover:(translate-y-[-5px] shadow-lg);
+}
+
+/* 注意區塊 */
+.notice {
+  @apply p-4 border-l-4 rounded-r mb-4;
+}
+
+.notice.info {
+  @apply border-blue-500 bg-blue-50 text-blue-800
+         dark:(border-blue-400 bg-blue-900/20 text-blue-300);
+}
+
+.notice.warning {
+  @apply border-yellow-500 bg-yellow-50 text-yellow-800
+         dark:(border-yellow-400 bg-yellow-900/20 text-yellow-300);
+}
+
+.notice.error {
+  @apply border-red-500 bg-red-50 text-red-800
+         dark:(border-red-400 bg-red-900/20 text-red-300);
+}
+
+/* 響應式容器 */
+.responsive-container {
+  @apply w-full px-4 mx-auto
+         sm:max-w-[540px]
+         md:max-w-[720px]
+         lg:max-w-[960px]
+         xl:max-w-[1140px]
+         2xl:max-w-[1320px];
+}
+
+/* 加載動畫 */
+.spinner {
+  @apply w-8 h-8 border-[3px] border-transparent rounded-full
+         border-t-primary animate-spin;
+}
