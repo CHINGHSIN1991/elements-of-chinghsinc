@@ -25,12 +25,6 @@ export function formatDate(date: Date) {
   })
 }
 
-export function getImagePath(path: string) {
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  const baseUrl = import.meta.env.DEV ? 'public' : '';
-  return `${baseUrl}/${cleanPath}`;
-}
-
 export function formatProjectPost(posts: Project[], {
   filterOutDrafts = true,
   filterOutFuturePosts = true,
