@@ -1,8 +1,9 @@
 ---
 // component import
 import MainHead from "./MainHead.astro"
-import Nav from "../components/Nav.astro"
+import NavReact from "../components/Nav.tsx"
 import Footer from "../components/Footer.astro"
+import { ViewTransitions } from 'astro:transitions';
 
 // styles import
 import "../styles/theme.css"
@@ -19,12 +20,15 @@ const {
 <!doctype html>
 <html lang="en" class="w-full h-full select-none">
 	<MainHead {title} {description} {image} {robots} {project}/>
+	<head>
+		<ViewTransitions />
+	</head>
 	<body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
-		<Nav class="sticky top-0 z-50" />
-		<main class="flex-grow">
+		<NavReact client:load />
+		<main class="flex-grow" transition:animate="slide">
 			<slot />
 		</main>
-		<Footer class="mt-auto" />
+		<Footer class="mt-auto" transition:persist />
 	</body>
 </html>
 
