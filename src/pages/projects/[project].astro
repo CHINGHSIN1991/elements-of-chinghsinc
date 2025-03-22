@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import { slugify } from '../../ts/utils';
+
+export async function getStaticPaths() {
+  const allProjects = await getCollection('projects');
+  console.log(allProjects);
+  return allProjects.map(project => ({
+    params: { post: slugify(project.data.title) },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+
+if (!project) {
+  return Astro.redirect('/404');
+}
+
+---
+
+<ProjectLayout project={project}>
+  <div>
+    <h1>{project.data.title}</h1>
+  </div>
+</ProjectLayout>
+
+<style>
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.5s ease-out;
+  }
+</style>
