@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import MainLayout from "./MainLayout.astro";
+import PostHeader from "../components/PostHeader.astro";
+
+interface ProjectFrontmatter {
+  draft: boolean;
+  title: string;
+  description: string;
+  date: Date;
+  category: string;
+  designers: string[];
+  cover: {
+    src: string;
+    alt: string;
+  };
+  images?: {
+    src: string;
+    alt: string;
+  }[];
+}
+
+const allProjects = await getCollection('projects', ({ data }: CollectionEntry<'projects'>) => {
+  return !data.draft;
+});
+
+const { project } = Astro.props;
+
+const {
+  title,
+  description,
+  date,
+  category,
+  designers,
+  cover,
+  images,
+} = project.data as ProjectFrontmatter;
+
+const relatedPosts = allProjects.filter(
+  (post: CollectionEntry<'projects'>) => 
+    post.data.category.toLowerCase() === category.toLowerCase() && 
+    post.data.title !== title
+).slice(0,3);
+---
+
+<MainLayout {title} {description} image={cover} project={project.data}>
+  <PostHeader
+    {title} {description} {date} {category} {cover} {designers}
+  />
+  <div class="flex gap-8 px-4 py-8 max-w-7xl mx-auto">
+    <div class="flex-grow">
+      <slot />
+    </div>
+    <div class="sidebar">
+      <aside class="sidebar-widget" aria-label="Blog categories">
+        <h2 class="text-xl font-bold mb-4">Blog Categories</h2>
+      </aside>
+      {
+        relatedPosts.length > 0 && (
+        <aside class="sidebar-widget" aria-label="Related posts">
+          <h2 class="text-xl font-bold mb-4">Related Posts</h2>
+        </aside>
+        )
+      }
+    </div>
+  </div>
+  {images && (
+    <div class="auto-grid">
+      {images.map((image) => (
+        <img 
+          src={image.src} 
+          alt={image.alt} 
+          class="w-full h-[300px] object-cover rounded-lg"
+        />
+      ))}
+    </div>
+  )}
+</MainLayout>
