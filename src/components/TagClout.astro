@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import { slugify } from "../ts/utils";
+
+const allPosts = await getCollection('projects', ({ data }) => {
+  return !data.draft;
+});
+const allCategories = allPosts.map((post) => post.data.tags?.map(tag => tag.toLowerCase())).flat().filter((tag): tag is string => Boolean(tag));
+
+const processedCats = allCategories.reduce((acc, cat) => {
+  const value = acc[cat] || 0;
+  return {
+    ...acc,
+    [cat]: value + 1
+  }
+}, {} as Record<string, number>)
+
+const { showCount } = Astro.props
+---
+
+<ul class="categories">
+  {
+    Object.entries(processedCats).map(([key, val]) => (
+      <li>
+        <a class="badge" href={`/tag/${slugify(key)}`}>
+          {key} {showCount && `(${val})`}
+        </a>
+      </li>
+    ))
+  }
+</ul>
