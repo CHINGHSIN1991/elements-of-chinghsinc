@@ -1,0 +1,18 @@
+[
+  {
+    "company": "Company",
+    "position": "Position",
+    "location": "Location",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "description": "Description"
+  },
+  {
+    "company": "Company",
+    "position": "Position",
+    "location": "Location",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "description": "Description"
+  }
+]
