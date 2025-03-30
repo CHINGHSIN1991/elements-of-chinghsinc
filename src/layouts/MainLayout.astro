@@ -1,7 +1,7 @@
 ---
 // component import
 import MainHead from "./MainHead.astro"
-import NavReact from "../components/Nav.tsx"
+import NavBar from "../components/NavBar.tsx"
 import Footer from "../components/Footer.astro"
 import { ViewTransitions } from 'astro:transitions';
 
@@ -24,7 +24,7 @@ const {
 		<ViewTransitions />
 	</head>
 	<body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
-		<NavReact client:load />
+		<NavBar client:load transition:persist/>
 		<main class="flex-grow" transition:animate="slide">
 			<slot />
 		</main>
