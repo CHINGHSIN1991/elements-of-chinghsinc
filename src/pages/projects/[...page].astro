@@ -1,15 +1,19 @@
 ---
-
-
-import { getCollection } from 'astro:content';
+// component import
 import MainLayout from '../../layouts/MainLayout.astro';
 import TagClout from '../../components/TagClout.astro';
-// import ProjectCard from '../../components/ProjectCard.astro';
-// import Pagination from '../../components/Pagination.astro';
-// import CategoryCloud from '../../components/CategoryCloud.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Pagination from '../../components/Pagination.astro';
+
+// import
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { slugify } from '../../ts/utils';
+
+// export
+export const prerender = true;
 
 export async function getStaticPaths({ paginate }: { paginate: any }) {
-  const allProjects = await getCollection('projects', ({ data }) => {
+  const allProjects = await getCollection('projects', ({ data }: CollectionEntry<'projects'>) => {
     return !data.draft;
   });
   console.log(allProjects);
@@ -25,7 +29,7 @@ const { page } = Astro.props as any;
 
 <MainLayout title="案例作品">
   <TagClout showCount />
-  <!-- <section 
+  <section 
     class="container mx-auto px-4 py-16 animate-slide-in"
     transition:animate="slide"
     aria-label="專案列表"
@@ -41,57 +45,41 @@ const { page } = Astro.props as any;
       <p class="text-center text-gray-500 mb-16 max-w-2xl mx-auto">
         我們的專業設計作品集，涵蓋住宅、商業與辦公空間的精選案例。
       </p>
+
       
-      {
-        page.data.length > 0 ? (
-          <>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {
-                page.data.map((project: Project) => (
-                  <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-                    <ProjectCard project={project}/>
-                  </div>
-                ))
-              }
-            </div>
-            
-            <div class="my-12">
-              <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-            </div>
-          </>
-        ) : (
-          <div class="flex flex-col items-center justify-center py-20 text-gray-500 bg-gray-50 rounded-lg shadow-inner">
-            <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 mb-4">
-              <span class="text-2xl">!</span>
-            </div>
-            <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
-            <p class="text-center max-w-md mb-8">
-              目前尚未有任何專案作品，請稍後再查看。
-            </p>
-            <a 
-              href="/" 
-              class="inline-flex items-center gap-2 px-6 py-3 bg-[#2bdcd2] text-white rounded-lg hover:bg-opacity-90 transition-colors"
-            >
-              返回首頁
-            </a>
+      {page?.data?.length > 0 ? (
+        <>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {page.data.map((project: any) => (
+              <div class="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+                <ProjectCard project={project}/>
+              </div>
+            ))}
           </div>
-        )
-      }
+          
+          <div class="my-12">
+            <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+          </div>
+        </>
+      ) : (
+        <div class="flex flex-col items-center justify-center py-20 text-gray-500 bg-gray-50 rounded-lg shadow-inner">
+          <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 mb-4">
+            <span class="text-2xl">!</span>
+          </div>
+          <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
+          <p class="text-center max-w-md mb-8">
+            目前尚未有任何專案作品，請稍後再查看。
+          </p>
+          <a 
+            href="/" 
+            class="inline-flex items-center gap-2 px-6 py-3 bg-[#2bdcd2] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+          >
+            返回首頁
+          </a>
+        </div>
+      )}
     </div>
   </section>
-  
-  {page.data.length > 0 && (
-    <aside 
-      class="container mx-auto px-4 pb-16 max-w-6xl" 
-      aria-label="專案分類"
-      transition:animate="fade"
-    >
-      <div class="bg-gray-50 rounded-lg p-8 shadow-inner">
-        <h2 class="text-2xl font-semibold mb-6 border-l-4 border-[#2bdcd2] pl-4">專案分類</h2>
-        <CategoryCloud showCount />
-      </div>
-    </aside>
-  )} -->
 </MainLayout>
 
 <style>

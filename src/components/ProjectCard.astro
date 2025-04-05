@@ -1,0 +1,61 @@
+---
+import { slugify, formatDate } from "../ts/utils";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, description, date, tags, cover } = project.data;
+---
+
+<article class="project-card h-full flex flex-col group">
+  <a href={`/project/${slugify(title)}`} class="block overflow-hidden rounded-t-lg relative">
+    <div class="aspect-video overflow-hidden">
+      <img 
+        src={cover} 
+        alt={title} 
+        class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+      />
+    </div>
+    
+    <div class="absolute top-4 right-4 flex flex-wrap gap-2 justify-end">
+      {tags && tags.slice(0, 2).map(tag => (
+        <a href={`/tag/${slugify(tag)}`} class="px-3 py-1 text-xs font-medium bg-background/80 backdrop-blur-sm text-text rounded-full hover:bg-primary hover:text-white transition-colors">
+          {tag}
+        </a>
+      ))}
+    </div>
+  </a>
+  
+  <div class="p-5 flex-grow flex flex-col">
+    <div class="mb-auto">
+      <span class="text-text-secondary text-sm block mb-2">
+        {formatDate(new Date(date))}
+      </span>
+      
+      <a href={`/project/${slugify(title)}`} class="block">
+        <h2 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+          {title}
+        </h2>
+      </a>
+      
+      <p class="text-text-secondary text-sm line-clamp-2 mb-4">
+        {description}
+      </p>
+    </div>
+    
+    <div class="mt-4">
+      <a 
+        href={`/project/${slugify(title)}`} 
+        class="inline-flex items-center text-primary group-hover:underline"
+      >
+        查看專案
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</article> 

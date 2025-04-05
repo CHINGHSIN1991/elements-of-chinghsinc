@@ -21,7 +21,7 @@ const {
 <html lang="en" class="w-full h-full select-none">
 	<head>
 		<script is:inline>
-			// 立即執行的腳本，在頁面加載前就應用主題
+			// Process the theme setting before page conversion
 			const savedTheme = localStorage.getItem('theme');
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			const theme = savedTheme || (prefersDark ? 'dark' : 'light');
