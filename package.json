@@ -23,5 +23,8 @@
   "devDependencies": {
     "@unocss/reset": "^66.1.0-beta.3",
     "unocss": "^66.1.0-beta.3"
+  },
+  "volta": {
+    "node": "20.19.0"
   }
 }
