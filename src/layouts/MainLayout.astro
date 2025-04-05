@@ -1,9 +1,9 @@
 ---
 // component import
 import MainHead from "./MainHead.astro"
-import NavBar from "../components/NavBar.tsx"
+import NavBar from "../components/NavBar.astro"
 import Footer from "../components/Footer.astro"
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from "astro:transitions";
 
 // styles import
 import "../styles/theme.css"
@@ -19,12 +19,24 @@ const {
 ---
 <!doctype html>
 <html lang="en" class="w-full h-full select-none">
-	<MainHead {title} {description} {image} {robots} {project}/>
 	<head>
-		<ViewTransitions />
+		<script is:inline>
+			// 立即執行的腳本，在頁面加載前就應用主題
+			const savedTheme = localStorage.getItem('theme');
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+			
+			if (theme === 'dark') {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+			}
+		</script>
+		<MainHead {title} {description} {image} {robots} {project}/>
+		<ClientRouter />
 	</head>
 	<body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
-		<NavBar client:load transition:persist/>
+		<NavBar transition:persist />
 		<main class="flex-grow" transition:animate="slide">
 			<slot />
 		</main>
@@ -33,6 +45,18 @@ const {
 </html>
 
 <script>
+	// Process the theme setting before page conversion
+	document.addEventListener('astro:before-swap', (event) => {
+		const currentTheme = localStorage.getItem('theme') || 
+						(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+		
+		if (currentTheme === 'dark') {
+			event.newDocument.documentElement.classList.add('dark');
+		} else {
+			event.newDocument.documentElement.classList.remove('dark');
+		}
+	});
+
 	function disableRightClick(e: MouseEvent) {
 		e.preventDefault();
 		return false;

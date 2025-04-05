@@ -1,0 +1,75 @@
+---
+import ThemeToggle from "./ThemeToggle.astro"
+// 定義導航項目
+const navItems = [
+  { name: 'Blog', path: '/blog' },
+  { name: 'Project', path: '/projects' },
+  { name: 'About', path: '/about' },
+  { name: 'Contact', path: '/contact' },
+];
+
+// 獲取當前路徑，用於確定活動頁籤
+const currentPath = Astro.url.pathname;
+
+// 確定活動頁籤索引
+const activeTabIndex = navItems.findIndex(
+  (item) => currentPath === item.path || currentPath.startsWith(`${item.path}/`)
+);
+---
+
+<nav class="flex items-center justify-center p-2">
+  <div class="flex items-center px-10 relative">
+    <a
+      href="/"
+      class="flex items-center gap-2 hover:opacity-80 transition-opacity"
+    >
+      <img src="/favicon.svg" alt="Logo" class="w-8 h-8" />
+    </a>
+    <div class="flex flex-col mx-[240px]">
+      <ul class="flex items-center gap-4 py-2 relative nav-container">
+        {navItems.map((item, index) => (
+          <li>
+            <a
+              href={item.path}
+              class={`nav-item block px-3 py-1 relative z-10 text-text hover:text-text-secondary transition-colors ${
+                index === activeTabIndex ? 'active text-primary font-bold' : ''
+              }`}
+              data-index={index}
+            >
+              {item.name}
+            </a>
+          </li>
+        ))}
+
+        <!-- 底線指示器 -->
+        <div id="nav-indicator" class="absolute bottom-0 h-0.5 bg-primary transition-all duration-300"></div>
+      </ul>
+    </div>
+    
+    <!-- 使用 ThemeToggle 組件 -->
+    <ThemeToggle />
+  </div>
+</nav>
+
+<script>
+  // 處理底線位置
+  function updateNavIndicator() {
+    const activeItem = document.querySelector('.nav-item.active');
+    const navIndicator = document.getElementById('nav-indicator');
+    
+    if (activeItem && navIndicator) {
+      const { offsetLeft, offsetWidth } = activeItem;
+      navIndicator.style.left = `${offsetLeft}px`;
+      navIndicator.style.width = `${offsetWidth}px`;
+      navIndicator.style.opacity = '1';
+    } else if (navIndicator) {
+      navIndicator.style.opacity = '0';
+    }
+  }
+  
+  // 初始執行
+  updateNavIndicator();
+  
+  // 在頁面轉換後重新計算
+  document.addEventListener('astro:page-load', updateNavIndicator);
+</script>
