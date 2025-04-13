@@ -5,8 +5,9 @@ import { slugify } from '../../ts/utils';
 
 export async function getStaticPaths() {
   const allProjects = await getCollection('projects');
+  console.log('allProjects');
   console.log(allProjects);
-  return allProjects.map(project => ({
+  return allProjects.map((project: any) => ({
     params: { post: slugify(project.data.title) },
     props: { project }
   }));

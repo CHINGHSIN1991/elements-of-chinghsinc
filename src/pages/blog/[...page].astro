@@ -1,0 +1,35 @@
+---
+// component import
+import MainLayout from '../../layouts/MainLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+// import
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+// export
+export const prerender = true;
+
+export async function getStaticPaths({ paginate }: { paginate: any}){
+  const allPosts = await getCollection('posts', ({ data }) => {
+    return !data.draft;
+  });
+  return paginate(allPosts, {  
+    pageSize: 3,
+  });
+}
+
+const { page } = Astro.props as any;
+---
+
+<MainLayout>
+  <section 
+    class="container mx-auto px-4 py-16 animate-slide-in"
+    transition:animate="slide"
+    aria-label="專案列表"
+  >
+  blog page
+  { page.data.map((post: any) => (
+    <PostCard post={post} />
+  )) }
+  </section>
+</MainLayout>
