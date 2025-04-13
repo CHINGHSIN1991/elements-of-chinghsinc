@@ -1,18 +1,12 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro"
-// 定義導航項目
-const navItems = [
-  { name: 'Blog', path: '/blog' },
-  { name: 'Project', path: '/projects' },
-  { name: 'About', path: '/about' },
-  { name: 'Contact', path: '/contact' },
-];
+import navData from '../data/navdata';
 
 // 獲取當前路徑，用於確定活動頁籤
 const currentPath = Astro.url.pathname;
 
 // 確定活動頁籤索引
-const activeTabIndex = navItems.findIndex(
+const activeTabIndex = navData.findIndex(
   (item) => currentPath === item.path || currentPath.startsWith(`${item.path}/`)
 );
 ---
@@ -27,7 +21,7 @@ const activeTabIndex = navItems.findIndex(
     </a>
     <div class="flex flex-col mx-[240px]">
       <ul class="flex items-center gap-4 py-2 relative nav-container">
-        {navItems.map((item, index) => (
+        {navData.map((item, index) => (
           <li>
             <a
               href={item.path}
