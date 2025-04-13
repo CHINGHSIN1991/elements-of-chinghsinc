@@ -10,7 +10,7 @@ const posts = defineCollection({
     author: z.string(),
     image: z.object({
       src: z.string(),
-      alt: z.string()
+      alt: z.string().optional().default("")
     }),
     draft: z.boolean().default(false),
     category: z.string(),
@@ -24,6 +24,7 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.string(),
+    category: z.string(),
     tags: z.array(z.string()).optional(),
     cover: z.string(),
     images: z.array(z.string()).optional(),
