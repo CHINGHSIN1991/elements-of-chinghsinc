@@ -1,18 +1,44 @@
 [
   {
-    "company": "Company",
-    "position": "Position",
-    "location": "Location",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "description": "Description"
-  },
-  {
-    "company": "Company",
-    "position": "Position",
-    "location": "Location",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "description": "Description"
+    "company": "Synology",
+    "position": "Software Engineer",
+    "location": "New Taipei City, Taiwan",
+    "startDate": "Jan. 2023",
+    "endDate": "Present",
+    "description": [
+      "-",
+      "-"
+    ]
+  }, {
+    "company": "AppWorks School",
+    "position": "Front-End Engineer Trainee",
+    "location": "Taipei, Taiwan",
+    "startDate": "Jun. 2022",
+    "endDate": "Nov. 2022",
+    "description": [
+      "Discussed requirements and features as the lead of the front-end engineer while working with the back-end engineer on the project.",
+      "Acquired chrome extension-related technologies from scratch and developed a fully functional extension within five weeks.",
+      "Spontaneously initiated UI design lectures to share UI design-related knowledge with colleagues."
+    ]
+  }, {
+    "company": "Whispace Studio",
+    "position": "Architectural Designer",
+    "location": "Taipei, Taiwan",
+    "startDate": "Aug. 2021",
+    "endDate": "Jun. 2022",
+    "description": [
+      "Responsible for communicating needs with the owner, designing proposals, valuation, construction, and demolition. Independently completed the design case for Kingston.",
+      "Independently completed the planning of curved wall segmentation with digital analysis tools - could not be done by the construction plant - within two weeks."
+    ]
+  }, {
+    "company": "Bio-Architecture Formosana",
+    "position": "Architectural Designer",
+    "location": "Taipei, Taiwan",
+    "startDate": "Mar. 2019",
+    "endDate": "May. 2021",
+    "description": [
+      "Cooperated with the architectural design team and communicated with the engineering consultants to complete the design and details of the MRT station next to the National Palace Museum.",
+      "Worked with the architectural design team to win the office building design competition of the world's top three network companies within two weeks."
+    ]
   }
 ]

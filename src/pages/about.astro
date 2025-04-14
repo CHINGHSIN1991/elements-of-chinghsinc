@@ -32,7 +32,11 @@ import workExperience from '../content/static/workExperience.json';
             <p class="text-text-secondary mb-2">{work.position}</p>
             <p class="text-text-secondary mb-2">{work.location}</p>
             <p class="text-text-secondary mb-2">{work.startDate} - {work.endDate}</p>
-            <p class="text-text-secondary">{work.description}</p>
+            <ul>
+              {work.description.map((desc) => (
+                <li>{desc}</li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
