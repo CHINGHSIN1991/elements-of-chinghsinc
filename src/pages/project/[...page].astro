@@ -15,7 +15,6 @@ export async function getStaticPaths({ paginate }: { paginate: any}){
   const allProjects = await getCollection('projects', ({ data }) => {
     return !data.draft;
   });
-  console.log(allProjects);
   return paginate(allProjects, {  
     pageSize: 3,
   });
