@@ -5,7 +5,7 @@ import type { CollectionEntry } from 'astro:content';
 import MainLayout from "./MainLayout.astro";
 import PostHeader from "../components/PostHeader.astro";
 
-interface ProjectFrontmatter {
+interface PostFrontmatter {
   draft: boolean;
   title: string;
   description: string;
@@ -22,11 +22,11 @@ interface ProjectFrontmatter {
   }[];
 }
 
-const allProjects = await getCollection('projects', ({ data }: CollectionEntry<'projects'>) => {
+const allPosts = await getCollection('posts', ({ data }: CollectionEntry<'posts'>) => {
   return !data.draft;
 });
 
-const { project } = Astro.props;
+const { post } = Astro.props;
 
 const {
   title,
@@ -36,16 +36,17 @@ const {
   designers,
   cover,
   images,
-} = project.data as ProjectFrontmatter;
+} = post.data as PostFrontmatter;
 
-const relatedPosts = allProjects.filter(
-  (post: CollectionEntry<'projects'>) => 
+// console.log('aaa', post);
+const relatedPosts = allPosts.filter(
+  (post: CollectionEntry<'posts'>) => 
     post.data.category.toLowerCase() === category.toLowerCase() && 
     post.data.title !== title
 ).slice(0,3);
 ---
 
-<MainLayout {title} {description} image={cover} project={project.data}>
+<MainLayout {title} {description} image={cover} post={post.data}>
   <PostHeader
     {title} {description} {date} {category} {cover} {designers}
   />
