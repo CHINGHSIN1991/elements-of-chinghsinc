@@ -2,6 +2,7 @@
 // component import
 import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import CategorySection from '../../components/CategorySection.astro';
 
 // import
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -27,9 +28,34 @@ const { page } = Astro.props as any;
     transition:animate="slide"
     aria-label="專案列表"
   >
-  blog page
-  { page.data.map((post: any) => (
-    <PostCard post={post} />
-  )) }
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="md:w-1/4 lg:w-1/5">
+        <CategorySection />
+      </div>
+      
+      <div class="md:w-3/4 lg:w-4/5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          { page.data.map((post: any) => (
+            <PostCard post={post} />
+          )) }
+        </div>
+        
+        {page.url.prev || page.url.next ? (
+          <div class="pagination-nav flex justify-center gap-4 mt-12">
+            {page.url.prev ? (
+              <a href={page.url.prev} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                Prev
+              </a>
+            ) : null}
+            
+            {page.url.next ? (
+              <a href={page.url.next} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                Next
+              </a>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    </div>
   </section>
 </MainLayout>

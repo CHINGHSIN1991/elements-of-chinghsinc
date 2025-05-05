@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { slugify } from '../../ts/utils';
+import CategorySection from '../../components/CategorySection.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts', ({ data }) => {
+    return !data.draft;
+  });
+
+  const uniqueCategories = [...new Set(allPosts.map(post => post.data.category.toLowerCase()))];
+
+  return uniqueCategories.map(category => {
+    const filteredPosts = allPosts.filter(post => 
+      post.data.category.toLowerCase() === category
+    );
+    return {
+      params: { category: slugify(category) },
+      props: { 
+        posts: filteredPosts,
+        category: category 
+      }
+    };
+  });
+}
+
+const { category, posts } = Astro.props;
+const title = `${category.charAt(0).toUpperCase() + category.slice(1)} Category Posts`;
+const description = `Check all posts in ${category} category`;
+---
+
+<MainLayout title={title} description={description}>
+  <div class="container mx-auto px-4 py-16">
+    <div class="flex flex-col md:flex-row gap-8">
+      <div class="md:w-1/4 lg:w-1/5">
+        <CategorySection />
+      </div>
+      
+
+      <div class="md:w-3/4 lg:w-4/5">
+        <h1 class="text-3xl font-bold mb-6">{title}</h1>
+        <p class="mb-8">{description}</p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {posts.map((post: any) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+
+        <div class="mt-12 text-center">
+          <a href="/blog" class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
+            Check all posts
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout> 
