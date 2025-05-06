@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
-import cloudflare from '@astrojs/cloudflare'
 import icon from 'astro-icon'
 import UnoCSS from 'unocss/astro'
 import react from '@astrojs/react'
@@ -16,8 +15,7 @@ if (isBuild) {
 }
 
 export default defineConfig({
-  output: 'server',
-  adapter: cloudflare(),
+  output: 'static',
   site: url,
   integrations: [
     icon(),
