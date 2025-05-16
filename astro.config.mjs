@@ -10,16 +10,14 @@ const SCRIPT = process.env.npm_lifecycle_script || ''
 const isBuild = SCRIPT.includes('astro build')
 
 let url = LOCAL_URL
-let base = '/'
 if (isBuild) {
   url = LIVE_URL
-  base = './'
 }
 
 export default defineConfig({
   output: 'static',
   site: url,
-  base: base,
+  base: './',
   integrations: [
     icon(),
     UnoCSS({
