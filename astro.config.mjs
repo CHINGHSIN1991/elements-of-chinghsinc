@@ -13,7 +13,7 @@ let url = LOCAL_URL
 let base = '/'
 if (isBuild) {
   url = LIVE_URL
-  base = './elements-of-chinghsinc'
+  base = './'
 }
 
 export default defineConfig({
