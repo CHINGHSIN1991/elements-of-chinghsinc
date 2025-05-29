@@ -14,17 +14,17 @@ const activeTabIndex = navData.findIndex(
 <nav class="flex items-center justify-center p-2">
   <div class="flex items-center px-10 relative">
     <a
-      href="/"
+      href={import.meta.env.BASE_URL}
       class="flex items-center gap-2 hover:opacity-80 transition-opacity"
     >
-      <img src="favicon.svg" alt="Logo" class="w-8 h-8" />
+      <img src={import.meta.env.BASE_URL + "favicon.svg"} alt="Logo" class="w-8 h-8" />
     </a>
     <div class="flex flex-col mx-[240px]">
       <ul class="flex items-center gap-4 py-2 relative nav-container">
         {navData.map((item, index) => (
           <li>
             <a
-              href={item.path}
+              href={import.meta.env.BASE_URL + item.path.replace(/^\//, '')}
               class={`nav-item block px-3 py-1 relative z-10 text-text hover:text-text-secondary transition-colors ${
                 index === activeTabIndex ? 'active text-primary font-bold' : ''
               }`}
