@@ -20,7 +20,7 @@ if (isBuild) {
 export default defineConfig({
   output: 'static',
   site: url,
-  base: base,
+  base,
   integrations: [
     icon(),
     UnoCSS({
@@ -28,4 +28,11 @@ export default defineConfig({
     }),
     react(),
   ],
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['sharp'],
+      }
+    },
+  },
 })
