@@ -11,10 +11,9 @@ const SCRIPT = process.env.npm_lifecycle_script || ''
 const isBuild = SCRIPT.includes('astro build')
 
 let url = LOCAL_URL
-let base = '/'
+let base = `/${REPO_NAME}/`
 if (isBuild) {
   url = `${LIVE_URL}/${REPO_NAME}`
-  base = `/${REPO_NAME}/`
 }
 
 export default defineConfig({
