@@ -11,8 +11,8 @@ interface PostFrontmatter {
   description: string;
   date: Date;
   category: string;
-  designers: string[];
-  cover: {
+  designers?: string[];
+  image?: {
     src: string;
     alt: string;
   };
@@ -34,7 +34,7 @@ const {
   date,
   category,
   designers,
-  cover,
+  image,
   images,
 } = post.data as PostFrontmatter;
 
@@ -44,11 +44,14 @@ const relatedPosts = allPosts.filter(
     post.data.category.toLowerCase() === category.toLowerCase() && 
     post.data.title !== title
 ).slice(0,3);
+
+// 處理 cover 屬性
+const coverData = image ? { src: image.src, alt: image.alt } : undefined;
 ---
 
-<MainLayout {title} {description} image={cover} post={post.data}>
+<MainLayout {title} {description} image={image} post={post.data}>
   <PostHeader
-    {title} {description} {date} {category} {cover} {designers}
+    {title} {description} {date} {category} cover={coverData} designers={designers || []}
   />
   <div class="flex gap-8 px-4 py-8 max-w-7xl mx-auto">
     <div class="flex-grow">

@@ -7,7 +7,7 @@ interface Props {
   date: Date;
   category: string;
   designers: string[];
-  cover: {
+  cover?: {
     src: string;
     alt: string;
   };
@@ -17,7 +17,9 @@ const { title, description, date, category, designers, cover } = Astro.props as 
 ---
 
 <header class="relative mb-8 h-64 md:h-96">
-  <img src={cover.src} alt={cover.alt} class="absolute inset-0 w-full h-full object-cover" />
+  {cover && (
+    <img src={cover.src} alt={cover.alt} class="absolute inset-0 w-full h-full object-cover" />
+  )}
   <div class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white px-4 text-center">
     <div class="mb-2 flex items-center gap-4">
       <span class="px-3 py-1 bg-primary rounded-full text-xs">{category}</span>
