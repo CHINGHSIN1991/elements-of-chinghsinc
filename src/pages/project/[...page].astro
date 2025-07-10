@@ -27,8 +27,7 @@ const { page } = Astro.props;
 <MainLayout title="案例作品">
   <TagClout showCount />
   <section 
-    class="container mx-auto px-4 py-16 animate-slide-in"
-    transition:animate="slide"
+    class="container mx-auto px-4 py-16"
     aria-label="專案列表"
   >
     <div class="max-w-6xl mx-auto">
@@ -78,32 +77,4 @@ const { page } = Astro.props;
   </section>
 </MainLayout>
 
-<style>
-  @keyframes slide-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  .animate-slide-in {
-    animation: slide-in 0.5s ease-out;
-  }
-
-  [transition\:animate="fade"] {
-    animation: fade-in 0.5s ease-out;
-  }
-</style>
