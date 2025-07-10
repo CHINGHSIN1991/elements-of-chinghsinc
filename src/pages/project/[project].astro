@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugify, formatDate } from '../../ts/utils';
 import MainLayout from '../../layouts/MainLayout.astro';
 
@@ -16,7 +16,11 @@ export async function getStaticPaths() {
   }));
 }
 
-const { project } = Astro.props;
+interface ProjectPageProps {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props as ProjectPageProps;
 const { data, id } = project;
 
 const getRelatedProjects = async () => {
