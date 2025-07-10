@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { slugify } from '../../ts/utils';
@@ -28,7 +28,12 @@ export async function getStaticPaths() {
   });
 }
 
-const { category, posts } = Astro.props;
+interface CategoryPageProps {
+  category: string;
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { category, posts } = Astro.props as CategoryPageProps;
 const title = `${category.charAt(0).toUpperCase() + category.slice(1)} Category Posts`;
 const description = `Check all posts in ${category} category`;
 ---
