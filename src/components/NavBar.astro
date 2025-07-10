@@ -11,21 +11,29 @@ const activeTabIndex = navData.findIndex(
 );
 ---
 
-<nav class="flex items-center justify-center p-2">
-  <div class="flex items-center px-10 relative">
-    <a
-      href={import.meta.env.BASE_URL}
-      class="flex items-center gap-2 hover:opacity-80 transition-opacity"
-    >
-      <img src={import.meta.env.BASE_URL + "favicon.svg"} alt="Logo" class="w-8 h-8" />
-    </a>
-    <div class="flex flex-col mx-[240px]">
+<nav 
+  id="navbar" 
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out"
+>
+  <div class="grid grid-cols-3 items-center px-4 md:px-10 py-2 w-full max-w-7xl mx-auto">
+    <!-- Left: Logo -->
+    <div class="flex justify-start">
+      <a
+        href={import.meta.env.BASE_URL}
+        class="flex items-center gap-2 hover:opacity-80 transition-opacity"
+      >
+        <img src={import.meta.env.BASE_URL + "favicon.svg"} alt="Logo" class="w-8 h-8" />
+      </a>
+    </div>
+    
+    <!-- Center: Navigation Links -->
+    <div class="flex justify-center">
       <ul class="flex items-center gap-4 py-2 relative nav-container">
         {navData.map((item, index) => (
           <li>
             <a
               href={import.meta.env.BASE_URL + item.path.replace(/^\//, '')}
-              class={`nav-item block px-3 py-1 relative z-10 text-text hover:text-text-secondary transition-colors ${
+              class={`nav-item block px-3 py-1 relative z-10 text-white hover:text-gray-300 transition-colors ${
                 index === activeTabIndex ? 'active text-primary font-bold' : ''
               }`}
               data-index={index}
@@ -40,15 +48,85 @@ const activeTabIndex = navData.findIndex(
       </ul>
     </div>
     
-    <!-- 使用 ThemeToggle 組件 -->
-    <ThemeToggle />
+    <!-- Right: Theme Toggle -->
+    <div class="flex justify-end">
+      <ThemeToggle />
+    </div>
   </div>
 </nav>
+
+<!-- 為 main content 添加 padding-top 以避免被 fixed navbar 遮擋 -->
+<style>
+  /* 確保 main content 不被 navbar 遮擋 */
+  :global(main) {
+    padding-top: 0;
+  }
+  
+  /* 初始透明狀態 */
+  #navbar {
+    background: transparent;
+    backdrop-filter: none;
+  }
+  
+  /* 滾動時的毛玻璃效果 */
+  #navbar.scrolled {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* 深色模式下的毛玻璃效果 */
+  :global(.dark) #navbar.scrolled {
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* 滾動時文字顏色調整 */
+  #navbar.scrolled .nav-item {
+    color: var(--color-text);
+  }
+  
+  #navbar.scrolled .nav-item:hover {
+    color: var(--color-text-secondary);
+  }
+  
+  /* 確保 logo 在滾動時也有適當顏色 */
+  #navbar.scrolled img {
+    filter: brightness(1);
+  }
+  
+  :global(.dark) #navbar.scrolled img {
+    filter: brightness(1);
+  }
+  
+  /* 響應式隱藏導航項目 */
+  @media (max-width: 768px) {
+    .nav-container {
+      gap: 0.5rem;
+    }
+    
+    .nav-item {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .nav-container {
+      gap: 0.25rem;
+    }
+    
+    .nav-item {
+      padding: 0.25rem;
+      font-size: 0.75rem;
+    }
+  }
+</style>
 
 <script>
   // 處理底線位置
   function updateNavIndicator() {
-    const activeItem = document.querySelector('.nav-item.active');
+    const activeItem = document.querySelector('.nav-item.active') as HTMLElement | null;
     const navIndicator = document.getElementById('nav-indicator');
     
     if (activeItem && navIndicator) {
@@ -61,9 +139,38 @@ const activeTabIndex = navData.findIndex(
     }
   }
   
+  // 處理滾動效果
+  function handleScroll() {
+    const navbar = document.getElementById('navbar');
+    if (!navbar) return;
+    
+    const scrollThreshold = 50; // 滾動超過 50px 時觸發效果
+    
+    if (window.scrollY > scrollThreshold) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+  
   // 初始執行
   updateNavIndicator();
+  handleScroll();
+  
+  // 監聽滾動事件
+  window.addEventListener('scroll', handleScroll, { passive: true });
   
   // 在頁面轉換後重新計算
-  document.addEventListener('astro:page-load', updateNavIndicator);
+  document.addEventListener('astro:page-load', () => {
+    updateNavIndicator();
+    handleScroll();
+    
+    // 重新綁定滾動事件（如果需要）
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  });
+  
+  // 清理事件監聽器
+  document.addEventListener('astro:before-swap', () => {
+    window.removeEventListener('scroll', handleScroll);
+  });
 </script>
