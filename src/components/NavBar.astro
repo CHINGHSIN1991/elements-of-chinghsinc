@@ -33,7 +33,7 @@ const activeTabIndex = navData.findIndex(
           <li>
             <a
               href={import.meta.env.BASE_URL + item.path.replace(/^\//, '')}
-              class={`nav-item block px-3 py-1 relative z-10 text-white hover:text-gray-300 transition-colors ${
+              class={`nav-item block px-3 py-1 relative z-10 text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors ${
                 index === activeTabIndex ? 'active text-primary font-bold' : ''
               }`}
               data-index={index}
@@ -81,13 +81,18 @@ const activeTabIndex = navData.findIndex(
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
-  /* 滾動時文字顏色調整 */
+  /* 滾動時文字顏色調整 - 覆蓋默認顏色 */
   #navbar.scrolled .nav-item {
-    color: var(--color-text);
+    color: var(--color-text) !important;
   }
   
   #navbar.scrolled .nav-item:hover {
-    color: var(--color-text-secondary);
+    color: var(--color-text-secondary) !important;
+  }
+  
+  /* 滾動時活動項目保持主色調 */
+  #navbar.scrolled .nav-item.active {
+    color: var(--color-primary) !important;
   }
   
   /* 確保 logo 在滾動時也有適當顏色 */
