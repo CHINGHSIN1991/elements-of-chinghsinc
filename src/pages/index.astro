@@ -1,10 +1,179 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const title = "The New World - Elements of ChingHsinC";
+const description = "A land of hope and opportunity";
 ---
 
-<MainLayout>
-TestTest
+<MainLayout title={title} description={description}>
+  <!-- Hero Section -->
+  <div class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-slate-900 dark:via-gray-900 dark:to-black transition-colors duration-500">
+    <!-- Background overlay with texture -->
+    <div class="absolute inset-0 opacity-20 dark:opacity-20">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(59,130,246,0.2),transparent_50%)] dark:bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.3),transparent_50%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(99,102,241,0.15),transparent_50%)] dark:bg-[radial-gradient(circle_at_75%_75%,rgba(59,130,246,0.2),transparent_50%)]"></div>
+    </div>
+    
+    <!-- Content Container -->
+    <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+      <!-- Year Display - Top Right -->
+      <div class="absolute top-0 right-0 text-gray-600 dark:text-white opacity-60 font-light transition-colors duration-300">
+        <div class="text-4xl md:text-5xl">1991</div>
+        <div class="text-2xl md:text-3xl mt-2">/</div>
+        <div class="text-4xl md:text-5xl mt-2">9999</div>
+      </div>
+      
+      <!-- Main Title -->
+      <h1 class="text-6xl md:text-8xl lg:text-9xl font-light text-gray-800 dark:text-white mb-8 leading-tight transition-colors duration-300">
+        Elements <span class="bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300 bg-clip-text text-transparent">of</span>
+        <br>
+        <span class="bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-300 dark:to-cyan-200 bg-clip-text text-transparent">Ching Hsin</span>
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light mb-12 max-w-2xl mx-auto transition-colors duration-300">
+        A Land of hope and opportunity
+      </p>
+      
+      <!-- Navigation Hints -->
+      <div class="flex justify-center items-center gap-8 text-gray-500 dark:text-white opacity-60 text-sm font-light transition-colors duration-300">
+        <span class="hidden md:block">Section 1</span>
+        <span class="hidden md:block">Section 2</span>
+        <span class="hidden md:block">Section 3</span>
+        <span class="hidden md:block">Section 4</span>
+      </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-600 dark:text-white opacity-60 animate-bounce transition-colors duration-300">
+      <div class="w-6 h-10 border-2 border-gray-600 dark:border-white rounded-full flex justify-center transition-colors duration-300">
+        <div class="w-1 h-3 bg-gray-600 dark:bg-white rounded-full mt-2 animate-pulse transition-colors duration-300"></div>
+      </div>
+    </div>
+    
+    <!-- Decorative Elements -->
+    <div class="absolute top-1/4 left-8 w-px h-32 bg-gradient-to-b from-transparent via-gray-400 dark:via-white to-transparent opacity-30 transition-colors duration-300"></div>
+    <div class="absolute bottom-1/4 right-8 w-px h-32 bg-gradient-to-b from-transparent via-gray-400 dark:via-white to-transparent opacity-30 transition-colors duration-300"></div>
+  </div>
+  
+  <!-- Additional Content Section -->
+  <section class="py-20 bg-background transition-colors duration-300">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-light text-text mb-4 transition-colors duration-300">Cross-Disciplinary Innovation</h2>
+      <p class="text-lg text-text-secondary mb-16 max-w-4xl mx-auto leading-relaxed transition-colors duration-300">
+        Integrating logical thinking, aesthetic design, and technological innovation to explore the infinite possibilities of cross-disciplinary professional knowledge
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Logical Thinking -->
+        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105">
+          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
+            ∑
+          </div>
+          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Logical Thinking</h3>
+          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
+            Based on mathematical logic, employing rigorous analytical methods to solve complex problems, pursuing the perfect balance between precision and efficiency
+          </p>
+          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
+            Mathematical Logic | Problem Solving
+          </div>
+        </div>
+        
+        <!-- Design Aesthetics -->
+        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105">
+          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
+            ⌘
+          </div>
+          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Design Aesthetics</h3>
+          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
+            Committed to creating designs that combine functionality with aesthetic value, from spatial planning to user experience comprehensive thinking
+          </p>
+          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
+            Aesthetic Design | User Experience
+          </div>
+        </div>
+        
+        <!-- Technology Innovation -->
+        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105">
+          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
+            &lt;/&gt;
+          </div>
+          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Technology Innovation</h3>
+          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
+            Utilizing modern technological tools to realize creative ideas, continuously exploring the integration of new technologies with traditional design concepts
+          </p>
+          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
+            Technology Innovation | Creative Solutions
+          </div>
+        </div>
+      </div>
+      
+      <!-- Core Philosophy -->
+      <div class="mt-16 p-8 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 transition-all duration-300">
+        <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Core Philosophy</h3>
+        <p class="text-lg text-text-secondary max-w-3xl mx-auto leading-relaxed italic transition-colors duration-300">
+          "A cross-disciplinary learner who pursues innovative solutions and is curious about everything. A deep thinker who is passionate about combining knowledge from different professional fields to create unique value."
+        </p>
+      </div>
+    </div>
+  </section>
 </MainLayout>
+
+<style>
+  /* Custom animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Enhance text readability */
+  h1 {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dark mode text shadow */
+  :global(.dark) h1 {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Gradient text fallback */
+  .bg-clip-text {
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  
+  /* Ensure smooth transitions for all elements */
+  * {
+    transition-property: color, background-color, border-color, fill, stroke, opacity;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
+  }
+</style>
+
+<script>
+  // 確保主題切換能夠正確觸發頁面更新
+  function handleThemeChange() {
+    // 觸發一個微小的重繪來確保所有元素更新
+    document.body.style.display = 'none';
+    document.body.offsetHeight; // 觸發重繪
+    document.body.style.display = '';
+  }
+  
+  // 監聽主題切換事件
+  document.addEventListener('click', (e) => {
+    if (e.target && (e.target as HTMLElement).closest('#theme-toggle')) {
+      setTimeout(handleThemeChange, 100);
+    }
+  });
+  
+  // 也監聽存儲變化（如果有其他頁面改變主題）
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'theme') {
+      handleThemeChange();
+    }
+  });
+</script>
