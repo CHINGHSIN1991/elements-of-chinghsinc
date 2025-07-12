@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import { slugify } from '../../ts/utils';
 
@@ -13,7 +13,11 @@ export async function getStaticPaths() {
   }));
 }
 
-const { post } = Astro.props;
+interface PostPageProps {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props as PostPageProps;
 
 if (!post) {
   return Astro.redirect('/404');

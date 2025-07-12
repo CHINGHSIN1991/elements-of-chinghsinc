@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import Link from "../../components/Link.astro";
 import { slugify} from "../../ts/utils";
@@ -33,7 +33,12 @@ export async function getStaticPaths() {
   });
 }
 
-const { tag, projects } = Astro.props;
+interface TagPageProps {
+  tag: string;
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { tag, projects } = Astro.props as TagPageProps;
 const displayTag = tag;
 ---
 

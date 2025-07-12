@@ -7,6 +7,16 @@ import CategorySection from '../../components/CategorySection.astro';
 // import
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+interface BlogPageProps {
+  page: {
+    data: CollectionEntry<'posts'>[];
+    url: {
+      prev?: string;
+      next?: string;
+    };
+  };
+}
+
 // export
 export const prerender = true;
 
@@ -19,7 +29,7 @@ export async function getStaticPaths({ paginate }: { paginate: any}){
   });
 }
 
-const { page } = Astro.props as any;
+const { page } = Astro.props as BlogPageProps;
 ---
 
 <MainLayout>
