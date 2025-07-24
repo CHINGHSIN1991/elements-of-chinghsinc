@@ -1,15 +1,18 @@
-[{
-  "school": "National Chiao Tung University",
-  "degree": "Bachelor's in Applied Mathematics",
-  "location": "Hsinchu, Taiwan",
-  "startDate": "Aug.2014",
-  "endDate": "Feb. 2018",
-  "description": "Studied applied mathematics with a focus on computational methods, statistics, and mathematical modeling."
-}, {
-  "school": "National Chiao Tung University",
-  "degree": "Master of Architecture, M.Arch. I",
-  "location": "Hsinchu, Taiwan",
-  "startDate": "Aug. 2010",
-  "endDate": "Jul. 2014",
-  "description": "Post-baccalaureate graduate program in architecture, focusing on urban design, sustainable architecture, and computational design methods."
-}]
+{
+  "_type": "education",
+  "data": [{
+    "school": "National Chiao Tung University",
+    "degree": "Bachelor's in Applied Mathematics",
+    "location": "Hsinchu, Taiwan",
+    "startDate": "Aug.2014",
+    "endDate": "Feb. 2018",
+    "description": "Studied applied mathematics with a focus on computational methods, statistics, and mathematical modeling."
+  }, {
+    "school": "National Chiao Tung University",
+    "degree": "Master of Architecture, M.Arch. I",
+    "location": "Hsinchu, Taiwan",
+    "startDate": "Aug. 2010",
+    "endDate": "Jul. 2014",
+    "description": "Post-baccalaureate graduate program in architecture, focusing on urban design, sustainable architecture, and computational design methods."
+  }]
+}

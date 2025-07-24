@@ -1,8 +1,11 @@
 {
-  "architecture": {
-    
-  },
-  "software": {
-    
+  "_type": "skills",
+  "data": {
+    "architecture": {
+      
+    },
+    "software": {
+      
+    }
   }
 }
