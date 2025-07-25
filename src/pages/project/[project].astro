@@ -11,7 +11,7 @@ export async function getStaticPaths() {
   });
   
   return allProjects.map((project) => ({
-    params: { project: project.id },
+    params: { project: project.id || slugify(project.data.title) },
     props: { project }
   }));
 }
@@ -73,14 +73,10 @@ const relatedProjects = await getRelatedProjects();
     
     <div class="mb-12">
       <img 
-        src={typeof data.cover === 'string' ? data.cover : data.cover?.src || "/assets/images/fallback-image.png"} 
+        src={data.cover} 
         alt={data.title || "專案圖片"} 
         class="w-full h-auto max-h-[600px] object-cover rounded-lg shadow-md"
       />
-    </div>
-    
-    <div class="prose prose-lg dark:prose-invert max-w-4xl mx-auto mb-12">
-      <slot />
     </div>
     
     {data.tags && data.tags.length > 0 && (
@@ -100,20 +96,15 @@ const relatedProjects = await getRelatedProjects();
       <div class="max-w-6xl mx-auto mb-12">
         <h3 class="text-2xl font-bold mb-6">專案圖片</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.images.map((image: any) => {
-            const imgSrc = typeof image === 'string' ? image : image.src;
-            const imgAlt = typeof image === 'string' ? '專案圖片' : image.alt || '專案圖片';
-            
-            return (
-              <div class="aspect-video overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
-                <img 
-                  src={imgSrc} 
-                  alt={imgAlt} 
-                  class="w-full h-full object-cover"
-                />
-              </div>
-            );
-          })}
+          {data.images.map((image: string) => (
+            <div class="aspect-video overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+              <img 
+                src={image} 
+                alt={data.title || "專案圖片"} 
+                class="w-full h-full object-cover"
+              />
+            </div>
+          ))}
         </div>
       </div>
     )}
@@ -124,12 +115,12 @@ const relatedProjects = await getRelatedProjects();
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           {relatedProjects.map((relatedProject) => (
             <a 
-              href={`/project/${relatedProject.id}`} 
+              href={`/project/${relatedProject.id || slugify(relatedProject.data.title)}`} 
               class="group block bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300"
             >
               <div class="aspect-video overflow-hidden">
                 <img 
-                  src={typeof relatedProject.data.cover === 'string' ? relatedProject.data.cover : relatedProject.data.cover?.src || "/assets/images/fallback-image.png"} 
+                  src={relatedProject.data.cover} 
                   alt={relatedProject.data.title} 
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
