@@ -8,10 +8,11 @@ interface Props {
 
 const { project } = Astro.props;
 const { title, description, date, tags, cover } = project.data;
+const projectId = project.id || slugify(title);
 ---
 
 <article class="project-card h-full flex flex-col group">
-  <a href={`/project/${slugify(title)}`} class="block overflow-hidden rounded-t-lg relative">
+  <a href={`/project/${projectId}`} class="block overflow-hidden rounded-t-lg relative">
     <div class="aspect-video overflow-hidden">
       <img 
         src={cover} 
@@ -35,7 +36,7 @@ const { title, description, date, tags, cover } = project.data;
         {formatDate(new Date(date))}
       </span>
       
-      <a href={`/project/${slugify(title)}`} class="block">
+      <a href={`/project/${projectId}`} class="block">
         <h2 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
           {title}
         </h2>
@@ -48,7 +49,7 @@ const { title, description, date, tags, cover } = project.data;
     
     <div class="mt-4">
       <a 
-        href={`/project/${project.id}`} 
+        href={`/project/${projectId}`} 
         class="inline-flex items-center text-primary group-hover:underline"
       >
         查看專案
