@@ -23,79 +23,260 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
+
+// 獲取所有文章以找出相關文章
+const allPosts = await getCollection('posts', ({ data }) => {
+  return !data.draft;
+});
+
+// 獲取相同分類的相關文章（最多3篇）
+const relatedPosts = allPosts
+  .filter(p => 
+    p.data.category === post.data.category && 
+    p.id !== post.id
+  )
+  .slice(0, 3);
+
+// 獲取所有分類
+const categories = [...new Set(allPosts.map(post => post.data.category))];
 ---
 <PostLayout post={post}>
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <!-- 文章標題和基本資訊 -->
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-      <div class="flex flex-wrap gap-4 text-gray-600 dark:text-gray-400">
-        <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <time datetime={post.data.date}>{formatDate(new Date(post.data.date))}</time>
+  <div class="flex gap-8 max-w-7xl mx-auto px-4 py-8">
+    <!-- 左側邊欄 -->
+    <aside class="w-64 shrink-0 hidden lg:block">
+      <div class="sticky top-24 space-y-8">
+        <!-- 分類列表 -->
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h2 class="text-xl font-bold mb-4">文章分類</h2>
+          <ul class="space-y-2">
+            {categories.map(cat => (
+              <li>
+                <a 
+                  href={`/category/${slugify(cat)}`}
+                  class={`block hover:text-primary-500 transition-colors ${cat === post.data.category ? 'text-primary-500 font-bold' : ''}`}
+                >
+                  {cat}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-          </svg>
-          <a href={`/category/${slugify(post.data.category)}`} class="hover:text-primary">
-            {post.data.category}
-          </a>
-        </div>
-        <div class="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-          <span>{post.data.author}</span>
-        </div>
+
+        <!-- 相關文章 -->
+        {relatedPosts.length > 0 && (
+          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">相關文章</h2>
+            <ul class="space-y-4">
+              {relatedPosts.map(relatedPost => (
+                <li>
+                  <a 
+                    href={`/blog/${relatedPost.id}`}
+                    class="block hover:text-primary-500 transition-colors"
+                  >
+                    <h3 class="font-medium text-sm line-clamp-2">
+                      {relatedPost.data.title}
+                    </h3>
+                    <span class="text-xs text-gray-500 mt-1 block">
+                      {formatDate(new Date(relatedPost.data.date))}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-    </header>
+    </aside>
 
-    <!-- 文章封面圖 -->
-    {post.data.image && (
-      <div class="mb-8 rounded-lg overflow-hidden">
-        <img 
-          src={post.data.image.src} 
-          alt={post.data.image.alt || post.data.title}
-          class="w-full h-auto object-cover"
-        />
-      </div>
-    )}
-
-    <!-- 文章描述 -->
-    <div class="mb-8">
-      <p class="text-lg text-gray-600 dark:text-gray-400 italic">
-        {post.data.description}
-      </p>
-    </div>
-
-    <!-- 標籤列表 -->
-    {post.data.tags && post.data.tags.length > 0 && (
-      <div class="mb-8">
-        <div class="flex flex-wrap gap-2">
-          {post.data.tags.map(tag => (
-            <a
-              href={`/tag/${slugify(tag)}`}
-              class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
-            >
-              #{tag}
+    <!-- 主要內容 -->
+    <div class="flex-grow max-w-3xl">
+      <!-- 文章標題和基本資訊 -->
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
+        <div class="flex flex-wrap gap-4 text-gray-600 dark:text-gray-400">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <time datetime={post.data.date}>{formatDate(new Date(post.data.date))}</time>
+          </div>
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            <a href={`/category/${slugify(post.data.category)}`} class="hover:text-primary">
+              {post.data.category}
             </a>
-          ))}
+          </div>
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span>{post.data.author}</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- 文章封面圖 -->
+      {post.data.image && (
+        <div class="mb-8 rounded-lg overflow-hidden">
+          <img 
+            src={post.data.image.src} 
+            alt={post.data.image.alt || post.data.title}
+            class="w-full h-auto object-cover"
+          />
+        </div>
+      )}
+
+      <!-- 文章描述 -->
+      <div class="mb-8">
+        <p class="text-lg text-gray-600 dark:text-gray-400 italic">
+          {post.data.description}
+        </p>
+      </div>
+
+      <!-- 標籤列表 -->
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="mb-8">
+          <div class="flex flex-wrap gap-2">
+            {post.data.tags.map(tag => (
+              <a
+                href={`/tag/${slugify(tag)}`}
+                class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- 文章內容 -->
+      <div class="prose prose-lg dark:prose-invert max-w-none">
+        <Content />
+      </div>
+    </div>
+
+    <!-- 右側邊欄 -->
+    <aside class="w-64 shrink-0 hidden xl:block">
+      <div class="sticky top-24 space-y-4">
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h2 class="text-xl font-bold mb-4">文章目錄</h2>
+          <nav class="table-of-contents">
+            <ul class="space-y-2">
+              {headings.map(heading => (
+                <li class={`pl-${(heading.depth - 1) * 4}`}>
+                  <a 
+                    href={`#${heading.slug}`}
+                    class="block hover:text-primary-500 transition-colors text-sm"
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div class="mt-6 space-y-2">
+            <button
+              id="backToTop"
+              class="w-full px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition"
+            >
+              回到頂部
+            </button>
+            <button
+              id="expandAll"
+              class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            >
+              展開全部
+            </button>
+            <button
+              id="scrollToBottom"
+              class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            >
+              滾動到底部
+            </button>
+          </div>
+        </div>
+
+        <!-- 文章資訊 -->
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h2 class="text-xl font-bold mb-4">文章資訊</h2>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span>字數</span>
+              <span class="font-medium">{post.body?.length || 0}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>段落數</span>
+              <span class="font-medium">{headings.length}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>標籤數</span>
+              <span class="font-medium">{post.data.tags?.length || 0}</span>
+            </div>
+          </div>
         </div>
       </div>
-    )}
-
-    <!-- 文章內容 -->
-    <div class="prose prose-lg dark:prose-invert max-w-none">
-      <Content />
-    </div>
+    </aside>
   </div>
 </PostLayout>
 
+<script>
+  // 回到頂部功能
+  document.getElementById('backToTop')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 展開全部功能
+  let isExpanded = false;
+  document.getElementById('expandAll')?.addEventListener('click', () => {
+    const button = document.getElementById('expandAll');
+    if (button) {
+      isExpanded = !isExpanded;
+      button.textContent = isExpanded ? '收合全部' : '展開全部';
+      
+      // 這裡可以根據需求添加展開/收合的邏輯
+      const details = document.querySelectorAll('details');
+      details.forEach(detail => {
+        detail.open = isExpanded;
+      });
+    }
+  });
+
+  // 滾動到底部功能
+  document.getElementById('scrollToBottom')?.addEventListener('click', () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  });
+
+  // 平滑滾動到錨點
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(anchor.getAttribute('href') || '');
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+</script>
+
 <style>
+  .sticky {
+    position: sticky;
+    top: 2rem;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .prose {
     max-width: 100%;
   }
@@ -112,4 +293,9 @@ const { Content } = await post.render();
   .prose a:hover {
     text-decoration: underline;
   }
+
+  /* 目錄縮進 */
+  .pl-4 { padding-left: 1rem; }
+  .pl-8 { padding-left: 2rem; }
+  .pl-12 { padding-left: 3rem; }
 </style>
