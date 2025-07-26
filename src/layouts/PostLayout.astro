@@ -57,18 +57,6 @@ const coverData = image ? { src: image.src, alt: image.alt } : undefined;
     <div class="flex-grow">
       <slot />
     </div>
-    <div class="sidebar">
-      <aside class="sidebar-widget" aria-label="Blog categories">
-        <h2 class="text-xl font-bold mb-4">Blog Categories</h2>
-      </aside>
-      {
-        relatedPosts.length > 0 && (
-        <aside class="sidebar-widget" aria-label="Related posts">
-          <h2 class="text-xl font-bold mb-4">Related Posts</h2>
-        </aside>
-        )
-      }
-    </div>
   </div>
   {images && (
     <div class="auto-grid">
