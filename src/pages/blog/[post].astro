@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import CategorySection from '../../components/CategorySection.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
 import { slugify, formatDate } from '../../ts/utils';
 
 export const prerender = true;
@@ -25,20 +26,8 @@ if (!post) {
 }
 
 const { Content, headings } = await post.render();
-
-// 獲取所有文章以找出相關文章
-const allPosts = await getCollection('posts', ({ data }) => {
-  return !data.draft;
-});
-
-// 獲取相同分類的相關文章（最多3篇）
-const relatedPosts = allPosts
-  .filter(p => 
-    p.data.category === post.data.category && 
-    p.id !== post.id
-  )
-  .slice(0, 3);
 ---
+
 <PostLayout post={post}>
   <div class="flex gap-8 max-w-7xl mx-auto px-4 py-8">
     <!-- 左側邊欄 -->
@@ -48,28 +37,7 @@ const relatedPosts = allPosts
         <CategorySection currentCategory={post.data.category} />
 
         <!-- 相關文章 -->
-        {relatedPosts.length > 0 && (
-          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-bold mb-4">相關文章</h2>
-            <ul class="space-y-4">
-              {relatedPosts.map(relatedPost => (
-                <li>
-                  <a 
-                    href={`/blog/${relatedPost.id}`}
-                    class="block hover:text-primary-500 transition-colors"
-                  >
-                    <h3 class="font-medium text-sm line-clamp-2">
-                      {relatedPost.data.title}
-                    </h3>
-                    <span class="text-xs text-gray-500 mt-1 block">
-                      {formatDate(new Date(relatedPost.data.date))}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <RelatedPosts currentPost={post} limit={3} />
       </div>
     </aside>
 
@@ -101,25 +69,22 @@ const relatedPosts = allPosts
           </div>
         </div>
       </header>
-
       <!-- 文章封面圖 -->
       {post.data.image && (
         <div class="mb-8 rounded-lg overflow-hidden">
-          <img 
-            src={post.data.image.src} 
+          <img
+            src={post.data.image.src}
             alt={post.data.image.alt || post.data.title}
             class="w-full h-auto object-cover"
           />
         </div>
       )}
-
       <!-- 文章描述 -->
       <div class="mb-8">
         <p class="text-lg text-gray-600 dark:text-gray-400 italic">
           {post.data.description}
         </p>
       </div>
-
       <!-- 標籤列表 -->
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="mb-8">
@@ -135,13 +100,11 @@ const relatedPosts = allPosts
           </div>
         </div>
       )}
-
       <!-- 文章內容 -->
       <div class="prose prose-lg dark:prose-invert max-w-none">
         <Content />
       </div>
     </div>
-
     <!-- 右側邊欄 -->
     <aside class="w-64 shrink-0 hidden xl:block">
       <div class="sticky top-24 space-y-4">
@@ -151,7 +114,7 @@ const relatedPosts = allPosts
             <ul class="space-y-2">
               {headings.map(heading => (
                 <li class={`pl-${(heading.depth - 1) * 4}`}>
-                  <a 
+                  <a
                     href={`#${heading.slug}`}
                     class="block hover:text-primary-500 transition-colors text-sm"
                   >
@@ -161,7 +124,6 @@ const relatedPosts = allPosts
               ))}
             </ul>
           </nav>
-
           <div class="mt-6 space-y-2">
             <button
               id="backToTop"
@@ -183,7 +145,6 @@ const relatedPosts = allPosts
             </button>
           </div>
         </div>
-
         <!-- 文章資訊 -->
         <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
           <h2 class="text-xl font-bold mb-4">文章資訊</h2>
@@ -235,14 +196,15 @@ const relatedPosts = allPosts
   });
 
   // 平滑滾動到錨點
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
+  document.querySelectorAll('.table-of-contents a').forEach(link => {
+    link.addEventListener('click', (e) => {
       e.preventDefault();
-      const target = document.querySelector(anchor.getAttribute('href') || '');
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth'
-        });
+      const href = link.getAttribute('href');
+      if (href) {
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     });
   });
@@ -262,24 +224,15 @@ const relatedPosts = allPosts
   }
 
   .prose {
-    max-width: 100%;
-  }
-  
-  .prose img {
-    border-radius: 0.5rem;
-  }
-  
-  .prose a {
-    color: var(--color-primary);
-    text-decoration: none;
-  }
-  
-  .prose a:hover {
-    text-decoration: underline;
+    max-width: none;
   }
 
-  /* 目錄縮進 */
-  .pl-4 { padding-left: 1rem; }
-  .pl-8 { padding-left: 2rem; }
-  .pl-12 { padding-left: 3rem; }
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    scroll-margin-top: 2rem;
+  }
 </style>
