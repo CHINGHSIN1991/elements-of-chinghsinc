@@ -3,6 +3,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import CategorySection from '../../components/CategorySection.astro';
+import { slugify } from '../../ts/utils';
 
 // import
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -25,26 +26,63 @@ export async function getStaticPaths({ paginate }: { paginate: any}){
     return !data.draft;
   });
   return paginate(allPosts, {  
-    pageSize: 3,
+    pageSize: 6,
   });
 }
 
 const { page } = Astro.props as BlogPageProps;
+
+// 獲取所有文章以找出相關文章
+const allPosts = await getCollection('posts', ({ data }) => {
+  return !data.draft;
+});
+
+// 獲取熱門文章（按日期排序，取前5篇）
+const popularPosts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 5);
 ---
 
 <MainLayout>
   <section 
     class="container mx-auto px-4 py-16"
-    aria-label="專案列表"
+    aria-label="部落格列表"
   >
-    <div class="flex flex-col md:flex-row gap-8">
-      <div class="md:w-1/4 lg:w-1/5">
-        <CategorySection />
-      </div>
-      
-      <div class="md:w-3/4 lg:w-4/5">
+    <div class="flex gap-8 max-w-7xl mx-auto">
+      <!-- 左側邊欄 -->
+      <aside class="w-64 shrink-0 hidden lg:block">
+        <div class="sticky top-24 space-y-8">
+          <!-- 分類列表 -->
+          <CategorySection />
+
+          <!-- 熱門文章 -->
+          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">熱門文章</h2>
+            <ul class="space-y-4">
+              {popularPosts.map(post => (
+                <li>
+                  <a 
+                    href={`/blog/${post.id}`}
+                    class="block hover:text-primary-500 transition-colors"
+                  >
+                    <h3 class="font-medium text-sm line-clamp-2">
+                      {post.data.title}
+                    </h3>
+                    <span class="text-xs text-gray-500 mt-1 block">
+                      {new Date(post.data.date).toLocaleDateString()}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 主要內容區 -->
+      <div class="flex-grow">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          { page.data.map((post: any) => (
+          { page.data.map((post) => (
             <PostCard post={post} />
           )) }
         </div>
@@ -53,13 +91,13 @@ const { page } = Astro.props as BlogPageProps;
           <div class="pagination-nav flex justify-center gap-4 mt-12">
             {page.url.prev ? (
               <a href={page.url.prev} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
-                Prev
+                上一頁
               </a>
             ) : null}
             
             {page.url.next ? (
               <a href={page.url.next} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
-                Next
+                下一頁
               </a>
             ) : null}
           </div>
@@ -68,3 +106,45 @@ const { page } = Astro.props as BlogPageProps;
     </div>
   </section>
 </MainLayout>
+
+<script>
+  // 回到頂部功能
+  document.getElementById('backToTop')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // 展開全部功能
+  let isExpanded = false;
+  document.getElementById('expandAll')?.addEventListener('click', () => {
+    const button = document.getElementById('expandAll');
+    if (button) {
+      isExpanded = !isExpanded;
+      button.textContent = isExpanded ? '收合全部' : '展開全部';
+      
+      // 這裡可以根據需求添加展開/收合的邏輯
+      const details = document.querySelectorAll('details');
+      details.forEach(detail => {
+        detail.open = isExpanded;
+      });
+    }
+  });
+
+  // 滾動到底部功能
+  document.getElementById('scrollToBottom')?.addEventListener('click', () => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  });
+</script>
+
+<style>
+  .sticky {
+    position: sticky;
+    top: 2rem;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

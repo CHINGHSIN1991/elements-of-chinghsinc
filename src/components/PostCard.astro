@@ -5,7 +5,6 @@ import { slugify, formatDate } from "../ts/utils"
 const { post } = Astro.props;
 const { title, description, date, author, image, tags, category } = post.data;
 
-// 使用通用的方法處理圖片
 const imageUrl = image?.src || post.data.cover || "/assets/images/fallback-image.png";
 const imageAlt = image?.alt || title || "文章圖片";
 ---

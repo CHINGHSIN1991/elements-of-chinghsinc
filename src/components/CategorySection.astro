@@ -2,15 +2,22 @@
 import { getCollection } from 'astro:content';
 import { slugify } from "../ts/utils";
 
+interface Props {
+  currentCategory?: string;
+}
+
+const { currentCategory } = Astro.props;
+
 const allPosts = await getCollection('posts', ({ data }) => {
   return !data.draft;
 });
 
-const categories = [...new Set(allPosts.map((post) => post.data.category.toLowerCase()))];
+const categories = [...new Set(allPosts.map(post => post.data.category))];
 
+// 計算每個分類的文章數量
 const categoryCounts = categories.reduce((acc, category) => {
   const count = allPosts.filter(post => 
-    post.data.category.toLowerCase() === category
+    post.data.category === category
   ).length;
   
   return {
@@ -20,19 +27,21 @@ const categoryCounts = categories.reduce((acc, category) => {
 }, {} as Record<string, number>);
 ---
 
-<section class="category-section mb-8 sticky top-8">
-  <h2 class="text-2xl font-bold mb-4">Post - Category</h2>
-  <div class="flex flex-col gap-2">
-    {
-      Object.entries(categoryCounts).map(([category, count]) => (
+<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+  <h2 class="text-xl font-bold mb-4">文章分類</h2>
+  <ul class="space-y-2">
+    {categories.map(cat => (
+      <li>
         <a 
-          href={`/category/${slugify(category)}`} 
-          class="px-3 py-2 bg-gray-100 hover:bg-primary hover:text-white text-gray-800 rounded-md text-sm transition-colors flex justify-between items-center"
+          href={`/category/${slugify(cat)}`}
+          class={`block hover:text-primary-500 transition-colors flex justify-between items-center ${cat === currentCategory ? 'text-primary-500 font-bold' : ''}`}
         >
-          <span>{category}</span>
-          <span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs">{count}</span>
+          <span>{cat}</span>
+          <span class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full text-xs">
+            {categoryCounts[cat]}
+          </span>
         </a>
-      ))
-    }
-  </div>
-</section>
+      </li>
+    ))}
+  </ul>
+</div> 
