@@ -3,6 +3,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import CategorySection from '../../components/CategorySection.astro';
+import PopularPosts from '../../components/PopularPosts.astro';
 import { slugify } from '../../ts/utils';
 
 // import
@@ -32,15 +33,10 @@ export async function getStaticPaths({ paginate }: { paginate: any}){
 
 const { page } = Astro.props as BlogPageProps;
 
-// 獲取所有文章以找出相關文章
+// 獲取所有文章用於統計
 const allPosts = await getCollection('posts', ({ data }) => {
   return !data.draft;
 });
-
-// 獲取熱門文章（按日期排序，取前5篇）
-const popularPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 5);
 ---
 
 <MainLayout>
@@ -56,26 +52,7 @@ const popularPosts = allPosts
           <CategorySection />
 
           <!-- 熱門文章 -->
-          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-bold mb-4">熱門文章</h2>
-            <ul class="space-y-4">
-              {popularPosts.map(post => (
-                <li>
-                  <a 
-                    href={`/blog/${post.id}`}
-                    class="block hover:text-primary-500 transition-colors"
-                  >
-                    <h3 class="font-medium text-sm line-clamp-2">
-                      {post.data.title}
-                    </h3>
-                    <span class="text-xs text-gray-500 mt-1 block">
-                      {new Date(post.data.date).toLocaleDateString()}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <PopularPosts limit={5} />
         </div>
       </aside>
 
