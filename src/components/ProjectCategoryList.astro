@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import { slugify } from "../ts/utils";
+
+interface Props {
+  currentCategory?: string;
+}
+
+const { currentCategory } = Astro.props;
+
+const allProjects = await getCollection('projects', ({ data }) => {
+  return !data.draft;
+});
+
+const categories = [...new Set(allProjects.map(project => project.data.category))];
+
+// 計算每個分類的專案數量
+const categoryCounts = categories.reduce((acc, category) => {
+  const count = allProjects.filter(project =>
+    project.data.category === category
+  ).length;
+
+  return {
+    ...acc,
+    [category]: count
+  };
+}, {} as Record<string, number>);
+---
+
+<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+  <h2 class="text-xl font-bold mb-4">專案分類</h2>
+  <ul class="space-y-2">
+    {categories.map(cat => (
+      <li>
+        <a
+          href={`/project/category/${slugify(cat)}`}
+          class={`block hover:text-primary-500 transition-colors flex justify-between items-center ${cat === currentCategory ? 'text-primary-500 font-bold' : ''}`}
+        >
+          <span>{cat}</span>
+          <span class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full text-xs">
+            {categoryCounts[cat]}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div> 

@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugify, formatDate } from '../../ts/utils';
 import MainLayout from '../../layouts/MainLayout.astro';
+import RelatedProjects from '../../components/RelatedProjects.astro';
 
 export const prerender = true;
 
@@ -21,124 +22,126 @@ interface ProjectPageProps {
 }
 
 const { project } = Astro.props as ProjectPageProps;
-const { data, id } = project;
-
-const getRelatedProjects = async () => {
-  const allProjects = await getCollection('projects', ({ data: projectData, id: projectId }) => {
-    return !projectData.draft && projectId !== id;
-  });
-  
-  return allProjects
-    .filter(p => p.data.category === data.category)
-    .slice(0, 3);
-};
-
-const relatedProjects = await getRelatedProjects();
+const { data } = project;
 ---
 
 <MainLayout title={data.title} description={data.description}>
-  <article class="max-w-6xl mx-auto px-4 py-8">
-    <header class="mb-12 text-center">
-      <div class="flex justify-center items-center gap-2 mb-4">
-        <span class="px-3 py-1 bg-primary/90 text-white text-sm font-medium rounded-full">
-          {data.category}
-        </span>
-        <span class="text-text-secondary">
-          {formatDate(new Date(data.date))}
-        </span>
+  <div class="flex gap-8 max-w-7xl mx-auto px-4 py-8">
+    <!-- 左側邊欄 -->
+    <aside class="w-64 shrink-0 hidden lg:block">
+      <div class="sticky top-24 space-y-8">
+        <!-- 相關專案 -->
+        <RelatedProjects currentProject={project} limit={3} />
       </div>
-      
-      <h1 class="text-4xl md:text-5xl font-bold mb-4 transition-name="title">{data.title}</h1>
-      
-      <p class="text-text-secondary text-lg max-w-3xl mx-auto mb-6">
-        {data.description}
-      </p>
-      
-      {data.designers && data.designers.length > 0 && (
-        <div class="flex justify-center items-center mb-8">
-          <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-            </svg>
-            <span class="text-text-secondary">設計師: </span>
-            <div class="flex flex-wrap gap-2 ml-2">
-              {data.designers.map((designer: string) => (
-                <span class="text-primary">{designer}</span>
+    </aside>
+
+    <!-- 主要內容 -->
+    <div class="flex-grow max-w-4xl">
+      <article>
+        <header class="mb-12 text-center">
+          <div class="flex justify-center items-center gap-2 mb-4">
+            <span class="px-3 py-1 bg-primary/90 text-white text-sm font-medium rounded-full">
+              {data.category}
+            </span>
+            <span class="text-text-secondary">
+              {formatDate(new Date(data.date))}
+            </span>
+          </div>
+          
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">{data.title}</h1>
+          
+          <p class="text-text-secondary text-lg max-w-3xl mx-auto mb-6">
+            {data.description}
+          </p>
+          
+          {data.designers && data.designers.length > 0 && (
+            <div class="flex justify-center items-center mb-8">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-text-secondary" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                <span class="text-text-secondary">設計師: </span>
+                <div class="flex flex-wrap gap-2 ml-2">
+                  {data.designers.map((designer: string) => (
+                    <span class="text-primary">{designer}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </header>
+        
+        <div class="mb-12">
+          <img 
+            src={data.cover} 
+            alt={data.title || "專案圖片"} 
+            class="w-full h-auto max-h-[600px] object-cover rounded-lg shadow-md"
+          />
+        </div>
+        
+        {data.tags && data.tags.length > 0 && (
+          <div class="max-w-4xl mx-auto mb-12">
+            <h3 class="text-lg font-bold mb-4">標籤</h3>
+            <div class="flex flex-wrap gap-2">
+              {data.tags.map((tag: string) => (
+                <a href={`/tag/${slugify(tag)}`} class="px-3 py-1 bg-background-secondary rounded-full hover:bg-primary/10 transition-colors">
+                  #{tag}
+                </a>
               ))}
             </div>
           </div>
-        </div>
-      )}
-    </header>
-    
-    <div class="mb-12">
-      <img 
-        src={data.cover} 
-        alt={data.title || "專案圖片"} 
-        class="w-full h-auto max-h-[600px] object-cover rounded-lg shadow-md"
-      />
-    </div>
-    
-    {data.tags && data.tags.length > 0 && (
-      <div class="max-w-4xl mx-auto mb-12">
-        <h3 class="text-lg font-bold mb-4">標籤</h3>
-        <div class="flex flex-wrap gap-2">
-          {data.tags.map((tag: string) => (
-            <a href={`/tag/${slugify(tag)}`} class="px-3 py-1 bg-background-secondary rounded-full hover:bg-primary/10 transition-colors">
-              #{tag}
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
-    
-    {data.images && data.images.length > 0 && (
-      <div class="max-w-6xl mx-auto mb-12">
-        <h3 class="text-2xl font-bold mb-6">專案圖片</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.images.map((image: string) => (
-            <div class="aspect-video overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
-              <img 
-                src={image} 
-                alt={data.title || "專案圖片"} 
-                class="w-full h-full object-cover"
-              />
+        )}
+        
+        {data.images && data.images.length > 0 && (
+          <div class="max-w-6xl mx-auto mb-12">
+            <h3 class="text-2xl font-bold mb-6">專案圖片</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {data.images.map((image: string) => (
+                <div class="aspect-video overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+                  <img 
+                    src={image} 
+                    alt={data.title || "專案圖片"} 
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+        )}
+      </article>
+    </div>
+
+    <!-- 右側邊欄 -->
+    <aside class="w-64 shrink-0 hidden xl:block">
+      <div class="sticky top-24 space-y-4">
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+          <h2 class="text-xl font-bold mb-4">專案資訊</h2>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span>分類</span>
+              <span class="font-medium">{data.category}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>發布日期</span>
+              <span class="font-medium">{formatDate(new Date(data.date))}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>設計師</span>
+              <span class="font-medium">{data.designers?.length || 0} 位</span>
+            </div>
+            <div class="flex justify-between">
+              <span>標籤數</span>
+              <span class="font-medium">{data.tags?.length || 0}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>圖片數</span>
+              <span class="font-medium">{data.images?.length || 0}</span>
+            </div>
+          </div>
         </div>
       </div>
-    )}
-    
-    {relatedProjects.length > 0 && (
-      <div class="max-w-6xl mx-auto mt-16">
-        <h3 class="text-2xl font-bold mb-6">相關專案</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {relatedProjects.map((relatedProject) => (
-            <a 
-              href={`/project/${relatedProject.id || slugify(relatedProject.data.title)}`} 
-              class="group block bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300"
-            >
-              <div class="aspect-video overflow-hidden">
-                <img 
-                  src={relatedProject.data.cover} 
-                  alt={relatedProject.data.title} 
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div class="p-4">
-                <h4 class="font-bold group-hover:text-primary transition-colors">
-                  {relatedProject.data.title}
-                </h4>
-                <p class="text-sm text-text-secondary line-clamp-1">
-                  {relatedProject.data.description}
-                </p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
-  </article>
+    </aside>
+  </div>
 </MainLayout>
 
 <style>

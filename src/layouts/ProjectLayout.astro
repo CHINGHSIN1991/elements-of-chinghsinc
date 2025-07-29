@@ -38,10 +38,10 @@ const {
   images,
 } = project.data as ProjectFrontmatter;
 
-const relatedPosts = allProjects.filter(
-  (post: CollectionEntry<'projects'>) => 
-    post.data.category.toLowerCase() === category.toLowerCase() && 
-    post.data.title !== title
+const relatedProjects = allProjects.filter(
+  (project: CollectionEntry<'projects'>) => 
+    project.data.category.toLowerCase() === category.toLowerCase() && 
+    project.data.title !== title
 ).slice(0,3);
 ---
 
@@ -54,13 +54,13 @@ const relatedPosts = allProjects.filter(
       <slot />
     </div>
     <div class="sidebar">
-      <aside class="sidebar-widget" aria-label="Blog categories">
-        <h2 class="text-xl font-bold mb-4">Blog Categories</h2>
+      <aside class="sidebar-widget" aria-label="Project categories">
+        <h2 class="text-xl font-bold mb-4">Project Categories</h2>
       </aside>
       {
-        relatedPosts.length > 0 && (
-        <aside class="sidebar-widget" aria-label="Related posts">
-          <h2 class="text-xl font-bold mb-4">Related Posts</h2>
+        relatedProjects.length > 0 && (
+        <aside class="sidebar-widget" aria-label="Related projects">
+          <h2 class="text-xl font-bold mb-4">Related Projects</h2>
         </aside>
         )
       }

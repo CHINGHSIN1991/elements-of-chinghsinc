@@ -4,6 +4,8 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import TagClout from '../../components/TagClout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import Pagination from '../../components/Pagination.astro';
+import ProjectCategoryList from '../../components/ProjectCategoryList.astro';
+import PopularProjects from '../../components/PopularProjects.astro';
 
 // import
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -26,12 +28,16 @@ export async function getStaticPaths({ paginate }: { paginate: any}){
     return !data.draft;
   });
   return paginate(allProjects, {  
-    pageSize: 3,
+    pageSize: 6,
   });
 }
 
 const { page } = Astro.props as ProjectListProps;
 
+// 獲取所有專案用於統計
+const allProjects = await getCollection('projects', ({ data }) => {
+  return !data.draft;
+});
 ---
 
 <MainLayout title="案例作品">
@@ -40,49 +46,88 @@ const { page } = Astro.props as ProjectListProps;
     class="container mx-auto px-4 py-16"
     aria-label="專案列表"
   >
-    <div class="max-w-6xl mx-auto">
-      <h1 
-        class="text-4xl md:text-5xl font-bold text-center mb-4"
-        transition:name="page-title"
-      >
-        Projects
-      </h1>
-      
-      <p class="text-center text-text-secondary dark:text-gray-300 mb-16 max-w-2xl mx-auto">
-        desc desc
-      </p>
+    <div class="flex gap-8 max-w-7xl mx-auto">
+      <!-- 左側邊欄 -->
+      <aside class="w-64 shrink-0 hidden lg:block">
+        <div class="sticky top-24 space-y-8">
+          <!-- 專案分類列表 -->
+          <ProjectCategoryList />
 
-      {page && page?.data?.length > 0 ? (
-        <>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {page.data.map((project: any) => (
-              <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
-          
-          <div class="my-12 flex justify-between">
-            <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-          </div>
-        </>
-      ) : (
-        <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary dark:bg-gray-800 rounded-lg shadow-inner">
-          <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
-            <span class="text-2xl">!</span>
-          </div>
-          <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
-          <p class="text-center max-w-md mb-8">
-            目前尚未有任何專案作品，請稍後再查看。
-          </p>
-          <a 
-            href="/" 
-            class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
-          >
-            返回首頁
-          </a>
+          <!-- 熱門專案 -->
+          <PopularProjects limit={5} />
         </div>
-      )}
+      </aside>
+
+      <!-- 主要內容區 -->
+      <div class="flex-grow">
+        <div class="max-w-6xl mx-auto">
+          <h1 
+            class="text-4xl md:text-5xl font-bold text-center mb-4"
+            transition:name="page-title"
+          >
+            專案作品
+          </h1>
+          
+          <p class="text-center text-text-secondary dark:text-gray-300 mb-16 max-w-2xl mx-auto">
+            這裡展示了我們完成的各種設計專案，包含品牌設計、網頁設計、UI/UX 設計等作品。
+          </p>
+
+          {page && page?.data?.length > 0 ? (
+            <>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                {page.data.map((project) => (
+                  <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300">
+                    <ProjectCard project={project} />
+                  </div>
+                ))}
+              </div>
+              
+              <div class="my-12 flex justify-between">
+                <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+              </div>
+            </>
+          ) : (
+            <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary dark:bg-gray-800 rounded-lg shadow-inner">
+              <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                <span class="text-2xl">!</span>
+              </div>
+              <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
+              <p class="text-center max-w-md mb-8">
+                目前尚未有任何專案作品，請稍後再查看。
+              </p>
+              <a 
+                href="/" 
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+              >
+                返回首頁
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <!-- 右側邊欄 -->
+      <aside class="w-64 shrink-0 hidden xl:block">
+        <div class="sticky top-24 space-y-4">
+          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">專案統計</h2>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span>總專案數</span>
+                <span class="font-medium">{allProjects.length}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>分類數</span>
+                <span class="font-medium">{new Set(allProjects.map(project => project.data.category)).size}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>當前頁面</span>
+                <span class="font-medium">{page.data.length} 個專案</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 </MainLayout>
