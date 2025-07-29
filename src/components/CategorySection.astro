@@ -33,7 +33,7 @@ const categoryCounts = categories.reduce((acc, category) => {
     {categories.map(cat => (
       <li>
         <a 
-          href={`/category/${slugify(cat)}`}
+          href={`/blog/category/${slugify(cat)}`}
           class={`block hover:text-primary-500 transition-colors flex justify-between items-center ${cat === currentCategory ? 'text-primary-500 font-bold' : ''}`}
         >
           <span>{cat}</span>

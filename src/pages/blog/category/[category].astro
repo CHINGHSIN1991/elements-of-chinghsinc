@@ -1,9 +1,9 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import MainLayout from '../../layouts/MainLayout.astro';
-import PostCard from '../../components/PostCard.astro';
-import CategorySection from '../../components/CategorySection.astro';
-import { slugify } from '../../ts/utils';
+import MainLayout from '../../../layouts/MainLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import CategorySection from '../../../components/CategorySection.astro';
+import { slugify } from '../../../ts/utils';
 
 export const prerender = true;
 
@@ -34,8 +34,8 @@ interface CategoryPageProps {
 }
 
 const { category, posts } = Astro.props as CategoryPageProps;
-const title = `${category} Category Posts`;
-const description = `Check all posts in ${category} category`;
+const title = `${category} 文章分類`;
+const description = `查看所有 ${category} 分類的文章`;
 ---
 
 <MainLayout title={title} description={description}>
@@ -45,7 +45,6 @@ const description = `Check all posts in ${category} category`;
         <CategorySection currentCategory={category} />
       </div>
       
-
       <div class="md:w-3/4 lg:w-4/5">
         <h1 class="text-3xl font-bold mb-6">{title}</h1>
         <p class="mb-8">{description}</p>
@@ -58,7 +57,7 @@ const description = `Check all posts in ${category} category`;
 
         <div class="mt-12 text-center">
           <a href="/blog" class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
-            All Posts
+            所有文章
           </a>
         </div>
       </div>
