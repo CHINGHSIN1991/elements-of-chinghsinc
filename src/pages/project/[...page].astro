@@ -105,29 +105,6 @@ const allProjects = await getCollection('projects', ({ data }) => {
           )}
         </div>
       </div>
-
-      <!-- 右側邊欄 -->
-      <aside class="w-64 shrink-0 hidden xl:block">
-        <div class="sticky top-24 space-y-4">
-          <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h2 class="text-xl font-bold mb-4">專案統計</h2>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between">
-                <span>總專案數</span>
-                <span class="font-medium">{allProjects.length}</span>
-              </div>
-              <div class="flex justify-between">
-                <span>分類數</span>
-                <span class="font-medium">{new Set(allProjects.map(project => project.data.category)).size}</span>
-              </div>
-              <div class="flex justify-between">
-                <span>當前頁面</span>
-                <span class="font-medium">{page.data.length} 個專案</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
     </div>
   </section>
 </MainLayout>
