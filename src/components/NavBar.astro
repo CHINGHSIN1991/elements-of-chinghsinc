@@ -55,33 +55,29 @@ const activeTabIndex = navData.findIndex(
   </div>
 </nav>
 
-<!-- 為 main content 添加 padding-top 以避免被 fixed navbar 遮擋 -->
+<!-- Navbar styles -->
 <style>
-  /* 確保 main content 不被 navbar 遮擋 */
-  :global(main) {
-    padding-top: 0;
-  }
   
-  /* 初始透明狀態 */
+  /* Initial transparent state */
   #navbar {
     background: transparent;
     backdrop-filter: none;
   }
   
-  /* 滾動時的毛玻璃效果 */
+  /* Glass effect when scrolling */
   #navbar.scrolled {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
-  /* 深色模式下的毛玻璃效果 */
+  /* Dark mode glass effect */
   :global(.dark) #navbar.scrolled {
     background: rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
   
-  /* 滾動時文字顏色調整 - 覆蓋默認顏色 */
+  /* Adjust text color when scrolling - override default color */
   #navbar.scrolled .nav-item {
     color: var(--color-text) !important;
   }
@@ -90,12 +86,12 @@ const activeTabIndex = navData.findIndex(
     color: var(--color-text-secondary) !important;
   }
   
-  /* 滾動時活動項目保持主色調 */
+  /* Active item maintains primary color when scrolling */
   #navbar.scrolled .nav-item.active {
     color: var(--color-primary) !important;
   }
   
-  /* 確保 logo 在滾動時也有適當顏色 */
+  /* Ensure logo has appropriate color when scrolling */
   #navbar.scrolled img {
     filter: brightness(1);
   }
@@ -104,7 +100,7 @@ const activeTabIndex = navData.findIndex(
     filter: brightness(1);
   }
   
-  /* 響應式隱藏導航項目 */
+  /* Responsive hide navigation items */
   @media (max-width: 768px) {
     .nav-container {
       gap: 0.5rem;
@@ -129,7 +125,7 @@ const activeTabIndex = navData.findIndex(
 </style>
 
 <script>
-  // 處理底線位置
+  // Handle underline position
   function updateNavIndicator() {
     const activeItem = document.querySelector('.nav-item.active') as HTMLElement | null;
     const navIndicator = document.getElementById('nav-indicator');
@@ -144,12 +140,12 @@ const activeTabIndex = navData.findIndex(
     }
   }
   
-  // 處理滾動效果
+  // Handle scroll effect
   function handleScroll() {
     const navbar = document.getElementById('navbar');
     if (!navbar) return;
     
-    const scrollThreshold = 50; // 滾動超過 50px 時觸發效果
+    const scrollThreshold = 50; // Scroll threshold
     
     if (window.scrollY > scrollThreshold) {
       navbar.classList.add('scrolled');
@@ -158,23 +154,23 @@ const activeTabIndex = navData.findIndex(
     }
   }
   
-  // 初始執行
+  // Initial execution
   updateNavIndicator();
   handleScroll();
   
-  // 監聽滾動事件
+  // Listen to scroll event
   window.addEventListener('scroll', handleScroll, { passive: true });
   
-  // 在頁面轉換後重新計算
+  // Recalculate after page transition
   document.addEventListener('astro:page-load', () => {
     updateNavIndicator();
     handleScroll();
     
-    // 重新綁定滾動事件（如果需要）
+    // Rebind scroll event (if needed)
     window.addEventListener('scroll', handleScroll, { passive: true });
   });
   
-  // 清理事件監聽器
+  // Clear event listeners
   document.addEventListener('astro:before-swap', () => {
     window.removeEventListener('scroll', handleScroll);
   });

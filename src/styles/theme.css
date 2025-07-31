@@ -1,12 +1,17 @@
-/* 基礎變量 */
+/* base variables */
 :root {
-  /* 淺色模式變量 */
+  /* light mode variables */
   --color-primary: #3b82f6;
   --color-primary-dark: #2563eb;
   --color-background: #ffffff;
   --color-background-secondary: #f3f4f6;
   --color-text: #1f2937;
   --color-text-secondary: #4b5563;
+
+  /* navbar related settings */
+  --navbar-height: 4rem; /* 64px - navbar height */
+  --navbar-spacing: 6rem; /* 96px - sticky element spacing */
+  --scroll-margin-top: 6rem; /* 96px - anchor scroll margin */
 }
 
 /* 深色模式變量 */
@@ -30,11 +35,34 @@ body {
          transition-colors duration-300;
 }
 
-/* 禁用圖片拖拽 */
+/* disable image drag */
 img {
   -webkit-user-drag: none;
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
   user-drag: none;
+}
+
+/* navbar related global styles */
+:global(main) {
+  padding-top: var(
+    --navbar-height
+  ); /* ensure main content is not covered by navbar */
+}
+
+/* sticky element */
+.sticky-navbar-safe {
+  position: sticky;
+  top: var(--navbar-spacing) !important;
+}
+
+/* anchor scroll margin */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  scroll-margin-top: var(--scroll-margin-top);
 }
