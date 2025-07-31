@@ -30,20 +30,20 @@ const { Content, headings } = await post.render();
 
 <PostLayout post={post}>
   <div class="flex gap-8 max-w-7xl mx-auto px-4 py-8">
-    <!-- 左側邊欄 -->
+    <!-- left sidebar -->
     <aside class="w-64 shrink-0 hidden lg:block">
-      <div class="sticky top-24 space-y-8">
-        <!-- 分類列表 -->
+        <div class="sticky-navbar-safe space-y-8">
+        <!-- category list -->
         <CategorySection currentCategory={post.data.category} />
 
-        <!-- 相關文章 -->
+        <!-- related posts -->
         <RelatedPosts currentPost={post} limit={3} />
       </div>
     </aside>
 
-    <!-- 主要內容 -->
+    <!-- main content -->
     <div class="flex-grow max-w-3xl">
-      <!-- 文章標題和基本資訊 -->
+      <!-- article title and basic info -->
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
         <div class="flex flex-wrap gap-4 text-gray-600 dark:text-gray-400">
@@ -69,7 +69,7 @@ const { Content, headings } = await post.render();
           </div>
         </div>
       </header>
-      <!-- 文章封面圖 -->
+      <!-- article cover image -->
       {post.data.image && (
         <div class="mb-8 rounded-lg overflow-hidden">
           <img
@@ -79,13 +79,13 @@ const { Content, headings } = await post.render();
           />
         </div>
       )}
-      <!-- 文章描述 -->
+      <!-- article description -->
       <div class="mb-8">
         <p class="text-lg text-gray-600 dark:text-gray-400 italic">
           {post.data.description}
         </p>
       </div>
-      <!-- 標籤列表 -->
+      <!-- tag list -->
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="mb-8">
           <div class="flex flex-wrap gap-2">
@@ -100,16 +100,16 @@ const { Content, headings } = await post.render();
           </div>
         </div>
       )}
-      <!-- 文章內容 -->
+      <!-- article content -->
       <div class="prose prose-lg dark:prose-invert max-w-none">
         <Content />
       </div>
     </div>
-    <!-- 右側邊欄 -->
+    <!-- right sidebar -->
     <aside class="w-64 shrink-0 hidden xl:block">
-      <div class="sticky top-24 space-y-4">
+              <div class="sticky-navbar-safe space-y-4">
         <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-          <h2 class="text-xl font-bold mb-4">文章目錄</h2>
+          <h2 class="text-xl font-bold mb-4">Table of Contents</h2>
           <nav class="table-of-contents">
             <ul class="space-y-2">
               {headings.map(heading => (
@@ -129,36 +129,36 @@ const { Content, headings } = await post.render();
               id="backToTop"
               class="w-full px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition"
             >
-              回到頂部
+              Back to Top
             </button>
             <button
               id="expandAll"
               class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
             >
-              展開全部
+              Expand All
             </button>
             <button
               id="scrollToBottom"
               class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
             >
-              滾動到底部
+              Scroll to Bottom
             </button>
           </div>
         </div>
-        <!-- 文章資訊 -->
+        <!-- article info -->
         <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-          <h2 class="text-xl font-bold mb-4">文章資訊</h2>
+          <h2 class="text-xl font-bold mb-4">Article Info</h2>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
-              <span>字數</span>
+              <span>Word Count</span>
               <span class="font-medium">{post.body?.length || 0}</span>
             </div>
             <div class="flex justify-between">
-              <span>段落數</span>
+              <span>Paragraph Count</span>
               <span class="font-medium">{headings.length}</span>
             </div>
             <div class="flex justify-between">
-              <span>標籤數</span>
+              <span>Tag Count</span>
               <span class="font-medium">{post.data.tags?.length || 0}</span>
             </div>
           </div>
@@ -169,20 +169,20 @@ const { Content, headings } = await post.render();
 </PostLayout>
 
 <script>
-  // 回到頂部功能
+  // back to top function
   document.getElementById('backToTop')?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // 展開全部功能
+  // expand all function
   let isExpanded = false;
   document.getElementById('expandAll')?.addEventListener('click', () => {
     const button = document.getElementById('expandAll');
     if (button) {
       isExpanded = !isExpanded;
-      button.textContent = isExpanded ? '收合全部' : '展開全部';
+      button.textContent = isExpanded ? 'Collapse All' : 'Expand All';
       
-      // 這裡可以根據需求添加展開/收合的邏輯
+      // here you can add the logic for expand/collapse
       const details = document.querySelectorAll('details');
       details.forEach(detail => {
         detail.open = isExpanded;
@@ -190,12 +190,12 @@ const { Content, headings } = await post.render();
     }
   });
 
-  // 滾動到底部功能
+  // scroll to bottom function
   document.getElementById('scrollToBottom')?.addEventListener('click', () => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   });
 
-  // 平滑滾動到錨點
+  // smooth scroll to anchor
   document.querySelectorAll('.table-of-contents a').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -211,11 +211,6 @@ const { Content, headings } = await post.render();
 </script>
 
 <style>
-  .sticky {
-    position: sticky;
-    top: 2rem;
-  }
-
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -225,14 +220,5 @@ const { Content, headings } = await post.render();
 
   .prose {
     max-width: none;
-  }
-
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4,
-  .prose h5,
-  .prose h6 {
-    scroll-margin-top: 2rem;
   }
 </style>

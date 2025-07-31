@@ -27,18 +27,18 @@ const { data } = project;
 
 <MainLayout title={data.title} description={data.description}>
   <div class="flex gap-8 max-w-7xl mx-auto px-4 py-8">
-    <!-- 左側邊欄 -->
+    <!-- left sidebar -->
     <aside class="w-64 shrink-0 hidden lg:block">
-      <div class="sticky top-24 space-y-8">
-        <!-- 相關專案 -->
+      <div class="sticky-navbar-safe space-y-8">
+        <!-- related projects -->
         <RelatedProjects currentProject={project} limit={3} />
       </div>
     </aside>
 
-    <!-- 主要內容 -->
+    <!-- main content -->
     <div class="flex-grow max-w-4xl">
       <article>
-        <header class="mb-12 text-center">
+        <header class="mt-16 mb-12 text-center">
           <div class="flex justify-center items-center gap-2 mb-4">
             <span class="px-3 py-1 bg-primary/90 text-white text-sm font-medium rounded-full">
               {data.category}
@@ -47,13 +47,10 @@ const { data } = project;
               {formatDate(new Date(data.date))}
             </span>
           </div>
-          
           <h1 class="text-4xl md:text-5xl font-bold mb-4">{data.title}</h1>
-          
           <p class="text-text-secondary text-lg max-w-3xl mx-auto mb-6">
             {data.description}
           </p>
-          
           {data.designers && data.designers.length > 0 && (
             <div class="flex justify-center items-center mb-8">
               <div class="flex items-center">
@@ -113,7 +110,7 @@ const { data } = project;
 
     <!-- 右側邊欄 -->
     <aside class="w-64 shrink-0 hidden xl:block">
-      <div class="sticky top-24 space-y-4">
+      <div class="sticky-navbar-safe space-y-4">
         <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
           <h2 class="text-xl font-bold mb-4">專案資訊</h2>
           <div class="space-y-2 text-sm">
