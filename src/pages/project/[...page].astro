@@ -33,15 +33,9 @@ export async function getStaticPaths({ paginate }: { paginate: any}){
 }
 
 const { page } = Astro.props as ProjectListProps;
-
-// 獲取所有專案用於統計
-const allProjects = await getCollection('projects', ({ data }) => {
-  return !data.draft;
-});
 ---
 
 <MainLayout title="案例作品">
-  <TagClout showCount />
   <section 
     class="container mx-auto px-4 py-16"
     aria-label="專案列表"
@@ -59,52 +53,38 @@ const allProjects = await getCollection('projects', ({ data }) => {
       </aside>
 
       <!-- 主要內容區 -->
-      <div class="flex-grow">
-        <div class="max-w-6xl mx-auto">
-          <h1 
-            class="text-4xl md:text-5xl font-bold text-center mb-4"
-            transition:name="page-title"
-          >
-            專案作品
-          </h1>
-          
-          <p class="text-center text-text-secondary dark:text-gray-300 mb-16 max-w-2xl mx-auto">
-            這裡展示了我們完成的各種設計專案，包含品牌設計、網頁設計、UI/UX 設計等作品。
-          </p>
-
-          {page && page?.data?.length > 0 ? (
-            <>
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                {page.data.map((project) => (
-                  <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300">
-                    <ProjectCard project={project} />
-                  </div>
-                ))}
-              </div>
-              
-              <div class="my-12 flex justify-between">
-                <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-              </div>
-            </>
-          ) : (
-            <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary dark:bg-gray-800 rounded-lg shadow-inner">
-              <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
-                <span class="text-2xl">!</span>
-              </div>
-              <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
-              <p class="text-center max-w-md mb-8">
-                目前尚未有任何專案作品，請稍後再查看。
-              </p>
-              <a 
-                href="/" 
-                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
-              >
-                返回首頁
-              </a>
+      <div class="flex-grow mt-8">
+        {page && page?.data?.length > 0 ? (
+          <>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {page.data.map((project) => (
+                <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300">
+                  <ProjectCard project={project} />
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      </div>
+            
+            <div class="my-12 flex justify-between">
+              <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+            </div>
+          </>
+        ) : (
+          <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary dark:bg-gray-800 rounded-lg shadow-inner">
+            <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
+              <span class="text-2xl">!</span>
+            </div>
+            <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
+            <p class="text-center max-w-md mb-8">
+              目前尚未有任何專案作品，請稍後再查看。
+            </p>
+            <a 
+              href="/" 
+              class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              返回首頁
+            </a>
+          </div>
+        )}
     </div>
   </section>
 </MainLayout>
