@@ -20,14 +20,6 @@ const projectId = project.id || slugify(title);
         class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
       />
     </div>
-    
-    <div class="absolute top-4 right-4 flex flex-wrap gap-2 justify-end">
-      {tags && tags.slice(0, 2).map(tag => (
-        <a href={`/tag/${slugify(tag)}`} class="px-3 py-1 text-xs font-medium bg-background/80 backdrop-blur-sm text-text rounded-full hover:bg-primary hover:text-white transition-colors">
-          {tag}
-        </a>
-      ))}
-    </div>
   </a>
   
   <div class="p-5 flex-grow flex flex-col">
