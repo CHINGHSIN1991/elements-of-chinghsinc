@@ -69,16 +69,6 @@ const { Content, headings } = await post.render();
           </div>
         </div>
       </header>
-      <!-- article cover image -->
-      {post.data.image && (
-        <div class="mb-8 rounded-lg overflow-hidden">
-          <img
-            src={post.data.image.src}
-            alt={post.data.image.alt || post.data.title}
-            class="w-full h-auto object-cover"
-          />
-        </div>
-      )}
       <!-- article description -->
       <div class="mb-8">
         <p class="text-lg text-gray-600 dark:text-gray-400 italic">
