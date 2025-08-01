@@ -24,11 +24,11 @@ const relatedProjects = allProjects
 ---
 
 {relatedProjects.length > 0 && (
-  <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-    <h2 class="text-xl font-bold mb-4">相關專案</h2>
-    <ul class="space-y-4">
+  <div class="border-l-2 px-2">
+    <h2 class="text-xl font-bold mb-4 pl-2">相關專案</h2>
+    <ul class="space-y-1">
       {relatedProjects.map(relatedProject => (
-        <li>
+        <li class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 px-2 py-1 rounded-md">
           <a
             href={`/project/${relatedProject.id || slugify(relatedProject.data.title)}`}
             class="block hover:text-primary-500 transition-colors"

@@ -17,11 +17,11 @@ const popularPosts = allPosts
   .slice(0, limit);
 ---
 
-<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-  <h2 class="text-xl font-bold mb-4">熱門文章</h2>
-  <ul class="space-y-4">
+<div class="border-l-2 px-2">
+  <h2 class="text-xl font-bold mb-4 pl-2">熱門文章</h2>
+  <ul class="space-y-1">
     {popularPosts.map(post => (
-      <li>
+      <li class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 px-2 py-1 rounded-md">
         <a 
           href={`/blog/${post.id}`}
           class="block hover:text-primary-500 transition-colors"

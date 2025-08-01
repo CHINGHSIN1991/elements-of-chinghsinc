@@ -27,11 +27,11 @@ const categoryCounts = categories.reduce((acc, category) => {
 }, {} as Record<string, number>);
 ---
 
-<div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-  <h2 class="text-xl font-bold mb-4">文章分類</h2>
-  <ul class="space-y-2">
+<div class="border-l-2 px-2">
+  <h2 class="text-xl font-bold mb-4 pl-2">文章分類</h2>
+  <ul class="space-y-1">
     {categories.map(cat => (
-      <li>
+      <li class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 px-2 py-1 rounded-md">
         <a 
           href={`/blog/category/${slugify(cat)}`}
           class={`block hover:text-primary-500 transition-colors flex justify-between items-center ${cat === currentCategory ? 'text-primary-500 font-bold' : ''}`}
