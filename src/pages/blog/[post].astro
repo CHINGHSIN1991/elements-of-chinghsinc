@@ -98,12 +98,12 @@ const { Content, headings } = await post.render();
     <!-- right sidebar -->
     <aside class="w-64 shrink-0 hidden xl:block">
               <div class="sticky-navbar-safe space-y-4">
-        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-          <h2 class="text-xl font-bold mb-4">Table of Contents</h2>
+        <div class="dark:border-l-2 dark:border-gray-700 border-l-2 border-gray-200 px-2">
+          <h2 class="text-xl font-bold mb-4 pl-2">Table of Contents</h2>
           <nav class="table-of-contents">
-            <ul class="space-y-2">
+            <ul class="space-y-1">
               {headings.map(heading => (
-                <li class={`pl-${(heading.depth - 1) * 4}`}>
+                <li class={`pl-${(heading.depth - 1) * 4} hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 px-2 py-1 rounded-md`}>
                   <a
                     href={`#${heading.slug}`}
                     class="block hover:text-primary-500 transition-colors text-sm"
@@ -114,7 +114,7 @@ const { Content, headings } = await post.render();
               ))}
             </ul>
           </nav>
-          <div class="mt-6 space-y-2">
+          <div class="mt-6 space-y-2 pl-2">
             <button
               id="backToTop"
               class="w-full px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition"
@@ -136,9 +136,9 @@ const { Content, headings } = await post.render();
           </div>
         </div>
         <!-- article info -->
-        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-          <h2 class="text-xl font-bold mb-4">Article Info</h2>
-          <div class="space-y-2 text-sm">
+        <div class="dark:border-l-2 dark:border-gray-700 border-l-2 border-gray-200 px-2">
+          <h2 class="text-xl font-bold mb-4 pl-2">Article Info</h2>
+          <div class="space-y-2 text-sm pl-2">
             <div class="flex justify-between">
               <span>Word Count</span>
               <span class="font-medium">{post.body?.length || 0}</span>
