@@ -1,48 +1,231 @@
-# Astro Starter Kit: Basics
+# Elements of ChingHsinChen
 
-```sh
-npm create astro@latest -- --template basics
+A personal portfolio and blog website built with Astro, featuring a modern design with dark mode support and responsive layout.
+
+## 🌟 Features
+
+### 📝 Blog System
+- **Markdown Support**: Write blog posts in Markdown with frontmatter
+- **Category Organization**: Organize posts by categories
+- **Tag System**: Tag-based content discovery
+- **Related Posts**: Automatic related content suggestions
+- **Table of Contents**: Auto-generated navigation for long articles
+- **Article Statistics**: Word count, paragraph count, and tag information
+
+### 🎨 Project Showcase
+- **Project Gallery**: Display portfolio projects with rich metadata
+- **Category Filtering**: Filter projects by technology or type
+- **Project Details**: Detailed project pages with descriptions and links
+- **Related Projects**: Smart project recommendations
+
+### 🎯 User Experience
+- **Dark/Light Mode**: Toggle between themes with persistent preference
+- **Responsive Design**: Optimized for desktop, tablet, and mobile
+- **Smooth Navigation**: Client-side routing with Astro transitions
+- **SEO Optimized**: Meta tags, Open Graph, Twitter Cards, and JSON-LD
+- **Performance**: Fast loading with static site generation
+
+### 🏗️ Technical Features
+- **Component Architecture**: Modular, reusable components organized by functionality
+- **TypeScript Support**: Full type safety throughout the codebase
+- **Tailwind CSS**: Utility-first styling with custom design system
+- **Content Collections**: Type-safe content management with Astro
+- **Image Optimization**: Automatic image processing and optimization
+
+## 📁 Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── blog/           # Blog-specific components
+│   │   ├── CategorySection.astro
+│   │   ├── PostCard.astro
+│   │   ├── PopularPosts.astro
+│   │   └── RelatedPosts.astro
+│   ├── project/        # Project-specific components
+│   │   ├── ProjectCard.astro
+│   │   ├── ProjectCategoryList.astro
+│   │   ├── PopularProjects.astro
+│   │   └── RelatedProjects.astro
+│   ├── layout/         # Layout and structural components
+│   │   ├── NavBar.astro
+│   │   ├── Footer.astro
+│   │   ├── PostHeader.astro
+│   │   └── Seo.astro
+│   └── common/         # Shared utility components
+│       ├── Link.astro
+│       ├── Nav.astro
+│       ├── Pagination.astro
+│       ├── ThemeToggle.astro
+│       └── TagClout.astro
+├── content/            # Content management
+│   ├── posts/         # Blog posts (Markdown)
+│   ├── projects/      # Project data (JSON)
+│   └── static/        # Static content data
+├── layouts/           # Page layouts
+├── pages/            # Route pages
+├── styles/           # Global styles and themes
+├── ts/               # TypeScript utilities
+└── data/             # Site configuration and navigation
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## 🚀 Getting Started
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+### Installation
 
-## 🚀 Project Structure
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/elements-of-chinghsinc.git
+   cd elements-of-chinghsinc
+   ```
 
-Inside of your Astro project, you'll see the following folders and files:
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:4321`
+
+## 🛠️ Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with hot reload |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build locally |
+| `npm run astro check` | Type-check your code |
+| `npm run astro sync` | Sync content collections |
+
+## 📝 Content Management
+
+### Adding Blog Posts
+1. Create a new `.md` file in `src/content/posts/`
+2. Add frontmatter with required fields:
+   ```yaml
+   ---
+   title: "Your Post Title"
+   description: "Brief description"
+   date: 2025-01-01
+   author: "Your Name"
+   category: "Technology"
+   tags: ["astro", "web-development"]
+   ---
+   ```
+3. Write your content in Markdown
+
+### Adding Projects
+1. Create a new `.json` file in `src/content/projects/`
+2. Add project metadata:
+   ```json
+   {
+     "title": "Project Name",
+     "description": "Project description",
+     "date": "2025-01-01",
+     "category": "Web Development",
+     "technologies": ["React", "TypeScript"],
+     "image": "/path/to/image.jpg",
+     "url": "https://project-url.com"
+   }
+   ```
+
+## 🎨 Customization
+
+### Theme Configuration
+- Edit `src/styles/theme.css` for color schemes and CSS variables
+- Modify `src/data/siteData.json` for site-wide settings
+- Update `src/data/navdata.ts` for navigation structure
+
+### Component Styling
+- Components use Tailwind CSS classes
+- Custom styles can be added in component `<style>` blocks
+- Global styles are in `src/styles/`
+
+### Layout Customization
+- Main layout: `src/layouts/MainLayout.astro`
+- Blog post layout: `src/layouts/PostLayout.astro`
+- Project layout: `src/layouts/ProjectLayout.astro`
+
+## 🔧 Configuration
+
+### Site Settings
+Edit `src/data/siteData.json`:
+```json
+{
+  "title": "Your Site Title",
+  "description": "Site description",
+  "image": {
+    "src": "/images/default.jpg",
+    "alt": "Default image"
+  }
+}
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Navigation
+Edit `src/data/navdata.ts`:
+```typescript
+export default [
+  { name: "Home", path: "/" },
+  { name: "Blog", path: "/blog" },
+  { name: "Projects", path: "/project" },
+  { name: "About", path: "/about" }
+];
+```
 
-## 🧞 Commands
+## 🚀 Deployment
 
-All commands are run from the root of the project, from a terminal:
+### Build for Production
+```bash
+npm run build
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### Deploy Options
+- **Netlify**: Connect your repository for automatic deployments
+- **Vercel**: Import your project for seamless deployment
+- **GitHub Pages**: Use GitHub Actions for deployment
+- **Any Static Host**: Upload the `dist/` folder
 
-## 👀 Want to learn more?
+## 📚 Tech Stack
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- **[Astro](https://astro.build)** - Static site generator
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS
+- **[UnoCSS](https://unocss.dev/)** - Atomic CSS engine
+- **[Markdown](https://www.markdownguide.org/)** - Content authoring
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Astro](https://astro.build) for the amazing static site generator
+- [Tailwind CSS](https://tailwindcss.com) for the utility-first CSS framework
+- [UnoCSS](https://unocss.dev) for the atomic CSS engine
+
+## 📞 Contact
+
+- **Website**: [your-website.com](https://your-website.com)
+- **Email**: your-email@example.com
+- **GitHub**: [@yourusername](https://github.com/yourusername)
+
+---
+
+Made with ❤️ by ChingHsinChen
