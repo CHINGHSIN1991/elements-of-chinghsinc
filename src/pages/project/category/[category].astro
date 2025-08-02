@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import ProjectCard from '../../../components/ProjectCard.astro';
 import ProjectCategoryList from '../../../components/ProjectCategoryList.astro';
+import PopularProjects from '../../../components/PopularProjects.astro';
 import { slugify } from '../../../ts/utils';
 
 export const prerender = true;
@@ -39,13 +40,24 @@ const description = `查看所有 ${category} 分類的專案`;
 ---
 
 <MainLayout title={title} description={description}>
-  <div class="container mx-auto px-4 py-16">
-    <div class="flex flex-col md:flex-row gap-8">
-      <div class="md:w-1/4 lg:w-1/5">
-        <ProjectCategoryList currentCategory={category} />
-      </div>
-      
-      <div class="md:w-3/4 lg:w-4/5">
+  <section 
+    class="container mx-auto px-4 py-16"
+    aria-label="分類專案列表"
+  >
+    <div class="flex gap-8 max-w-7xl mx-auto">
+      <!-- 左側邊欄 -->
+      <aside class="w-64 shrink-0 hidden lg:block">
+        <div class="sticky-navbar-safe space-y-8">
+          <!-- 專案分類列表 -->
+          <ProjectCategoryList currentCategory={category} />
+
+          <!-- 熱門專案 -->
+          <PopularProjects limit={5} />
+        </div>
+      </aside>
+
+      <!-- 主要內容區 -->
+      <div class="flex-grow">
         <h1 class="text-3xl font-bold mb-6">{title}</h1>
         <p class="mb-8">{description}</p>
 
@@ -62,5 +74,5 @@ const description = `查看所有 ${category} 分類的專案`;
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </MainLayout> 

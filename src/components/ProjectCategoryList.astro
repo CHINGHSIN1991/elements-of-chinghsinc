@@ -27,7 +27,7 @@ const categoryCounts = categories.reduce((acc, category) => {
 }, {} as Record<string, number>);
 ---
 
-<div class="border-l-2 px-2">
+  <div class="dark:border-l-2 dark:border-gray-700 border-l-2 border-gray-200 px-2">
   <h2 class="text-xl font-bold mb-4 pl-2">專案分類</h2>
   <ul class="space-y-1">
     {categories.map(cat => (
