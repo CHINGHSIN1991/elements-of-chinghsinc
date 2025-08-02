@@ -1,6 +1,6 @@
 ---
-import Link from "./Link.astro";
-import { slugify, formatDate } from "../ts/utils"
+import Link from "../common/Link.astro";
+import { slugify, formatDate } from "../../ts/utils"
 
 const { post } = Astro.props;
 const { title, description, date, author, image, tags, category } = post.data;

@@ -1,8 +1,8 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-import CategorySection from '../../components/CategorySection.astro';
-import RelatedPosts from '../../components/RelatedPosts.astro';
+import CategorySection from '../../components/blog/CategorySection.astro';
+import RelatedPosts from '../../components/blog/RelatedPosts.astro';
 import { slugify, formatDate } from '../../ts/utils';
 
 export const prerender = true;
