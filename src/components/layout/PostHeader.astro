@@ -16,7 +16,7 @@ interface Props {
 const { title, description, date, category, designers, cover } = Astro.props as Props;
 ---
 
-<header class="relative mb-8 h-64 md:h-96">
+<header class="relative h-64 md:h-96">
   {cover && (
     <img src={cover.src} alt={cover.alt} class="absolute inset-0 w-full h-full object-cover" />
   )}

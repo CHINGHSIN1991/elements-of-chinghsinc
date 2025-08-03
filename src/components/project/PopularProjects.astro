@@ -18,11 +18,11 @@ const popularProjects = allProjects
   .slice(0, limit);
 ---
 
-  <div class="dark:border-r-2 dark:border-gray-700 border-r-2 border-gray-200 px-2">
+  <div class="px-2">
   <h2 class="text-xl font-bold mb-4 pl-2">熱門專案</h2>
   <ul class="space-y-1">
     {popularProjects.map(project => (
-      <li class="hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 px-2 py-1 rounded-md">
+      <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a 
           href={`/project/${project.id || slugify(project.data.title)}`}
           class="block hover:text-primary-500 transition-colors"
