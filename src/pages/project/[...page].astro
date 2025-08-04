@@ -58,7 +58,7 @@ const { page } = Astro.props as ProjectListProps;
           <>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
               {page.data.map((project) => (
-                <div class="bg-wㄙㄩㄣˉㄙㄩㄣˉhite dark:bg-background-secondary rounded-lg overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300">
+                <div class="bg-white dark:bg-background-secondary rounded-lg overflow-hidden shadow-dark border border-gray-100 dark:border-gray-700 hover:shadow-dark-lg transition-all duration-300">
                   <ProjectCard project={project} />
                 </div>
               ))}

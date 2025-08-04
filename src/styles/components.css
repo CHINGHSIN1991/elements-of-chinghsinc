@@ -2,7 +2,7 @@
 .project-card {
   @apply bg-background-secondary 
          rounded-lg overflow-hidden 
-         shadow-md hover:shadow-lg 
+         shadow-dark hover:shadow-dark-lg 
          transition-shadow duration-300;
 }
 
@@ -72,7 +72,7 @@
 /* 動畫卡片 */
 .animated-card {
   @apply card transition-all duration-300 
-         hover:(translate-y-[-5px] shadow-lg);
+         hover:(translate-y-[-5px] shadow-dark-lg);
 }
 
 /* 注意區塊 */

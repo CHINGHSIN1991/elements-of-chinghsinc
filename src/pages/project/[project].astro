@@ -72,7 +72,7 @@ const { data } = project;
           <img 
             src={data.cover} 
             alt={data.title || "專案圖片"} 
-            class="w-full h-auto max-h-[600px] object-cover rounded-lg shadow-md"
+            class="w-full h-auto max-h-[600px] object-cover rounded-lg shadow-dark"
           />
         </div>
         
@@ -94,7 +94,7 @@ const { data } = project;
             <h3 class="text-2xl font-bold mb-6">專案圖片</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.images.map((image: string) => (
-                <div class="aspect-video overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="aspect-video overflow-hidden rounded-lg shadow-dark hover:shadow-dark-lg transition-all duration-300">
                   <img 
                     src={image} 
                     alt={data.title || "專案圖片"} 
