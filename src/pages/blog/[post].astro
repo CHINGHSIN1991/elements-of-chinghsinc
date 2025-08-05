@@ -42,11 +42,11 @@ const { Content, headings } = await post.render();
     </aside>
 
     <!-- main content -->
-          <div class="flex-grow max-w-3xl py-16 px-8 shadow-dark-lg">
+    <div class="flex-grow max-w-3xl py-16 px-8 shadow-xl dark:shadow-black-800">
       <!-- article title and basic info -->
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-        <div class="flex flex-wrap gap-4 text-gray-600 dark:text-gray-400">
+        <div class="flex flex-wrap gap-4 text-text-secondary">
           <div class="flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -71,7 +71,7 @@ const { Content, headings } = await post.render();
       </header>
       <!-- article description -->
       <div class="mb-8">
-        <p class="text-lg text-gray-600 dark:text-gray-400 italic">
+        <p class="text-lg text-text-secondary italic">
           {post.data.description}
         </p>
       </div>
@@ -82,7 +82,7 @@ const { Content, headings } = await post.render();
             {post.data.tags.map(tag => (
               <a
                 href={`/tag/${slugify(tag)}`}
-                class="px-3 py-1 bg-gray-100 dark:bg-background-secondary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
+                class="px-3 py-1 bg-background-tertiary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
               >
                 #{tag}
               </a>
@@ -103,10 +103,10 @@ const { Content, headings } = await post.render();
           <nav class="table-of-contents">
             <ul class="space-y-1">
               {headings.map(heading => (
-                <li class={`pl-${(heading.depth - 1) * 4} hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md`}>
+                <li class={`pl-${(heading.depth - 1) * 4} hover:bg-background-tertiary transition-colors duration-300 px-2 py-1 rounded-md`}>
                   <a
                     href={`#${heading.slug}`}
-                    class="block hover:text-primary-500 transition-colors text-sm"
+                    class="block hover:text-primary transition-colors text-sm"
                   >
                     {heading.text}
                   </a>
@@ -117,19 +117,19 @@ const { Content, headings } = await post.render();
           <div class="mt-6 space-y-2 pl-2">
             <button
               id="backToTop"
-              class="w-full px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition"
+              class="w-full px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition"
             >
               Back to Top
             </button>
             <button
               id="expandAll"
-              class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              class="w-full px-4 py-2 bg-background-tertiary text-text rounded hover:bg-background-secondary transition"
             >
               Expand All
             </button>
             <button
               id="scrollToBottom"
-              class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              class="w-full px-4 py-2 bg-background-tertiary text-text rounded hover:bg-background-secondary transition"
             >
               Scroll to Bottom
             </button>
