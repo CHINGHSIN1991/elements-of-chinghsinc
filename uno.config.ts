@@ -65,6 +65,10 @@ export default defineConfig({
     ['text-shadow-lg', { 'text-shadow': '0 4px 8px rgba(0,0,0,0.2)' }],
     ['shadow-dark', { 'box-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)' }],
     ['shadow-dark-lg', { 'box-shadow': '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)' }],
+    ['shadow-dark-xl', { 'box-shadow': '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4)' }],
+    ['shadow-dark-2xl', { 'box-shadow': '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 15px 15px -5px rgba(0, 0, 0, 0.5)' }],
+    ['shadow-dark-glow', { 'box-shadow': '0 0 20px rgba(0, 0, 0, 0.5), 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)' }],
+    ['shadow-dark-inner', { 'box-shadow': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.4)' }],
     [/^glass-(.+)$/, ([, opacity]) => {
       return {
         'backdrop-filter': 'blur(10px)',
