@@ -27,14 +27,21 @@ export default defineConfig({
       primary: {
         DEFAULT: 'var(--color-primary)',
         dark: 'var(--color-primary-dark)',
+        light: 'var(--color-primary-light)',
       },
       background: {
         DEFAULT: 'var(--color-background)',
         secondary: 'var(--color-background-secondary)',
+        tertiary: 'var(--color-background-tertiary)',
       },
       text: {
         DEFAULT: 'var(--color-text)',
         secondary: 'var(--color-text-secondary)',
+        muted: 'var(--color-text-muted)',
+      },
+      border: {
+        DEFAULT: 'var(--color-border)',
+        dark: 'var(--color-border-dark)',
       }
     },
     breakpoints: {
@@ -48,14 +55,16 @@ export default defineConfig({
   shortcuts: {
     'btn': 'px-4 py-2 rounded-lg transition-colors duration-200',
     'btn-primary': 'bg-primary text-white hover:bg-primary-dark',
-    'btn-secondary': 'bg-background-secondary text-text hover:bg-gray-300 dark:hover:bg-gray-700',
-    'card': 'bg-background-secondary rounded-lg p-4 shadow-md',
-    'input': 'px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-background text-text',
+    'btn-secondary': 'bg-background-secondary text-text hover:bg-background-tertiary border border-border',
+    'card': 'bg-background-secondary rounded-lg p-4 shadow-dark border border-border',
+    'input': 'px-3 py-2 border border-border rounded-md bg-background text-text',
     'container': 'max-w-7xl mx-auto px-4',
   },
   rules: [
     ['text-shadow', { 'text-shadow': '0 2px 4px rgba(0,0,0,0.1)' }],
     ['text-shadow-lg', { 'text-shadow': '0 4px 8px rgba(0,0,0,0.2)' }],
+    ['shadow-dark', { 'box-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)' }],
+    ['shadow-dark-lg', { 'box-shadow': '0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)' }],
     [/^glass-(.+)$/, ([, opacity]) => {
       return {
         'backdrop-filter': 'blur(10px)',
