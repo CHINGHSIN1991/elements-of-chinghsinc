@@ -31,7 +31,7 @@ const { Content, headings } = await post.render();
 <PostLayout post={post}>
   <div class="flex max-w-7xl mx-auto">
     <!-- left sidebar -->
-    <aside class="w-64 shrink-0 hidden lg:block py-16">
+    <aside class="w-64 shrink-0 hidden lg:block py-16 px-2">
         <div class="sticky-navbar-safe space-y-8">
         <!-- category list -->
         <CategorySection currentCategory={post.data.category} />
@@ -42,7 +42,7 @@ const { Content, headings } = await post.render();
     </aside>
 
     <!-- main content -->
-    <div class="flex-grow max-w-3xl py-16 px-8 shadow-dark-xl">
+    <div class="flex-grow max-w-3xl py-16 px-8 shadow-dark-lg dark:shadow-dark-xl">
       <!-- article title and basic info -->
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
@@ -96,7 +96,7 @@ const { Content, headings } = await post.render();
       </div>
     </div>
     <!-- right sidebar -->
-    <aside class="w-64 shrink-0 hidden xl:block py-16">
+    <aside class="w-64 shrink-0 hidden xl:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-4">
                  <div class="px-2">
            <h2 class="text-xl font-bold mb-4 pl-2">Table of Contents</h2>
