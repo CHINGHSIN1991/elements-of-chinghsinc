@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugify, formatDate } from '../../ts/utils';
 import MainLayout from '../../layouts/MainLayout.astro';
 import RelatedProjects from '../../components/project/RelatedProjects.astro';
+import ProjectInfo from '../../components/project/ProjectInfo.astro';
 
 export const prerender = true;
 
@@ -122,46 +123,13 @@ const { data } = project;
     <!-- right sidebar -->
     <aside class="w-64 shrink-0 hidden xl:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-4">
-        <div class="px-2">
-          <h2 class="text-xl font-bold mb-4 pl-2">專案資訊</h2>
-          <div class="space-y-2 text-sm pl-2">
-            <div class="flex justify-between">
-              <span>分類</span>
-              <span class="font-medium">{data.category}</span>
-            </div>
-            <div class="flex justify-between">
-              <span>發布日期</span>
-              <span class="font-medium">{formatDate(new Date(data.date))}</span>
-            </div>
-            <div class="flex justify-between">
-              <span>設計師</span>
-              <span class="font-medium">{data.designers?.length || 0} 位</span>
-            </div>
-            <div class="flex justify-between">
-              <span>標籤數</span>
-              <span class="font-medium">{data.tags?.length || 0}</span>
-            </div>
-            <div class="flex justify-between">
-              <span>圖片數</span>
-              <span class="font-medium">{data.images?.length || 0}</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="mt-6 pl-2">
-          <button
-            id="backToTop"
-            class="w-full border-y py-1 text-sm text-text-secondary hover:bg-background-secondary transition"
-          >
-            Back to Top
-          </button>
-          <button
-            id="scrollToBottom"
-            class="w-full border-y py-1 text-sm text-text-secondary hover:bg-background-secondary transition"
-          >
-            Scroll to Bottom
-          </button>
-        </div>
+        <ProjectInfo 
+          category={data.category}
+          date={data.date}
+          designers={data.designers}
+          tags={data.tags}
+          images={data.images}
+        />
       </div>
     </aside>
   </div>
