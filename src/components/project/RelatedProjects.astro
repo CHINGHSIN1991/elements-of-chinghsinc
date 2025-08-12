@@ -33,22 +33,13 @@ const relatedProjects = allProjects
             href={`/project/${relatedProject.id || slugify(relatedProject.data.title)}`}
             class="block hover:text-primary-500 transition-colors"
           >
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                <img
-                  src={relatedProject.data.cover}
-                  alt={relatedProject.data.title}
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="flex-1 min-w-0">
-                <h3 class="font-medium text-sm line-clamp-2">
-                  {relatedProject.data.title}
-                </h3>
-                <span class="text-xs text-gray-500 mt-1 block">
-                  {relatedProject.data.category}
-                </span>
-              </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-medium text-sm line-clamp-2">
+                {relatedProject.data.title}
+              </h3>
+              <span class="text-xs text-gray-500 mt-1 block">
+                {relatedProject.data.category}
+              </span>
             </div>
           </a>
         </li>
