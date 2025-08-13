@@ -81,7 +81,7 @@ const { Content, headings } = await post.render();
           <div class="flex flex-wrap gap-2">
             {post.data.tags.map(tag => (
               <a
-                href={`/tag/${slugify(tag)}`}
+                href={`/blog/tag/${slugify(tag)}`}
                 class="px-3 py-1 bg-background-tertiary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
               >
                 #{tag}
