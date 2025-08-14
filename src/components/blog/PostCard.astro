@@ -3,7 +3,7 @@ import Link from "../common/Link.astro";
 import { slugify, formatDate } from "../../ts/utils"
 
 const { post } = Astro.props;
-const { title, description, date, author, image, tags, category } = post.data;
+const { title, description, date, image, tags, category } = post.data;
 
 const imageUrl = image?.src || post.data.cover || "/assets/images/fallback-image.png";
 const imageAlt = image?.alt || title || "文章圖片";
@@ -30,14 +30,6 @@ const imageAlt = image?.alt || title || "文章圖片";
     <div class="mb-auto">
       <div class="flex items-center text-text-secondary text-sm mb-2">
         <span class="mr-3">{formatDate(new Date(date))}</span>
-        {author && (
-          <span class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-            </svg>
-            {author}
-          </span>
-        )}
       </div>
       
       <a href={`/blog/${post.id}`} class="block">
