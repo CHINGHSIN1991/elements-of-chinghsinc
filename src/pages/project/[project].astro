@@ -42,7 +42,7 @@ const coverData = typeof data.cover === 'string' && data.cover
   />
   <div class="flex max-w-7xl mx-auto">
     <!-- left sidebar -->
-    <aside class="w-64 shrink-0 hidden lg:block py-16 px-2">
+    <aside class="w-64 shrink-0 hidden md:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-8">
         <!-- related projects -->
         <RelatedProjects currentProject={project} limit={3} />
@@ -50,17 +50,26 @@ const coverData = typeof data.cover === 'string' && data.cover
     </aside>
 
     <!-- main content -->
-    <div class="flex-grow max-w-3xl pt-16 pb-32 px-8 shadow-dark-lg dark:shadow-dark-xl min-h-screen">
+    <div class="flex-grow max-w-3xl py-16 px-4 md:px-8 shadow-dark-lg dark:shadow-dark-xl">
+      
+      <!-- Mobile related projects -->
+      <div class="block md:hidden mb-8">
+        <div class="bg-background-secondary p-4 rounded-lg">
+          <RelatedProjects currentProject={project} limit={3} />
+        </div>
+      </div>
       <!-- project description -->
-      <div class="mb-8">
-        <p class="text-lg text-text-secondary italic">
+      <div id="description" class="mb-8">
+        <h2 class="text-3xl font-bold mb-4">Project Description</h2>
+        <p class="text-lg text-text-secondary leading-relaxed">
           {data.description}
         </p>
       </div>
       
       <!-- tag list -->
       {data.tags && data.tags.length > 0 && (
-        <div class="mb-8">
+        <div id="tags" class="mb-8">
+          <h3 class="text-2xl font-bold mb-4">Tags</h3>
           <div class="flex flex-wrap gap-2">
             {data.tags.map((tag: string) => (
               <a
@@ -74,20 +83,25 @@ const coverData = typeof data.cover === 'string' && data.cover
         </div>
       )}
       
-      <!-- cover shown in PostHeader -->
-      
       <!-- project images -->
       {data.images && data.images.length > 0 && (
-        <div class="mb-8">
-          <h3 class="text-2xl font-bold mb-6">專案圖片</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.images.map((image: string) => (
-              <div class="aspect-video overflow-hidden rounded-lg shadow-dark hover:shadow-dark-lg transition-all duration-300">
-                <img 
-                  src={image} 
-                  alt={data.title || "專案圖片"} 
-                  class="w-full h-full object-cover"
-                />
+        <div id="images" class="mb-8">
+          <h3 class="text-2xl font-bold mb-6">Project Images</h3>
+          <div class="space-y-8">
+            {data.images.map((image: { src: string; description: string }) => (
+              <div class="w-full">
+                <div class="w-full rounded-lg overflow-hidden">
+                  <img 
+                    src={image.src} 
+                    alt={image.description || data.title || "Project image"} 
+                    class="w-full h-auto object-contain"
+                  />
+                </div>
+                {image.description && (
+                  <p class="mt-3 text-text-secondary text-sm leading-relaxed">
+                    {image.description}
+                  </p>
+                )}
               </div>
             ))}
           </div>
