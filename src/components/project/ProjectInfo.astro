@@ -4,7 +4,7 @@ interface Props {
   date: string;
   designers?: string[];
   tags?: string[];
-  images?: string[];
+  images?: { src: string; description: string }[];
 }
 
 const { category, date, designers, tags, images } = Astro.props;
@@ -12,26 +12,26 @@ import { formatDate } from '../../ts/utils';
 ---
 
 <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">專案資訊</h2>
+  <h2 class="text-xl font-bold mb-4 pl-2">Project Info</h2>
   <div class="space-y-2 text-sm pl-2">
     <div class="flex justify-between">
-      <span>分類</span>
+      <span>Category</span>
       <span class="font-medium">{category}</span>
     </div>
     <div class="flex justify-between">
-      <span>發布日期</span>
+      <span>Date</span>
       <span class="font-medium">{formatDate(new Date(date))}</span>
     </div>
     <div class="flex justify-between">
-      <span>設計師</span>
-      <span class="font-medium">{designers?.length || 0} 位</span>
+      <span>Designers</span>
+      <span class="font-medium">{designers?.length || 0}</span>
     </div>
     <div class="flex justify-between">
-      <span>標籤數</span>
+      <span>Tags</span>
       <span class="font-medium">{tags?.length || 0}</span>
     </div>
     <div class="flex justify-between">
-      <span>圖片數</span>
+      <span>Images</span>
       <span class="font-medium">{images?.length || 0}</span>
     </div>
   </div>

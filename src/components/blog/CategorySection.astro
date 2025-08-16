@@ -27,7 +27,7 @@ const categoryCounts = categories.reduce((acc, category) => {
 }, {} as Record<string, number>);
 ---
 <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">文章分類</h2>
+  <h2 class="text-xl font-bold mb-4 pl-2">Categories</h2>
   <ul class="space-y-1">
     {categories.map(cat => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
