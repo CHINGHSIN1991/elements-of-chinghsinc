@@ -28,16 +28,16 @@ const categoryCounts = categories.reduce((acc, category) => {
 ---
 
   <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">專案分類</h2>
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Project Categories</h2>
   <ul class="space-y-1">
     {categories.map(cat => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a
           href={`/project/category/${slugify(cat)}`}
-          class={`block hover:text-primary-500 transition-colors flex justify-between items-center ${cat === currentCategory ? 'text-primary-500 font-bold' : ''}`}
+          class={`block hover:text-primary transition-colors flex justify-between items-center text-xs ${cat === currentCategory ? 'text-primary font-medium' : 'text-text-secondary'}`}
         >
           <span>{cat}</span>
-          <span class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full text-xs">
+          <span class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded-full text-xs opacity-70">
             {categoryCounts[cat]}
           </span>
         </a>

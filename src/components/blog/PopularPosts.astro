@@ -18,18 +18,18 @@ const popularPosts = allPosts
 ---
 
   <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">熱門文章</h2>
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Popular Posts</h2>
   <ul class="space-y-1">
     {popularPosts.map(post => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a 
           href={`/blog/${post.id}`}
-          class="block hover:text-primary-500 transition-colors"
+          class="block hover:text-primary transition-colors"
         >
-          <h3 class="font-medium text-sm line-clamp-2">
+          <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">
             {post.data.title}
           </h3>
-          <span class="text-xs text-gray-500 mt-1 block">
+          <span class="text-xs text-text-muted mt-1 block opacity-70">
             {new Date(post.data.date).toLocaleDateString()}
           </span>
         </a>

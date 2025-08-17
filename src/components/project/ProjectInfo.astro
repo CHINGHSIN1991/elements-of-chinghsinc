@@ -12,41 +12,41 @@ import { formatDate } from '../../ts/utils';
 ---
 
 <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">Project Info</h2>
-  <div class="space-y-2 text-sm pl-2">
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Project Info</h2>
+  <div class="space-y-2 text-xs pl-2">
     <div class="flex justify-between">
-      <span>Category</span>
-      <span class="font-medium">{category}</span>
+      <span class="text-text-muted">Category</span>
+      <span class="font-normal text-text-secondary">{category}</span>
     </div>
     <div class="flex justify-between">
-      <span>Date</span>
-      <span class="font-medium">{formatDate(new Date(date))}</span>
+      <span class="text-text-muted">Date</span>
+      <span class="font-normal text-text-secondary">{formatDate(new Date(date))}</span>
     </div>
     <div class="flex justify-between">
-      <span>Designers</span>
-      <span class="font-medium">{designers?.length || 0}</span>
+      <span class="text-text-muted">Designers</span>
+      <span class="font-normal text-text-secondary">{designers?.length || 0}</span>
     </div>
     <div class="flex justify-between">
-      <span>Tags</span>
-      <span class="font-medium">{tags?.length || 0}</span>
+      <span class="text-text-muted">Tags</span>
+      <span class="font-normal text-text-secondary">{tags?.length || 0}</span>
     </div>
     <div class="flex justify-between">
-      <span>Images</span>
-      <span class="font-medium">{images?.length || 0}</span>
+      <span class="text-text-muted">Images</span>
+      <span class="font-normal text-text-secondary">{images?.length || 0}</span>
     </div>
   </div>
 </div>
 
-<div class="mt-6 pl-2">
+<div class="mt-4 pl-2">
   <button
     id="backToTop"
-    class="w-full border-y py-1 text-sm text-text-secondary hover:bg-background-secondary transition"
+    class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
   >
     Back to Top
   </button>
   <button
     id="scrollToBottom"
-    class="w-full border-y py-1 text-sm text-text-secondary hover:bg-background-secondary transition"
+    class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
   >
     Scroll to Bottom
   </button>

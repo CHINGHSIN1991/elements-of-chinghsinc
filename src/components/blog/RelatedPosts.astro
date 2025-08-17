@@ -26,18 +26,18 @@ const relatedPosts = allPosts
 {relatedPosts.length > 0 && (
   // <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
   <div class="px-2">
-    <h2 class="text-xl font-bold mb-4 pl-2">Related Articles</h2>
+    <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Related Articles</h2>
     <ul class="space-y-1">
       {relatedPosts.map(relatedPost => (
         <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
           <a
             href={`/blog/${relatedPost.id}`}
-            class="block hover:text-primary-500 transition-colors"
+            class="block hover:text-primary transition-colors"
           >
-            <h3 class="font-medium text-sm line-clamp-2">
+            <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">
               {relatedPost.data.title}
             </h3>
-            <span class="text-xs text-gray-500 mt-1 block">
+            <span class="text-xs text-text-muted mt-1 block opacity-70">
               {formatDate(new Date(relatedPost.data.date))}
             </span>
           </a>

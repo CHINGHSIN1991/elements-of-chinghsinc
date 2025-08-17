@@ -19,24 +19,20 @@ const popularProjects = allProjects
 ---
 
   <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">熱門專案</h2>
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Popular Projects</h2>
   <ul class="space-y-1">
     {popularProjects.map(project => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a 
           href={`/project/${project.id || slugify(project.data.title)}`}
-          class="block hover:text-primary-500 transition-colors"
+          class="block hover:text-primary transition-colors"
         >
-          <div class="flex items-center space-x-3">
-            <div class="flex-1 min-w-0">
-              <h3 class="font-medium text-sm line-clamp-2">
-                {project.data.title}
-              </h3>
-              <span class="text-xs text-gray-500 mt-1 block">
-                {new Date(project.data.date).toLocaleDateString()}
-              </span>
-            </div>
-          </div>
+          <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">
+            {project.data.title}
+          </h3>
+          <span class="text-xs text-text-muted mt-1 block opacity-70">
+            {new Date(project.data.date).toLocaleDateString()}
+          </span>
         </a>
       </li>
     ))}
