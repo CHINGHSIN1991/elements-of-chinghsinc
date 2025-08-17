@@ -4,6 +4,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import CategorySection from '../../components/blog/CategorySection.astro';
 import PopularPosts from '../../components/blog/PopularPosts.astro';
+import Pagination from '../../components/common/Pagination.astro';
 import { slugify } from '../../ts/utils';
 
 // import
@@ -61,21 +62,9 @@ const { page } = Astro.props as BlogPageProps;
               )) }
             </div>
 
-            {page.url.prev || page.url.next ? (
-              <div class="pagination-nav flex justify-center gap-4 mt-12">
-                {page.url.prev ? (
-                  <a href={page.url.prev} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
-                    上一頁
-                  </a>
-                ) : null}
-
-                {page.url.next ? (
-                  <a href={page.url.next} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
-                    下一頁
-                  </a>
-                ) : null}
-              </div>
-            ) : null}
+            <div class="my-12 flex justify-between">
+              <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+            </div>
           </>
         ) : (
           <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary rounded-lg shadow-inner">
