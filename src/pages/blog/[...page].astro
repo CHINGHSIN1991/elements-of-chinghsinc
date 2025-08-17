@@ -99,34 +99,6 @@ const { page } = Astro.props as BlogPageProps;
   </section>
 </MainLayout>
 
-<script>
-  // 回到頂部功能
-  document.getElementById('backToTop')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  // 展開全部功能
-  let isExpanded = false;
-  document.getElementById('expandAll')?.addEventListener('click', () => {
-    const button = document.getElementById('expandAll');
-    if (button) {
-      isExpanded = !isExpanded;
-      button.textContent = isExpanded ? '收合全部' : '展開全部';
-      
-      // 這裡可以根據需求添加展開/收合的邏輯
-      const details = document.querySelectorAll('details');
-      details.forEach(detail => {
-        detail.open = isExpanded;
-      });
-    }
-  });
-
-  // 滾動到底部功能
-  document.getElementById('scrollToBottom')?.addEventListener('click', () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  });
-</script>
-
 <style>
 
 
