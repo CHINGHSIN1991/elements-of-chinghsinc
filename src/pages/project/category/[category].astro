@@ -1,78 +1,22 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import MainLayout from '../../../layouts/MainLayout.astro';
+import CategoryPage, { createGetStaticPaths } from '../../_templates/CategoryPage.astro';
 import ProjectCard from '../../../components/project/ProjectCard.astro';
 import ProjectCategoryList from '../../../components/project/ProjectCategoryList.astro';
 import PopularProjects from '../../../components/project/PopularProjects.astro';
-import { slugify } from '../../../ts/utils';
 
 export const prerender = true;
+export const getStaticPaths = createGetStaticPaths('projects');
 
-export async function getStaticPaths() {
-  const allProjects = await getCollection('projects', ({ data }) => {
-    return !data.draft;
-  });
-
-  const uniqueCategories = [...new Set(allProjects.map(project => project.data.category))];
-
-  return uniqueCategories.map(category => {
-    const filteredProjects = allProjects.filter(project => 
-      project.data.category === category
-    );
-    return {
-      params: { category: slugify(category) },
-      props: { 
-        projects: filteredProjects,
-        category: category 
-      }
-    };
-  });
-}
-
-interface ProjectCategoryPageProps {
-  category: string;
-  projects: CollectionEntry<'projects'>[];
-}
-
-const { category, projects } = Astro.props as ProjectCategoryPageProps;
-const title = `${category} 專案分類`;
-const description = `查看所有 ${category} 分類的專案`;
+const { category, items } = Astro.props;
 ---
 
-<MainLayout title={title} description={description}>
-  <section 
-    class="container mx-auto px-4 py-16"
-    aria-label="分類專案列表"
-  >
-    <div class="flex gap-8 max-w-7xl mx-auto">
-      <!-- 左側邊欄 -->
-      <aside class="w-64 shrink-0 hidden lg:block">
-        <div class="sticky-navbar-safe space-y-8">
-          <!-- 專案分類列表 -->
-          <ProjectCategoryList currentCategory={category} />
-
-          <!-- 熱門專案 -->
-          <PopularProjects limit={5} />
-        </div>
-      </aside>
-
-      <!-- 主要內容區 -->
-      <div class="flex-grow">
-        <h1 class="text-3xl font-bold mb-6">{title}</h1>
-        <p class="mb-8">{description}</p>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {projects.map((project) => (
-            <ProjectCard project={project} />
-          ))}
-        </div>
-
-        <div class="mt-12 text-center">
-          <a href="/project" class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
-            所有專案
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-</MainLayout> 
+<CategoryPage
+  category={category}
+  items={items}
+  itemLabel="專案"
+  itemPropName="project"
+  CardComponent={ProjectCard}
+  CategoryListComponent={ProjectCategoryList}
+  PopularComponent={PopularProjects}
+  allHref="/project"
+/>
