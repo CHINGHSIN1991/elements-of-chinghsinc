@@ -163,31 +163,11 @@ const { Content, headings } = await post.render();
 </PostLayout>
 
 <script>
-  // back to top function
-  document.getElementById('backToTop')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  import { setupScrollToTop, setupExpandAll, setupScrollToBottom } from '../../ts/scroll-utils';
 
-  // expand all function
-  let isExpanded = false;
-  document.getElementById('expandAll')?.addEventListener('click', () => {
-    const button = document.getElementById('expandAll');
-    if (button) {
-      isExpanded = !isExpanded;
-      button.textContent = isExpanded ? 'Collapse All' : 'Expand All';
-      
-      // here you can add the logic for expand/collapse
-      const details = document.querySelectorAll('details');
-      details.forEach(detail => {
-        detail.open = isExpanded;
-      });
-    }
-  });
-
-  // scroll to bottom function
-  document.getElementById('scrollToBottom')?.addEventListener('click', () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  });
+  setupScrollToTop('backToTop');
+  setupExpandAll('expandAll', 'Expand All', 'Collapse All');
+  setupScrollToBottom('scrollToBottom');
 
   // smooth scroll to anchor
   document.querySelectorAll('.table-of-contents a').forEach(link => {
