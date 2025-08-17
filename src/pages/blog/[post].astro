@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import CategorySection from '../../components/blog/CategorySection.astro';
-import RelatedPosts from '../../components/blog/RelatedPosts.astro';
+import RelatedItems from '../../components/common/RelatedItems.astro';
 import { slugify, formatDate } from '../../ts/utils';
 
 export const prerender = true;
@@ -36,8 +36,8 @@ const { Content, headings } = await post.render();
         <!-- category list -->
         <CategorySection currentCategory={post.data.category} />
 
-        <!-- related posts -->
-        <RelatedPosts currentPost={post} limit={3} />
+          <!-- related posts -->
+          <RelatedItems currentItem={post} collection="posts" linkPrefix="/blog" limit={3} />
       </div>
     </aside>
 
@@ -49,9 +49,9 @@ const { Content, headings } = await post.render();
         <div class="bg-background-secondary p-4 rounded-lg">
           <CategorySection currentCategory={post.data.category} />
         </div>
-        <div class="bg-background-secondary p-4 rounded-lg">
-          <RelatedPosts currentPost={post} limit={3} />
-        </div>
+          <div class="bg-background-secondary p-4 rounded-lg">
+            <RelatedItems currentItem={post} collection="posts" linkPrefix="/blog" limit={3} />
+          </div>
       </div>
       <!-- article title and basic info -->
       <header class="mb-8">

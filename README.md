@@ -40,13 +40,11 @@ src/
 │   ├── blog/           # Blog-specific components
 │   │   ├── CategorySection.astro
 │   │   ├── PostCard.astro
-│   │   ├── PopularPosts.astro
-│   │   └── RelatedPosts.astro
+│   │   └── PopularPosts.astro
 │   ├── project/        # Project-specific components
 │   │   ├── ProjectCard.astro
 │   │   ├── ProjectCategoryList.astro
-│   │   ├── PopularProjects.astro
-│   │   └── RelatedProjects.astro
+│   │   └── PopularProjects.astro
 │   ├── layout/         # Layout and structural components
 │   │   ├── NavBar.astro
 │   │   ├── Footer.astro
@@ -57,7 +55,8 @@ src/
 │       ├── Nav.astro
 │       ├── Pagination.astro
 │       ├── ThemeToggle.astro
-│       └── TagClout.astro
+│       ├── TagClout.astro
+│       └── RelatedItems.astro
 ├── content/            # Content management
 │   ├── posts/         # Blog posts (Markdown)
 │   ├── projects/      # Project data (JSON)

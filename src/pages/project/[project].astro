@@ -2,7 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { slugify, formatDate } from '../../ts/utils';
 import MainLayout from '../../layouts/MainLayout.astro';
-import RelatedProjects from '../../components/project/RelatedProjects.astro';
+import RelatedItems from '../../components/common/RelatedItems.astro';
 import ProjectInfo from '../../components/project/ProjectInfo.astro';
 import PostHeader from '../../components/layout/PostHeader.astro';
 
@@ -44,8 +44,8 @@ const coverData = typeof data.cover === 'string' && data.cover
     <!-- left sidebar -->
     <aside class="w-64 shrink-0 hidden md:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-8">
-        <!-- related projects -->
-        <RelatedProjects currentProject={project} limit={3} />
+          <!-- related projects -->
+          <RelatedItems currentItem={project} collection="projects" linkPrefix="/project" limit={3} />
       </div>
     </aside>
 
@@ -53,11 +53,11 @@ const coverData = typeof data.cover === 'string' && data.cover
     <div class="flex-grow max-w-3xl py-16 px-4 md:px-8 shadow-dark-lg dark:shadow-dark-xl">
       
       <!-- Mobile related projects -->
-      <div class="block md:hidden mb-8">
-        <div class="bg-background-secondary p-4 rounded-lg">
-          <RelatedProjects currentProject={project} limit={3} />
+        <div class="block md:hidden mb-8">
+          <div class="bg-background-secondary p-4 rounded-lg">
+            <RelatedItems currentItem={project} collection="projects" linkPrefix="/project" limit={3} />
+          </div>
         </div>
-      </div>
       <!-- project description -->
       <div id="description" class="mb-8">
         <h2 class="text-3xl font-bold mb-4">Project Description</h2>

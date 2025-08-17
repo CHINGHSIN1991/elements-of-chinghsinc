@@ -1,0 +1,60 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { formatDate, slugify } from '../../ts/utils';
+
+interface Props {
+  currentItem: CollectionEntry<any>;
+  collection: string;
+  linkPrefix: string;
+  limit?: number;
+}
+
+const {
+  currentItem,
+  collection,
+  linkPrefix,
+  limit = 3,
+} = Astro.props as Props;
+
+const allItems = await getCollection(collection as any, ({ data }) => {
+  return !data.draft;
+});
+
+const relatedItems = allItems
+  .filter(item =>
+    item.id !== currentItem.id &&
+    item.data.category === currentItem.data.category
+  )
+  .sort(
+    (a, b) =>
+      new Date(b.data.date ?? 0).getTime() -
+      new Date(a.data.date ?? 0).getTime()
+  )
+  .slice(0, limit);
+---
+
+{relatedItems.length > 0 && (
+  <div class="px-2">
+    <h2 class="text-xl font-bold mb-4 pl-2">Related Items</h2>
+    <ul class="space-y-1">
+      {relatedItems.map(item => (
+        <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+          <a
+            href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
+            class="block hover:text-primary-500 transition-colors"
+          >
+            <h3 class="font-medium text-sm line-clamp-2">
+              {item.data.title}
+            </h3>
+            <span class="text-xs text-gray-500 mt-1 block">
+              {item.data.date
+                ? formatDate(new Date(item.data.date))
+                : item.data.category}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
