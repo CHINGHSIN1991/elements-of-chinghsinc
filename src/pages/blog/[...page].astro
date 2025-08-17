@@ -4,6 +4,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import CategorySection from '../../components/blog/CategorySection.astro';
 import PopularPosts from '../../components/blog/PopularPosts.astro';
+import Pagination from '../../components/common/Pagination.astro';
 import { slugify } from '../../ts/utils';
 
 // import
@@ -61,21 +62,9 @@ const { page } = Astro.props as BlogPageProps;
               )) }
             </div>
 
-            {page.url.prev || page.url.next ? (
-              <div class="pagination-nav flex justify-center gap-4 mt-12">
-                {page.url.prev ? (
-                  <a href={page.url.prev} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
-                    上一頁
-                  </a>
-                ) : null}
-
-                {page.url.next ? (
-                  <a href={page.url.next} class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
-                    下一頁
-                  </a>
-                ) : null}
-              </div>
-            ) : null}
+            <div class="my-12 flex justify-between">
+              <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+            </div>
           </>
         ) : (
           <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary rounded-lg shadow-inner">
@@ -98,34 +87,6 @@ const { page } = Astro.props as BlogPageProps;
     </div>
   </section>
 </MainLayout>
-
-<script>
-  // 回到頂部功能
-  document.getElementById('backToTop')?.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  // 展開全部功能
-  let isExpanded = false;
-  document.getElementById('expandAll')?.addEventListener('click', () => {
-    const button = document.getElementById('expandAll');
-    if (button) {
-      isExpanded = !isExpanded;
-      button.textContent = isExpanded ? '收合全部' : '展開全部';
-      
-      // 這裡可以根據需求添加展開/收合的邏輯
-      const details = document.querySelectorAll('details');
-      details.forEach(detail => {
-        detail.open = isExpanded;
-      });
-    }
-  });
-
-  // 滾動到底部功能
-  document.getElementById('scrollToBottom')?.addEventListener('click', () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  });
-</script>
 
 <style>
 
