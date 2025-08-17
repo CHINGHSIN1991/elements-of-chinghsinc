@@ -54,7 +54,6 @@ src/
 │   │   └── Seo.astro
 │   └── common/         # Shared utility components
 │       ├── Link.astro
-│       ├── Nav.astro
 │       ├── Pagination.astro
 │       ├── ThemeToggle.astro
 │       └── TagClout.astro
