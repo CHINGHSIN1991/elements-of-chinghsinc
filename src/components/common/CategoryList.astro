@@ -3,36 +3,32 @@ import { getCollection } from 'astro:content';
 import { slugify } from "../../ts/utils";
 
 interface Props {
+  collection: string;
+  linkPrefix: string;
+  title: string;
   currentCategory?: string;
 }
 
-const { currentCategory } = Astro.props;
+const { collection, linkPrefix, title, currentCategory } = Astro.props;
 
-const allPosts = await getCollection('posts', ({ data }) => {
+const items = await getCollection(collection, ({ data }) => {
   return !data.draft;
 });
 
-const categories = [...new Set(allPosts.map(post => post.data.category))];
+const categories = [...new Set(items.map(item => item.data.category))];
 
-// 計算每個分類的文章數量
 const categoryCounts = categories.reduce((acc, category) => {
-  const count = allPosts.filter(post => 
-    post.data.category === category
-  ).length;
-  
-  return {
-    ...acc,
-    [category]: count
-  };
+  const count = items.filter(item => item.data.category === category).length;
+  return { ...acc, [category]: count };
 }, {} as Record<string, number>);
 ---
 <div class="px-2">
-  <h2 class="text-xl font-bold mb-4 pl-2">Categories</h2>
+  <h2 class="text-xl font-bold mb-4 pl-2">{title}</h2>
   <ul class="space-y-1">
     {categories.map(cat => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
-        <a 
-          href={`/blog/category/${slugify(cat)}`}
+        <a
+          href={`${linkPrefix}${slugify(cat)}`}
           class={`block hover:text-primary-500 transition-colors flex justify-between items-center ${cat === currentCategory ? 'text-primary-500 font-bold' : ''}`}
         >
           <span>{cat}</span>
@@ -43,4 +39,4 @@ const categoryCounts = categories.reduce((acc, category) => {
       </li>
     ))}
   </ul>
-</div> 
+</div>

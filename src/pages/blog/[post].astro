@@ -1,7 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-import CategorySection from '../../components/blog/CategorySection.astro';
+import CategoryList from '../../components/common/CategoryList.astro';
 import RelatedPosts from '../../components/blog/RelatedPosts.astro';
 import { slugify, formatDate } from '../../ts/utils';
 
@@ -34,7 +34,12 @@ const { Content, headings } = await post.render();
     <aside class="w-64 shrink-0 hidden md:block py-16 px-2">
         <div class="sticky-navbar-safe space-y-8">
         <!-- category list -->
-        <CategorySection currentCategory={post.data.category} />
+        <CategoryList
+          collection="posts"
+          linkPrefix="/blog/category/"
+          title="Categories"
+          currentCategory={post.data.category}
+        />
 
         <!-- related posts -->
         <RelatedPosts currentPost={post} limit={3} />
@@ -47,7 +52,12 @@ const { Content, headings } = await post.render();
       <!-- Mobile category and related posts -->
       <div class="block md:hidden mb-8 space-y-6">
         <div class="bg-background-secondary p-4 rounded-lg">
-          <CategorySection currentCategory={post.data.category} />
+          <CategoryList
+            collection="posts"
+            linkPrefix="/blog/category/"
+            title="Categories"
+            currentCategory={post.data.category}
+          />
         </div>
         <div class="bg-background-secondary p-4 rounded-lg">
           <RelatedPosts currentPost={post} limit={3} />
