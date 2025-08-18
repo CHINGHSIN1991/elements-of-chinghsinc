@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { formatDate } from "../../ts/utils";
 
 interface Props {
   limit?: number;
@@ -30,7 +31,7 @@ const popularPosts = allPosts
             {post.data.title}
           </h3>
           <span class="text-xs text-text-muted mt-1 block opacity-70">
-            {new Date(post.data.date).toLocaleDateString()}
+            {formatDate(new Date(post.data.date))}
           </span>
         </a>
       </li>
