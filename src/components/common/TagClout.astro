@@ -2,20 +2,29 @@
 import { getCollection } from 'astro:content';
 import { slugify } from "../../ts/utils";
 
-const allPosts = await getCollection('projects', ({ data }) => {
+interface Props {
+  showCount?: boolean;
+  collectionName?: 'projects' | 'posts';
+}
+
+const { showCount, collectionName = 'projects' } = Astro.props as Props;
+
+const allProjects = await getCollection(collectionName, ({ data }) => {
   return !data.draft;
 });
-const allCategories = allPosts.map((post) => post.data.tags?.map(tag => tag.toLowerCase())).flat().filter((tag): tag is string => Boolean(tag));
+
+const allCategories = allProjects
+  .map((project) => project.data.tags?.map(tag => tag.toLowerCase()))
+  .flat()
+  .filter((tag): tag is string => Boolean(tag));
 
 const processedCats = allCategories.reduce((acc, cat) => {
   const value = acc[cat] || 0;
   return {
     ...acc,
-    [cat]: value + 1
-  }
-}, {} as Record<string, number>)
-
-const { showCount } = Astro.props
+    [cat]: value + 1,
+  };
+}, {} as Record<string, number>);
 ---
 
 <ul class="categories">
@@ -29,3 +38,4 @@ const { showCount } = Astro.props
     ))
   }
 </ul>
+
