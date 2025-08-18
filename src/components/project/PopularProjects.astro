@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { slugify } from "../../ts/utils";
+import { slugify, formatDate } from "../../ts/utils";
 
 interface Props {
   limit?: number;
@@ -31,7 +31,7 @@ const popularProjects = allProjects
             {project.data.title}
           </h3>
           <span class="text-xs text-text-muted mt-1 block opacity-70">
-            {new Date(project.data.date).toLocaleDateString()}
+            {formatDate(new Date(project.data.date))}
           </span>
         </a>
       </li>
