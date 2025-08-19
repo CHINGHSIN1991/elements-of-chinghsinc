@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import { slugify } from "../../ts/utils";
+
+interface Props {
+  collectionName: string;
+  heading: string;
+  basePath: string;
+  currentCategory?: string;
+}
+
+const { collectionName, heading, basePath, currentCategory } = Astro.props as Props;
+
+const allItems = await getCollection(collectionName as any, ({ data }) => {
+  return !data.draft;
+});
+
+const categories = [...new Set(allItems.map(item => item.data.category))];
+
+const categoryCounts = categories.reduce((acc, category) => {
+  const count = allItems.filter(item => item.data.category === category).length;
+  return {
+    ...acc,
+    [category]: count
+  };
+}, {} as Record<string, number>);
+---
+<div class="px-2">
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{heading}</h2>
+  <ul class="space-y-1">
+    {categories.map(cat => (
+      <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+        <a
+          href={`${basePath}/category/${slugify(cat)}`}
+          class={`block hover:text-primary transition-colors flex justify-between items-center text-xs ${cat === currentCategory ? 'text-primary font-medium' : 'text-text-secondary'}`}
+        >
+          <span>{cat}</span>
+          <span class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded-full text-xs opacity-70">
+            {categoryCounts[cat]}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
