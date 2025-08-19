@@ -3,7 +3,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import CategorySection from '../../components/blog/CategorySection.astro';
-import PopularPosts from '../../components/blog/PopularPosts.astro';
+import PopularItems from '../../components/common/PopularItems.astro';
 import Pagination from '../../components/common/Pagination.astro';
 import { slugify } from '../../ts/utils';
 
@@ -48,7 +48,7 @@ const { page } = Astro.props as BlogPageProps;
           <CategorySection />
 
           <!-- 熱門文章 -->
-          <PopularPosts limit={5} />
+          <PopularItems collectionName="posts" basePath="/blog" limit={5} />
         </div>
       </aside>
 
