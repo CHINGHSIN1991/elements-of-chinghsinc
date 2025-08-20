@@ -13,7 +13,7 @@ export function createGetStaticPaths(collectionName: string, pageSize = 6) {
 interface PaginatedListProps<T = any> {
   collectionName: string;
   cardComponent: any;
-  sidebarComponents: any[];
+  sidebarComponents: Array<{ component: any; props?: Record<string, any> }>;
   page: {
     data: CollectionEntry<T>[];
     url: {
@@ -48,8 +48,8 @@ const cardWrapperClass = collectionName === 'projects'
     <div class="flex gap-8 max-w-7xl mx-auto">
       <aside class="w-64 shrink-0 hidden lg:block">
         <div class="sticky-navbar-safe space-y-8">
-          {sidebarComponents.map(Component => (
-            <Component />
+          {sidebarComponents.map(({ component: Component, props }) => (
+            <Component {...props} />
           ))}
         </div>
       </aside>

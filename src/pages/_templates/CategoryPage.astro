@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
+import CategoryList from '../../components/common/CategoryList.astro';
 import { slugify } from '../../ts/utils';
 
 export function createGetStaticPaths(collection: string) {
@@ -32,7 +33,11 @@ interface CategoryPageProps<T = any> {
   /** Name of the prop passed to CardComponent, e.g. "post" or "project" */
   itemPropName: string;
   CardComponent: any;
-  CategoryListComponent: any;
+  categoryListProps: {
+    collectionName: string;
+    heading: string;
+    basePath: string;
+  };
   PopularComponent: any;
   /** Link to view all items of this type */
   allHref: string;
@@ -44,7 +49,7 @@ const {
   itemLabel,
   itemPropName,
   CardComponent,
-  CategoryListComponent,
+  categoryListProps,
   PopularComponent,
   allHref
 } = Astro.props as CategoryPageProps;
@@ -63,7 +68,7 @@ const description = `查看所有 ${category} 分類的${itemLabel}`;
       <aside class="w-64 shrink-0 hidden lg:block">
         <div class="sticky-navbar-safe space-y-8">
           <!-- 分類列表 -->
-          <CategoryListComponent currentCategory={category} />
+          <CategoryList {...categoryListProps} currentCategory={category} />
 
           <!-- 熱門{itemLabel} -->
           <PopularComponent limit={5} />

@@ -38,12 +38,10 @@ A personal portfolio and blog website built with Astro, featuring a modern desig
 src/
 ├── components/           # Reusable UI components
 │   ├── blog/           # Blog-specific components
-│   │   ├── CategorySection.astro
 │   │   ├── PostCard.astro
 │   │   └── PopularPosts.astro
 │   ├── project/        # Project-specific components
 │   │   ├── ProjectCard.astro
-│   │   ├── ProjectCategoryList.astro
 │   │   └── PopularProjects.astro
 │   ├── layout/         # Layout and structural components
 │   │   ├── NavBar.astro
@@ -51,6 +49,7 @@ src/
 │   │   ├── PostHeader.astro
 │   │   └── Seo.astro
 │   └── common/         # Shared utility components
+│       ├── CategoryList.astro
 │       ├── Link.astro
 │       ├── Pagination.astro
 │       ├── ThemeToggle.astro
