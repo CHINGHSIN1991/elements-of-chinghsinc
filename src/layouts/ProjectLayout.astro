@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { sortAndLimit } from "../ts/utils";
 
 import MainLayout from "./MainLayout.astro";
 import PostHeader from "../components/layout/PostHeader.astro";
@@ -38,11 +39,14 @@ const {
   images,
 } = project.data as ProjectFrontmatter;
 
-const relatedProjects = allProjects.filter(
-  (project: CollectionEntry<'projects'>) => 
-    project.data.category.toLowerCase() === category.toLowerCase() && 
-    project.data.title !== title
-).slice(0,3);
+const relatedProjects = sortAndLimit(
+  allProjects.filter(
+    (project: CollectionEntry<'projects'>) =>
+      project.data.category.toLowerCase() === category.toLowerCase() &&
+      project.data.title !== title
+  ),
+  3
+);
 ---
 
 <MainLayout {title} {description} image={cover} project={project?.data}>

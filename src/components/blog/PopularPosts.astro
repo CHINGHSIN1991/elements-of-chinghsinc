@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { formatDate } from "../../ts/utils";
+import { formatDate, sortAndLimit } from "../../ts/utils";
 
 interface Props {
   limit?: number;
@@ -13,9 +13,7 @@ const allPosts = await getCollection('posts', ({ data }) => {
 });
 
 // 獲取熱門文章（按日期排序，取前N篇）
-const popularPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, limit);
+const popularPosts = sortAndLimit(allPosts, limit);
 ---
 
   <div class="px-2">
