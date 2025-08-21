@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { slugify, formatDate } from "../../ts/utils";
+import { slugify, formatDate, sortAndLimit } from "../../ts/utils";
 
 interface Props {
   limit?: number;
@@ -13,9 +13,7 @@ const allProjects = await getCollection('projects', ({ data }) => {
 });
 
 // 獲取熱門專案（按日期排序，取前N篇）
-const popularProjects = allProjects
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, limit);
+const popularProjects = sortAndLimit(allProjects, limit);
 ---
 
   <div class="px-2">

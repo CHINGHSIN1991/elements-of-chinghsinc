@@ -1,6 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { formatDate, slugify } from '../../ts/utils';
+import { formatDate, slugify, sortAndLimit } from '../../ts/utils';
 
 interface Props {
   currentItem: CollectionEntry<any>;
@@ -20,17 +20,14 @@ const allItems = await getCollection(collection as any, ({ data }) => {
   return !data.draft;
 });
 
-const relatedItems = allItems
-  .filter(item =>
-    item.id !== currentItem.id &&
-    item.data.category === currentItem.data.category
-  )
-  .sort(
-    (a, b) =>
-      new Date(b.data.date ?? 0).getTime() -
-      new Date(a.data.date ?? 0).getTime()
-  )
-  .slice(0, limit);
+const relatedItems = sortAndLimit(
+  allItems.filter(
+    item =>
+      item.id !== currentItem.id &&
+      item.data.category === currentItem.data.category
+  ),
+  limit
+);
 ---
 
 {relatedItems.length > 0 && (
