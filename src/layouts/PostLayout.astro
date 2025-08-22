@@ -1,7 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-
 import MainLayout from "./MainLayout.astro";
 import PostHeader from "../components/layout/PostHeader.astro";
 
@@ -22,10 +19,6 @@ interface PostFrontmatter {
   }[];
 }
 
-const allPosts = await getCollection('posts', ({ data }: CollectionEntry<'posts'>) => {
-  return !data.draft;
-});
-
 const { post } = Astro.props;
 
 const {
@@ -37,13 +30,6 @@ const {
   image,
   images,
 } = post.data as PostFrontmatter;
-
-// console.log('aaa', post);
-const relatedPosts = allPosts.filter(
-  (post: CollectionEntry<'posts'>) => 
-    post.data.category.toLowerCase() === category.toLowerCase() && 
-    post.data.title !== title
-).slice(0,3);
 
 // 處理 cover 屬性
 const coverData = image ? { src: image.src, alt: image.alt } : undefined;
