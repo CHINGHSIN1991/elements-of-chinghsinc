@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
-import MainLayout from "./MainLayout.astro";
+import BaseContentLayout from "./BaseContentLayout.astro";
 import PostHeader from "../components/layout/PostHeader.astro";
 
 interface ProjectFrontmatter {
@@ -45,7 +45,7 @@ const relatedProjects = allProjects.filter(
 ).slice(0,3);
 ---
 
-<MainLayout {title} {description} image={cover} project={project?.data}>
+<BaseContentLayout {title} {description} image={cover} {images} project={project?.data}>
   <PostHeader
     {title} {description} {date} {category} {cover} {designers}
   />
@@ -66,15 +66,4 @@ const relatedProjects = allProjects.filter(
       }
     </div>
   </div>
-  {images && (
-    <div class="auto-grid">
-      {images.map((image) => (
-        <img 
-          src={image.src} 
-          alt={image.alt} 
-          class="w-full h-[300px] object-cover rounded-lg"
-        />
-      ))}
-    </div>
-  )}
-</MainLayout>
+</BaseContentLayout>

@@ -1,0 +1,35 @@
+---
+import MainLayout from "./MainLayout.astro";
+
+interface BaseContentProps {
+  title: string;
+  description: string;
+  image?: {
+    src: string;
+    alt: string;
+  };
+  images?: {
+    src: string;
+    alt: string;
+  }[];
+  post?: unknown;
+  project?: unknown;
+}
+
+const { title, description, image, images, post, project } =
+  Astro.props as BaseContentProps;
+---
+<MainLayout {title} {description} {image} {post} {project}>
+  <slot />
+  {images && (
+    <div class="auto-grid">
+      {images.map((image) => (
+        <img
+          src={image.src}
+          alt={image.alt}
+          class="w-full h-[300px] object-cover rounded-lg"
+        />
+      ))}
+    </div>
+  )}
+</MainLayout>
