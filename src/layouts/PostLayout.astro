@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { sortAndLimit } from "../ts/utils";
 
-import MainLayout from "./MainLayout.astro";
+import BaseContentLayout from "./BaseContentLayout.astro";
 import PostHeader from "../components/layout/PostHeader.astro";
 
 interface PostFrontmatter {
@@ -53,7 +53,7 @@ const relatedPosts = sortAndLimit(
 const coverData = image ? { src: image.src, alt: image.alt } : undefined;
 ---
 
-<MainLayout {title} {description} image={image} post={post.data}>
+<BaseContentLayout {title} {description} image={image} {images} post={post.data}>
   <PostHeader
     {title} {description} {date} {category} cover={coverData} designers={designers || []}
   />
@@ -62,15 +62,4 @@ const coverData = image ? { src: image.src, alt: image.alt } : undefined;
       <slot />
     </div>
   </div>
-  {images && (
-    <div class="auto-grid">
-      {images.map((image) => (
-        <img 
-          src={image.src} 
-          alt={image.alt} 
-          class="w-full h-[300px] object-cover rounded-lg"
-        />
-      ))}
-    </div>
-  )}
-</MainLayout>
+</BaseContentLayout>
