@@ -1,0 +1,22 @@
+---
+import { slugify } from '../../ts/utils';
+
+interface Props {
+  tags?: string[];
+  basePath: string;
+}
+
+const { tags = [], basePath } = Astro.props as Props;
+---
+{tags.length > 0 && (
+  <div class="flex flex-wrap gap-2">
+    {tags.map((tag: string) => (
+      <a
+        href={`${basePath}/${slugify(tag)}`}
+        class="px-3 py-1 bg-background-tertiary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
+      >
+        #{tag}
+      </a>
+    ))}
+  </div>
+)}

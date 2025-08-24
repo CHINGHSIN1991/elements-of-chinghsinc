@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import CategorySection from '../../components/blog/CategorySection.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
+import TagList from '../../components/common/TagList.astro';
 import { slugify, formatDate } from '../../ts/utils';
 
 export const prerender = true;
@@ -82,16 +83,7 @@ const { Content, headings } = await post.render();
       <!-- tag list -->
       {post.data.tags && post.data.tags.length > 0 && (
         <div class="mb-8">
-          <div class="flex flex-wrap gap-2">
-            {post.data.tags.map(tag => (
-              <a
-                href={`/blog/tag/${slugify(tag)}`}
-                class="px-3 py-1 bg-background-tertiary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
-              >
-                #{tag}
-              </a>
-            ))}
-          </div>
+          <TagList tags={post.data.tags} basePath="/blog/tag" />
         </div>
       )}
       <!-- article content -->
