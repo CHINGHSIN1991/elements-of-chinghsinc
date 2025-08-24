@@ -1,8 +1,9 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { slugify, formatDate } from '../../ts/utils';
+import { slugify } from '../../ts/utils';
 import MainLayout from '../../layouts/MainLayout.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
+import TagList from '../../components/common/TagList.astro';
 import ProjectInfo from '../../components/project/ProjectInfo.astro';
 import PostHeader from '../../components/layout/PostHeader.astro';
 
@@ -70,16 +71,7 @@ const coverData = typeof data.cover === 'string' && data.cover
       {data.tags && data.tags.length > 0 && (
         <div id="tags" class="mb-8">
           <h3 class="text-2xl font-bold mb-4">Tags</h3>
-          <div class="flex flex-wrap gap-2">
-            {data.tags.map((tag: string) => (
-              <a
-                href={`/tag/${slugify(tag)}`}
-                class="px-3 py-1 bg-background-tertiary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
-              >
-                #{tag}
-              </a>
-            ))}
-          </div>
+          <TagList tags={data.tags} basePath="/tag" />
         </div>
       )}
       
