@@ -1,6 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
-import { formatDate } from "../../ts/utils";
+import { formatDate, getPublishedCollection } from "../../ts/utils";
 
 interface Props {
   limit?: number;
@@ -8,9 +7,7 @@ interface Props {
 
 const { limit = 5 } = Astro.props;
 
-const allPosts = await getCollection('posts', ({ data }) => {
-  return !data.draft;
-});
+const allPosts = await getPublishedCollection('posts');
 
 // 獲取熱門文章（按日期排序，取前N篇）
 const popularPosts = allPosts

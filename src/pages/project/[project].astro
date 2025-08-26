@@ -1,6 +1,6 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import { slugify, formatDate } from '../../ts/utils';
+import type { CollectionEntry } from 'astro:content';
+import { slugify, formatDate, getPublishedCollection } from '../../ts/utils';
 import MainLayout from '../../layouts/MainLayout.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
 import ProjectInfo from '../../components/project/ProjectInfo.astro';
@@ -9,9 +9,7 @@ import PostHeader from '../../components/layout/PostHeader.astro';
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const allProjects = await getCollection('projects', ({ data }) => {
-    return !data.draft;
-  });
+  const allProjects = await getPublishedCollection('projects');
   
   return allProjects.map((project) => ({
     params: { project: project.id || slugify(project.data.title) },

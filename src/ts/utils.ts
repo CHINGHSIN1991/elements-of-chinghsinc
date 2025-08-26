@@ -1,3 +1,4 @@
+import { getCollection } from 'astro:content';
 import type { Project } from "../../types";
 
 export function invalidResult(): never {
@@ -23,6 +24,10 @@ export function formatDate(date: Date) {
   return new Date(date).toLocaleDateString('en-US', {
     timeZone: "UTC",
   })
+}
+
+export async function getPublishedCollection(collectionName: string) {
+  return await getCollection(collectionName as any, ({ data }) => !data.draft);
 }
 
 export function formatProjectPost(posts: Project[], {

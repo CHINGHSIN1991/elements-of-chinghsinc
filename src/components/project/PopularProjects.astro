@@ -1,6 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
-import { slugify, formatDate } from "../../ts/utils";
+import { slugify, formatDate, getPublishedCollection } from "../../ts/utils";
 
 interface Props {
   limit?: number;
@@ -8,9 +7,7 @@ interface Props {
 
 const { limit = 5 } = Astro.props;
 
-const allProjects = await getCollection('projects', ({ data }) => {
-  return !data.draft;
-});
+const allProjects = await getPublishedCollection('projects');
 
 // 獲取熱門專案（按日期排序，取前N篇）
 const popularProjects = allProjects

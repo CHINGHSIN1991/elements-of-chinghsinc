@@ -1,6 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
-import { slugify } from "../../ts/utils";
+import { slugify, getPublishedCollection } from "../../ts/utils";
 
 interface Props {
   collectionName: string;
@@ -11,9 +10,7 @@ interface Props {
 
 const { collectionName, heading, basePath, currentCategory } = Astro.props as Props;
 
-const allItems = await getCollection(collectionName as any, ({ data }) => {
-  return !data.draft;
-});
+const allItems = await getPublishedCollection(collectionName as any);
 
 const categories = [...new Set(allItems.map(item => item.data.category))];
 

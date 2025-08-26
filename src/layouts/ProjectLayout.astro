@@ -1,6 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { getPublishedCollection } from '../ts/utils';
 
 import MainLayout from "./MainLayout.astro";
 import PostHeader from "../components/layout/PostHeader.astro";
@@ -22,9 +22,7 @@ interface ProjectFrontmatter {
   }[];
 }
 
-const allProjects = await getCollection('projects', ({ data }: CollectionEntry<'projects'>) => {
-  return !data.draft;
-});
+const allProjects = await getPublishedCollection('projects');
 
 const { project } = Astro.props;
 
