@@ -150,7 +150,6 @@ src/
 ### Layout Customization
 - Main layout: `src/layouts/MainLayout.astro`
 - Blog post layout: `src/layouts/PostLayout.astro`
-- Project layout: `src/layouts/ProjectLayout.astro`
 
 ## 🔧 Configuration
 
