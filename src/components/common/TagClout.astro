@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { slugify } from "../../ts/utils";
+import { slugify, countByField } from "../../ts/utils";
 
 interface Props {
   showCount?: boolean;
@@ -13,18 +13,7 @@ const allProjects = await getCollection(collectionName, ({ data }) => {
   return !data.draft;
 });
 
-const allCategories = allProjects
-  .map((project) => project.data.tags?.map(tag => tag.toLowerCase()))
-  .flat()
-  .filter((tag): tag is string => Boolean(tag));
-
-const processedCats = allCategories.reduce((acc, cat) => {
-  const value = acc[cat] || 0;
-  return {
-    ...acc,
-    [cat]: value + 1,
-  };
-}, {} as Record<string, number>);
+const processedCats = countByField(allProjects, 'tags');
 ---
 
 <ul class="categories">

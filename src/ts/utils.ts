@@ -61,3 +61,23 @@ export function formatProjectPost(posts: Project[], {
 
   return filteredPosts;
 }
+
+export function countByField<T extends { data?: Record<string, any> }>(
+  items: T[],
+  field: string
+): Record<string, number> {
+  return items.reduce((acc, item) => {
+    const value = item?.data?.[field];
+    if (Array.isArray(value)) {
+      value.forEach((val) => {
+        if (!val) return;
+        const key = typeof val === "string" ? val.toLowerCase() : String(val);
+        acc[key] = (acc[key] || 0) + 1;
+      });
+    } else if (value) {
+      const key = String(value);
+      acc[key] = (acc[key] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+}

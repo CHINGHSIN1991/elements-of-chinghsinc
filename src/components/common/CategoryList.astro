@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { slugify } from "../../ts/utils";
+import { slugify, countByField } from "../../ts/utils";
 
 interface Props {
   collectionName: string;
@@ -15,15 +15,8 @@ const allItems = await getCollection(collectionName as any, ({ data }) => {
   return !data.draft;
 });
 
-const categories = [...new Set(allItems.map(item => item.data.category))];
-
-const categoryCounts = categories.reduce((acc, category) => {
-  const count = allItems.filter(item => item.data.category === category).length;
-  return {
-    ...acc,
-    [category]: count
-  };
-}, {} as Record<string, number>);
+const categoryCounts = countByField(allItems, 'category');
+const categories = Object.keys(categoryCounts);
 ---
 <div class="px-2">
   <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{heading}</h2>
