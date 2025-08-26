@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../ts/utils';
+
+interface Props {
+  collectionName: string;
+  limit?: number;
+  getHref: (item: any) => string;
+  title: string;
+}
+
+const { collectionName, limit = 5, getHref, title } = Astro.props;
+
+const allItems = await getCollection(collectionName as any, ({ data }) => {
+  return !data.draft;
+});
+
+const popularItems = allItems
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, limit);
+---
+<div class="px-2">
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{title}</h2>
+  <ul class="space-y-1">
+    {popularItems.map(item => (
+      <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+        <a
+          href={getHref(item)}
+          class="block hover:text-primary transition-colors"
+        >
+          <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">
+            {item.data.title}
+          </h3>
+          <span class="text-xs text-text-muted mt-1 block opacity-70">
+            {formatDate(new Date(item.data.date))}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
