@@ -1,5 +1,6 @@
 ---
-import { slugify, formatDate } from "../../ts/utils"
+import Card from "../common/Card.astro";
+import { slugify, formatDate } from "../../ts/utils";
 
 const { post } = Astro.props;
 const { title, description, date, image, tags, category } = post.data;
@@ -8,75 +9,54 @@ const imageUrl = image?.src || post.data.cover || "/assets/images/fallback-image
 const imageAlt = image?.alt || title || "文章圖片";
 ---
 
-<article class="post-card h-full flex flex-col group bg-background border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-  <a href={`/blog/${post.id}`} class="block overflow-hidden relative">
+<Card>
+  <a slot="image" href={`/blog/${post.id}`} class="block overflow-hidden relative">
     <div class="aspect-video overflow-hidden">
-      <img 
-        src={imageUrl} 
-        alt={imageAlt} 
+      <img
+        src={imageUrl}
+        alt={imageAlt}
         class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
       />
     </div>
-    
+
     {category && (
       <span class="absolute top-4 left-4 px-3 py-1 bg-primary/90 text-white text-xs font-medium rounded-full backdrop-blur-sm">
         {category}
       </span>
     )}
   </a>
-  
-  <div class="p-5 flex-grow flex flex-col">
-    <div class="mb-auto">
-      <div class="flex items-center text-text-secondary text-sm mb-2">
-        <span class="mr-3">{formatDate(new Date(date))}</span>
-      </div>
-      
-      <a href={`/blog/${post.id}`} class="block">
-        <h2 class="text-xl font-bold mb-2 text-text group-hover:text-primary transition-colors">
-          {title}
-        </h2>
-      </a>
-      
-      <p class="text-text-secondary text-sm line-clamp-2 mb-4">
-        {description}
-      </p>
-    </div>
-    
-    <div class="mt-4">
-      {tags && tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-4">
-          {tags.slice(0, 3).map((tag: string) => (
-            <a href={`/blog/tag/${slugify(tag)}`} class="text-xs px-2 py-1 bg-background-secondary rounded-full hover:bg-primary/10 transition-colors">
-              #{tag}
-            </a>
-          ))}
-        </div>
-      )}
-      
-      <a 
-        href={`/blog/${post.id}`} 
-        class="inline-flex items-center text-primary group-hover:underline"
-      >
-        閱讀更多
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </svg>
-      </a>
-    </div>
-  </div>
-</article>
 
-<style>
-  .post-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;  
-    overflow: hidden;
-  }
-</style>
+  <span slot="time">{formatDate(new Date(date))}</span>
+
+  <a slot="title" href={`/blog/${post.id}`} class="block">
+    <h2 class="text-xl font-bold mb-2 text-text group-hover:text-primary transition-colors">
+      {title}
+    </h2>
+  </a>
+
+  <p slot="description" class="text-text-secondary text-sm line-clamp-2 mb-4">
+    {description}
+  </p>
+
+  <div slot="actions">
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.slice(0, 3).map((tag: string) => (
+          <a href={`/blog/tag/${slugify(tag)}`} class="text-xs px-2 py-1 bg-background-secondary rounded-full hover:bg-primary/10 transition-colors">
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <a
+      href={`/blog/${post.id}`}
+      class="inline-flex items-center text-primary group-hover:underline"
+    >
+      閱讀更多
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </a>
+  </div>
+</Card>
