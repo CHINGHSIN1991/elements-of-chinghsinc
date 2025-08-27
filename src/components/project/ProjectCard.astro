@@ -1,4 +1,5 @@
 ---
+import Card from "../common/Card.astro";
 import { slugify, formatDate } from "../../ts/utils";
 import type { CollectionEntry } from "astro:content";
 
@@ -11,44 +12,48 @@ const { title, description, date, tags, cover } = project.data;
 const projectId = project.id || slugify(title);
 ---
 
-<article class="project-card h-full flex flex-col group">
-  <a href={`/project/${projectId}`} class="block overflow-hidden rounded-t-lg relative">
+<Card>
+  <a slot="image" href={`/project/${projectId}`} class="block overflow-hidden rounded-t-lg relative">
     <div class="aspect-video overflow-hidden">
-      <img 
-        src={cover} 
-        alt={title} 
+      <img
+        src={cover}
+        alt={title}
         class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
       />
     </div>
   </a>
-  
-  <div class="p-5 flex-grow flex flex-col">
-    <div class="mb-auto">
-      <span class="text-text-secondary text-sm block mb-2">
-        {formatDate(new Date(date))}
-      </span>
-      
-      <a href={`/project/${projectId}`} class="block">
-        <h2 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-          {title}
-        </h2>
-      </a>
-      
-      <p class="text-text-secondary text-sm line-clamp-2 mb-4">
-        {description}
-      </p>
-    </div>
-    
-    <div class="mt-4">
-      <a 
-        href={`/project/${projectId}`} 
-        class="inline-flex items-center text-primary group-hover:underline"
-      >
-        查看專案
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </svg>
-      </a>
-    </div>
+
+  <span slot="time">{formatDate(new Date(date))}</span>
+
+  <a slot="title" href={`/project/${projectId}`} class="block">
+    <h2 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+      {title}
+    </h2>
+  </a>
+
+  <p slot="description" class="text-text-secondary text-sm line-clamp-2 mb-4">
+    {description}
+  </p>
+
+  <div slot="actions">
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.slice(0, 3).map((tag: string) => (
+          <a href={`/project/tag/${slugify(tag)}`} class="text-xs px-2 py-1 bg-background-secondary rounded-full hover:bg-primary/10 transition-colors">
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <a
+      href={`/project/${projectId}`}
+      class="inline-flex items-center text-primary group-hover:underline"
+    >
+      查看專案
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </a>
   </div>
-</article> 
+</Card>

@@ -1,0 +1,33 @@
+---
+const { class: customClass = "" } = Astro.props;
+---
+<article class={`card h-full flex flex-col group bg-background border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 ${customClass}`}>
+  <slot name="image" />
+  <div class="p-5 flex-grow flex flex-col">
+    <div class="mb-auto">
+      <div class="flex items-center text-text-secondary text-sm mb-2">
+        <slot name="time" />
+      </div>
+      <slot name="title" />
+      <slot name="description" />
+    </div>
+    <div class="mt-4">
+      <slot name="actions" />
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
