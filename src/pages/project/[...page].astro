@@ -1,23 +1,23 @@
 ---
-import PaginatedList, { createGetStaticPaths } from '../_templates/PaginatedList.astro';
+import CollectionPage, { createCollectionPage } from '../_templates/CollectionPage.astro';
 import ProjectCard from '../../components/project/ProjectCard.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import PopularProjects from '../../components/project/PopularProjects.astro';
 
 export const prerender = true;
-export const getStaticPaths = createGetStaticPaths('projects', 6);
 
-const sidebarComponents = [
-  { component: CategoryList, props: { collectionName: 'projects', heading: 'Project Categories', basePath: '/project' } },
-  { component: PopularProjects }
-];
+const { getStaticPaths, props } = createCollectionPage({
+  collectionName: 'projects',
+  cardComponent: ProjectCard,
+  sidebarComponents: [
+    { component: CategoryList, props: { collectionName: 'projects', heading: 'Project Categories', basePath: '/project' } },
+    { component: PopularProjects }
+  ],
+  title: '案例作品'
+});
+
+export { getStaticPaths };
+
 const { page } = Astro.props;
 ---
-
-<PaginatedList
-  collectionName="projects"
-  cardComponent={ProjectCard}
-  sidebarComponents={sidebarComponents}
-  page={page}
-  title="案例作品"
-/>
+<CollectionPage {...props} page={page} />
