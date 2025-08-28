@@ -1,17 +1,15 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import PostCard from '../../../components/blog/PostCard.astro';
 import CategoryList from '../../../components/common/CategoryList.astro';
 import PopularPosts from '../../../components/blog/PopularPosts.astro';
-import { slugify } from '../../../ts/utils';
+import { slugify, getPublishedCollection } from '../../../ts/utils';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('posts', ({ data }) => {
-    return !data.draft;
-  });
+  const allPosts = await getPublishedCollection('posts');
 
   const allTags = allPosts
     .flatMap((post) => (post.data.tags || []) as string[])
