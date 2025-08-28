@@ -1,0 +1,44 @@
+---
+import PaginatedList, { createGetStaticPaths } from './PaginatedList.astro';
+
+interface SidebarComponent {
+  component: any;
+  props?: Record<string, any>;
+}
+
+interface CreateCollectionConfig {
+  collectionName: string;
+  cardComponent: any;
+  sidebarComponents: SidebarComponent[];
+  title?: string;
+  pageSize?: number;
+}
+
+export function createCollectionPage({
+  collectionName,
+  cardComponent,
+  sidebarComponents,
+  title,
+  pageSize = 6
+}: CreateCollectionConfig) {
+  return {
+    getStaticPaths: createGetStaticPaths(collectionName, pageSize),
+    props: { collectionName, cardComponent, sidebarComponents, title }
+  };
+}
+
+const {
+  collectionName,
+  cardComponent,
+  sidebarComponents,
+  page,
+  title
+} = Astro.props;
+---
+<PaginatedList
+  collectionName={collectionName}
+  cardComponent={cardComponent}
+  sidebarComponents={sidebarComponents}
+  page={page}
+  title={title}
+/>
