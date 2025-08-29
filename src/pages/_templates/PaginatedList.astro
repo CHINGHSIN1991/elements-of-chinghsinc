@@ -1,11 +1,12 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Pagination from '../../components/common/Pagination.astro';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { getPublishedCollection } from '../../ts/utils';
 
 export function createGetStaticPaths(collectionName: string, pageSize = 6) {
   return async function getStaticPaths({ paginate }: { paginate: any }) {
-    const allItems = await getCollection(collectionName, ({ data }) => !data.draft);
+    const allItems = await getPublishedCollection(collectionName);
     return paginate(allItems, { pageSize });
   };
 }

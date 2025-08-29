@@ -1,5 +1,7 @@
+import { getCollection, type CollectionKey } from 'astro:content';
+
 export function invalidResult(): never {
-  throw new Error('Invalid result')
+  throw new Error('Invalid result');
 }
 
 export function slugify(text: string) {
@@ -34,4 +36,8 @@ export function sortAndLimit<T extends { data: { date?: string | number } }>(
   );
 
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
+}
+
+export function getPublishedCollection<K extends CollectionKey>(collectionName: K) {
+  return getCollection(collectionName, ({ data }) => !data.draft);
 }
