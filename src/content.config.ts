@@ -28,7 +28,10 @@ const projects = defineCollection({
     category: z.string(),
     tags: z.array(z.string()).optional(),
     cover: z.string(),
-    images: z.array(z.string()).optional(),
+    images: z.array(z.object({
+      src: z.string(),
+      description: z.string().optional()
+    })).optional(),
     designers: z.array(z.string()),
     draft: z.boolean().default(false)
   })
