@@ -2,7 +2,7 @@
 import CollectionPage, { createCollectionPage } from '../_templates/CollectionPage.astro';
 import ProjectCard from '../../components/project/ProjectCard.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
-import PopularProjects from '../../components/project/PopularProjects.astro';
+import PopularItems from '../../components/common/PopularItems.astro';
 
 export const prerender = true;
 
@@ -11,7 +11,7 @@ const { getStaticPaths, props } = createCollectionPage({
   cardComponent: ProjectCard,
   sidebarComponents: [
     { component: CategoryList, props: { collectionName: 'projects', heading: 'Project Categories', basePath: '/project' } },
-    { component: PopularProjects }
+    { component: PopularItems, props: { collectionName: 'projects', title: 'Popular Projects', linkPrefix: 'project' } }
   ],
   title: '案例作品'
 });

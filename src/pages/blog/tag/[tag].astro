@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import PostCard from '../../../components/blog/PostCard.astro';
 import CategoryList from '../../../components/common/CategoryList.astro';
-import PopularPosts from '../../../components/blog/PopularPosts.astro';
+import PopularItems from '../../../components/common/PopularItems.astro';
 import { slugify, getPublishedCollection } from '../../../ts/utils';
 
 export const prerender = true;
@@ -62,10 +62,10 @@ const description = `查看所有包含 #${tagName} 標籤的文章`;
           <!-- 分類列表 -->
           <CategoryList collectionName="posts" heading="Categories" basePath="/blog" />
 
-          <!-- 熱門文章 -->
-          <PopularPosts limit={5} />
-        </div>
-      </aside>
+            <!-- 熱門文章 -->
+            <PopularItems collectionName="posts" title="Popular Posts" linkPrefix="blog" limit={5} />
+          </div>
+        </aside>
 
       <!-- 主要內容區 -->
       <div class="flex-grow mt-8">

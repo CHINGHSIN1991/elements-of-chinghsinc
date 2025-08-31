@@ -2,7 +2,7 @@
 import CollectionPage, { createCollectionPage } from '../_templates/CollectionPage.astro';
 import PostCard from '../../components/blog/PostCard.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
-import PopularPosts from '../../components/blog/PopularPosts.astro';
+import PopularItems from '../../components/common/PopularItems.astro';
 
 export const prerender = true;
 
@@ -11,7 +11,7 @@ const { getStaticPaths, props } = createCollectionPage({
   cardComponent: PostCard,
   sidebarComponents: [
     { component: CategoryList, props: { collectionName: 'posts', heading: 'Categories', basePath: '/blog' } },
-    { component: PopularPosts }
+    { component: PopularItems, props: { collectionName: 'posts', title: 'Popular Posts', linkPrefix: 'blog' } }
   ]
 });
 

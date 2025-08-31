@@ -1,7 +1,7 @@
 ---
 import CategoryPage, { createGetStaticPaths } from '../../_templates/CategoryPage.astro';
 import ProjectCard from '../../../components/project/ProjectCard.astro';
-import PopularProjects from '../../../components/project/PopularProjects.astro';
+import PopularItems from '../../../components/common/PopularItems.astro';
 
 export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('projects');
@@ -15,7 +15,8 @@ const { category, items } = Astro.props;
   itemLabel="專案"
   itemPropName="project"
   CardComponent={ProjectCard}
-  categoryListProps={{ collectionName: 'projects', heading: 'Project Categories', basePath: '/project' }}
-  PopularComponent={PopularProjects}
-  allHref="/project"
-/>
+    categoryListProps={{ collectionName: 'projects', heading: 'Project Categories', basePath: '/project' }}
+    PopularComponent={PopularItems}
+    popularComponentProps={{ collectionName: 'projects', title: 'Popular Projects', linkPrefix: 'project' }}
+    allHref="/project"
+  />

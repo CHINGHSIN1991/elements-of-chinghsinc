@@ -37,6 +37,7 @@ interface CategoryPageProps<T = any> {
     basePath: string;
   };
   PopularComponent: any;
+  popularComponentProps?: Record<string, any>;
   /** Link to view all items of this type */
   allHref: string;
 }
@@ -49,6 +50,7 @@ const {
   CardComponent,
   categoryListProps,
   PopularComponent,
+  popularComponentProps = {},
   allHref
 } = Astro.props as CategoryPageProps;
 
@@ -69,7 +71,7 @@ const description = `查看所有 ${category} 分類的${itemLabel}`;
           <CategoryList {...categoryListProps} currentCategory={category} />
 
           <!-- 熱門{itemLabel} -->
-          <PopularComponent limit={5} />
+          <PopularComponent {...popularComponentProps} limit={5} />
         </div>
       </aside>
 
