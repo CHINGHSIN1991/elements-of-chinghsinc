@@ -6,6 +6,7 @@ import RelatedItems from '../../components/common/RelatedItems.astro';
 import TagList from '../../components/common/TagList.astro';
 import ProjectInfo from '../../components/project/ProjectInfo.astro';
 import PostHeader from '../../components/layout/PostHeader.astro';
+import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
 
 export const prerender = true;
 
@@ -80,7 +81,7 @@ const coverData = typeof data.cover === 'string' && data.cover
         <div id="images" class="mb-8">
           <h3 class="text-2xl font-bold mb-6">Project Images</h3>
           <div class="space-y-8">
-            {data.images.map((image: { src: string; description: string }) => (
+            {data.images.map((image: { src: string; description?: string }) => (
               <div class="w-full">
                 <div class="w-full rounded-lg overflow-hidden">
                   <img 
@@ -104,6 +105,8 @@ const coverData = typeof data.cover === 'string' && data.cover
     <!-- right sidebar -->
     <aside class="w-64 shrink-0 hidden xl:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-4">
+                 <BuyMeACoffee />
+        
         <ProjectInfo 
           category={data.category}
           date={data.date}

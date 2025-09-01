@@ -4,6 +4,7 @@ import PostLayout from '../../layouts/PostLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
 import TagList from '../../components/common/TagList.astro';
+import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
 import { slugify, formatDate } from '../../ts/utils';
 
 export const prerender = true;
@@ -141,6 +142,8 @@ const { Content, headings } = await post.render();
             </button>
           </div>
         </div>
+                                   <BuyMeACoffee />
+                 
                  <!-- article info -->
          <div class="px-2">
           <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Article Info</h2>
