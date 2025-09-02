@@ -1,12 +1,14 @@
 ---
 import CategoryPage, { createGetStaticPaths } from '../../_templates/CategoryPage.astro';
 import ProjectCard from '../../../components/project/ProjectCard.astro';
-import PopularProjects from '../../../components/project/PopularProjects.astro';
+import PopularItems from '../../../components/common/PopularItems.astro';
 
 export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('projects');
 
 const { category, items } = Astro.props;
+const PopularProjects = (props) =>
+  PopularItems({ collectionName: 'projects', linkPrefix: '/project', ...props });
 ---
 
 <CategoryPage

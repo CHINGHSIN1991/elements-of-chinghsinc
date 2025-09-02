@@ -2,14 +2,14 @@
 import PaginatedList, { createGetStaticPaths } from '../_templates/PaginatedList.astro';
 import ProjectCard from '../../components/project/ProjectCard.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
-import PopularProjects from '../../components/project/PopularProjects.astro';
+import PopularItems from '../../components/common/PopularItems.astro';
 
 export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('projects', 6);
 
 const sidebarComponents = [
   { component: CategoryList, props: { collectionName: 'projects', heading: 'Project Categories', basePath: '/project' } },
-  { component: PopularProjects }
+  { component: PopularItems, props: { collectionName: 'projects', linkPrefix: '/project' } }
 ];
 const { page } = Astro.props;
 ---

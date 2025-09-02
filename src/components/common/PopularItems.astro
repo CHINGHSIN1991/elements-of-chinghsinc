@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import { slugify, formatDate, sortAndLimit } from "../../ts/utils";
+
+interface Props {
+  collectionName: string;
+  linkPrefix: string;
+  limit?: number;
+}
+
+const { collectionName, linkPrefix, limit = 5 } = Astro.props;
+
+const allItems = await getCollection(collectionName, ({ data }) => {
+  return !data.draft;
+});
+
+// 獲取熱門項目（按日期排序，取前N篇）
+const popularItems = sortAndLimit(allItems, limit);
+const title = `Popular ${collectionName.charAt(0).toUpperCase() + collectionName.slice(1)}`;
+---
+
+<div class="px-2">
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{title}</h2>
+  <ul class="space-y-1">
+    {popularItems.map(item => (
+      <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+        <a
+          href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
+          class="block hover:text-primary transition-colors"
+        >
+          <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">
+            {item.data.title}
+          </h3>
+          <span class="text-xs text-text-muted mt-1 block opacity-70">
+            {formatDate(new Date(item.data.date))}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
