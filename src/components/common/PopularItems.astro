@@ -1,6 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
-import { slugify, formatDate, sortAndLimit } from "../../ts/utils";
+import { slugify, formatDate, sortAndLimit, getPublishedCollection } from "../../ts/utils";
 
 interface Props {
   collectionName: string;
@@ -10,9 +9,7 @@ interface Props {
 
 const { collectionName, linkPrefix, limit = 5 } = Astro.props;
 
-const allItems = await getCollection(collectionName, ({ data }) => {
-  return !data.draft;
-});
+const allItems = await getPublishedCollection(collectionName);
 
 // 獲取熱門項目（按日期排序，取前N篇）
 const popularItems = sortAndLimit(allItems, limit);

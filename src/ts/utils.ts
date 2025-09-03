@@ -1,3 +1,5 @@
+import { getCollection } from 'astro:content';
+
 export function invalidResult(): never {
   throw new Error('Invalid result')
 }
@@ -34,4 +36,8 @@ export function sortAndLimit<T extends { data: { date?: string | number } }>(
   );
 
   return typeof limit === "number" ? sorted.slice(0, limit) : sorted;
+}
+
+export function getPublishedCollection(collection: string) {
+  return getCollection(collection as any, ({ data }) => !data.draft);
 }

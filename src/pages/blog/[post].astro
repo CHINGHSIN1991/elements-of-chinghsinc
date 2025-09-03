@@ -1,16 +1,16 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
 import TagList from '../../components/common/TagList.astro';
 import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
-import { slugify, formatDate } from '../../ts/utils';
+import { slugify, formatDate, getPublishedCollection } from '../../ts/utils';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('posts');
+  const allPosts = await getPublishedCollection('posts');
   return allPosts.map((post) => ({
     params: { post: post.id },
     props: { post }
