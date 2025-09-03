@@ -1,6 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
-import { slugify } from "../../ts/utils";
+import { slugify, getPublishedCollection } from "../../ts/utils";
 
 interface Props {
   showCount?: boolean;
@@ -9,9 +8,7 @@ interface Props {
 
 const { showCount, collectionName = 'projects' } = Astro.props as Props;
 
-const allProjects = await getCollection(collectionName, ({ data }) => {
-  return !data.draft;
-});
+const allProjects = await getPublishedCollection(collectionName);
 
 const allCategories = allProjects
   .map((project) => project.data.tags?.map(tag => tag.toLowerCase()))

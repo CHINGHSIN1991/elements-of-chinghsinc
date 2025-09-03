@@ -1,14 +1,12 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
-import { slugify } from '../../ts/utils';
+import { slugify, getPublishedCollection } from '../../ts/utils';
 
 export function createGetStaticPaths(collection: string) {
   return async function getStaticPaths() {
-    const allItems = await getCollection(collection, ({ data }) => {
-      return !data.draft;
-    });
+    const allItems = await getPublishedCollection(collection);
 
     const uniqueCategories = [...new Set(allItems.map(item => item.data.category))];
 
