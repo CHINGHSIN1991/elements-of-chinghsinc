@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="en" class="w-full h-full select-none">
+<html lang="zh-tw" class="w-full h-full">
 	<head>
 		<script is:inline>
 			// Process the theme setting before page conversion
@@ -46,30 +46,16 @@ const {
 
 <script>
 	// Process the theme setting before page conversion
-	document.addEventListener('astro:before-swap', (event) => {
-		const currentTheme = localStorage.getItem('theme') || 
-						(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-		
-		if (currentTheme === 'dark') {
-			event.newDocument.documentElement.classList.add('dark');
-		} else {
-			event.newDocument.documentElement.classList.remove('dark');
-		}
-	});
+        document.addEventListener('astro:before-swap', (event) => {
+                const currentTheme =
+                        localStorage.getItem('theme') ||
+                        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-	function disableRightClick(e: MouseEvent) {
-		e.preventDefault();
-		return false;
-	}
-
-	function disableSelection(e: Event) {
-		e.preventDefault();
-		return false;
-	}
-
-	document.addEventListener('contextmenu', disableRightClick);
-	document.addEventListener('selectstart', disableSelection);
-	document.addEventListener('copy', disableSelection);
-	document.addEventListener('dragstart', disableSelection);
+                if (currentTheme === 'dark') {
+                        event.newDocument.documentElement.classList.add('dark');
+                } else {
+                        event.newDocument.documentElement.classList.remove('dark');
+                }
+        });
 </script>
 
