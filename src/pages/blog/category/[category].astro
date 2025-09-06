@@ -7,8 +7,6 @@ export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('posts');
 
 const { category, items } = Astro.props;
-const PopularPosts = (props) =>
-  PopularItems({ collectionName: 'posts', linkPrefix: '/blog', ...props });
 ---
 
 <CategoryPage
@@ -18,6 +16,5 @@ const PopularPosts = (props) =>
   itemPropName="post"
   CardComponent={PostCard}
   categoryListProps={{ collectionName: 'posts', heading: 'Categories', basePath: '/blog' }}
-  PopularComponent={PopularPosts}
   allHref="/blog"
 />
