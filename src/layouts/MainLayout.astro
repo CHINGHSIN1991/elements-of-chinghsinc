@@ -35,13 +35,14 @@ const {
 		<MainHead {title} {description} {image} {robots} {project}/>
 		<ClientRouter />
 	</head>
-	<body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
-		<NavBar transition:persist />
-		<main class="flex-grow">
-			<slot />
-		</main>
-		<Footer class="mt-auto" transition:persist />
-	</body>
+        <body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
+                <a href="#main-content" class="sr-only focus:not-sr-only">跳到主要內容</a>
+                <NavBar transition:persist />
+                <main id="main-content" class="flex-grow">
+                        <slot />
+                </main>
+                <Footer class="mt-auto" transition:persist />
+        </body>
 </html>
 
 <script>
