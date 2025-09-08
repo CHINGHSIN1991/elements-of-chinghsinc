@@ -82,24 +82,6 @@ const description = "Connect with me to explore collaboration opportunities and 
 
         <!-- Contact Methods -->
         <div class="grid gap-4">
-          <!-- Email -->
-          <div class="group p-6 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-            <div class="flex items-center">
-              <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-xl mr-4 transition-transform duration-300 group-hover:rotate-12">
-                @
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-light text-text mb-1">Email</h3>
-                <a href={`mailto:${contactInfo.data.email}`} class="text-primary hover:text-primary-dark transition-colors text-sm">
-                  {contactInfo.data.email}
-                </a>
-              </div>
-              <svg class="w-5 h-5 text-text-secondary group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-              </svg>
-            </div>
-          </div>
-
           <!-- GitHub -->
           <div class="group p-6 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
             <div class="flex items-center">
@@ -257,28 +239,29 @@ const description = "Connect with me to explore collaboration opportunities and 
 
 <script>
   // Form submission handling
-  document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+  document.getElementById('contact-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-    
-    // Get form data
+
     const formData = new FormData(this as HTMLFormElement);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const subject = formData.get('subject');
-    const message = formData.get('message');
-    
-    // Build mailto link
-    const mailtoLink = `mailto:chinghsinchen1991@gmail.com?subject=${encodeURIComponent(subject as string)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-    
-    // Show success message
+    const payload = Object.fromEntries(formData.entries());
+
     const button = this.querySelector('button[type="submit"]') as HTMLButtonElement;
     const originalText = button.innerHTML;
-    button.innerHTML = '✓ Email client opened';
+    button.innerHTML = '… Sending';
     button.disabled = true;
-    
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      button.innerHTML = res.ok ? '✓ Message sent' : '✗ Failed to send';
+    } catch (err) {
+      button.innerHTML = '✗ Failed to send';
+    }
+
     setTimeout(() => {
       button.innerHTML = originalText;
       button.disabled = false;

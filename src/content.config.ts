@@ -62,7 +62,6 @@ const skillsSchema = z.object({
 });
 
 const contactInfoSchema = z.object({
-  email: z.string().email(),
   GitHub: z.string().url(),
   LinkedIn: z.string().url(),
   about: z.string()
