@@ -44,7 +44,11 @@ const activeTabIndex = navData.findIndex(
         ))}
 
         <!-- 底線指示器 -->
-        <div id="nav-indicator" class="absolute bottom-0 h-0.5 bg-primary transition-all duration-300"></div>
+        <li
+          id="nav-indicator"
+          aria-hidden="true"
+          class="absolute bottom-0 h-0.5 bg-primary transition-all duration-300 pointer-events-none"
+        ></li>
       </ul>
     </div>
     
