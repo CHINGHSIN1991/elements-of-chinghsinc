@@ -37,6 +37,7 @@ const activeTabIndex = navData.findIndex(
                 index === activeTabIndex ? 'active text-primary font-bold' : ''
               }`}
               data-index={index}
+              aria-current={index === activeTabIndex ? 'page' : undefined}
             >
               {item.name}
             </a>
