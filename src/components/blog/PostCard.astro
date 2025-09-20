@@ -20,7 +20,7 @@ const imageAlt = image?.alt || title || "文章圖片";
     </div>
 
     {category && (
-      <span class="absolute top-4 left-4 px-3 py-1 bg-primary/90 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+      <span class="label absolute top-4 left-4 px-3 py-1">
         {category}
       </span>
     )}
@@ -48,23 +48,5 @@ const imageAlt = image?.alt || title || "文章圖片";
         ))}
       </div>
     )}
-
-    <a
-      href={`/blog/${post.id}`}
-      class="inline-flex items-center px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-medium text-sm"
-    >
-      閱讀更多
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-      </svg>
-    </a>
   </div>
 </Card>

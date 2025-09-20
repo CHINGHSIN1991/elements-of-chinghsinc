@@ -56,10 +56,11 @@ export default defineConfig({
     'btn': 'px-4 py-2 rounded-lg transition-colors duration-200',
     'btn-primary': 'bg-primary text-white hover:bg-primary-dark',
     'btn-secondary': 'bg-background-secondary text-text hover:bg-background-tertiary border border-border',
-    'card': 'bg-background-secondary rounded-lg p-4 shadow-dark border border-border',
+    'card': 'bg-background-secondary rounded-lg shadow-dark border border-border',
     'input': 'px-3 py-2 border border-border rounded-md bg-background text-text',
     'container': 'max-w-7xl mx-auto px-4',
-  },
+    'label': 'bg-black/70 backdrop-blur-sm border border-gray-500 text-white rounded-full hover:bg-black/80 transition-colors text-xs font-medium',
+  }, 
   rules: [
     ['text-shadow', { 'text-shadow': '0 2px 4px rgba(0,0,0,0.1)' }],
     ['text-shadow-lg', { 'text-shadow': '0 4px 8px rgba(0,0,0,0.2)' }],
