@@ -22,7 +22,11 @@ const activeTabIndex = navData.findIndex(
         href={import.meta.env.BASE_URL}
         class="flex items-center gap-2 hover:opacity-80 transition-opacity"
       >
-        <img src={import.meta.env.BASE_URL + "favicon.svg"} alt="Logo" class="w-8 h-8" />
+        <img
+          src={import.meta.env.BASE_URL + "favicon.svg"}
+          alt="Elements of ChingHsinC logo"
+          class="w-8 h-8"
+        />
       </a>
     </div>
     
@@ -37,6 +41,7 @@ const activeTabIndex = navData.findIndex(
                 index === activeTabIndex ? 'active text-primary font-bold' : ''
               }`}
               data-index={index}
+              aria-current={index === activeTabIndex ? 'page' : undefined}
             >
               {item.name}
             </a>
