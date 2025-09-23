@@ -1,19 +1,22 @@
 ---
 import { slugify, formatDate, sortAndLimit, getPublishedCollection } from "../../ts/utils";
+import { localizePath, useTranslations } from "../../i18n/utils";
 
 interface Props {
   collectionName: string;
   linkPrefix: string;
   limit?: number;
+  title?: string;
 }
 
-const { collectionName, linkPrefix, limit = 5 } = Astro.props;
+const { collectionName, linkPrefix, limit = 5, title: customTitle } = Astro.props as Props;
+const { t, lang } = useTranslations(Astro);
 
 const allItems = await getPublishedCollection(collectionName);
 
 // 獲取熱門項目（按日期排序，取前N篇）
 const popularItems = sortAndLimit(allItems, limit);
-const title = `Popular ${collectionName.charAt(0).toUpperCase() + collectionName.slice(1)}`;
+const title = customTitle || (collectionName === 'posts' ? t('blog.sidebar.popular') : t('project.sidebar.popular'));
 ---
 
 <div class="px-2">
@@ -22,7 +25,7 @@ const title = `Popular ${collectionName.charAt(0).toUpperCase() + collectionName
     {popularItems.map(item => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a
-          href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
+          href={localizePath(`${linkPrefix}/${item.id || slugify(item.data.title)}`, lang)}
           class="block hover:text-primary transition-colors"
         >
           <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">

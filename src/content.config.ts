@@ -38,22 +38,32 @@ const projects = defineCollection({
 });
 
 
+const localizedString = z.object({
+  'zh-tw': z.string(),
+  en: z.string()
+});
+
+const localizedStringArray = z.object({
+  'zh-tw': z.array(z.string()),
+  en: z.array(z.string())
+});
+
 const educationSchema = z.array(z.object({
-  school: z.string(),
-  degree: z.string(),
-  location: z.string(),
-  startDate: z.string(),
-  endDate: z.string(),
-  description: z.string()
+  school: localizedString,
+  degree: localizedString,
+  location: localizedString,
+  startDate: localizedString,
+  endDate: localizedString,
+  description: localizedString
 }));
 
 const workExperienceSchema = z.array(z.object({
-  company: z.string(),
-  position: z.string(),
-  location: z.string(),
-  startDate: z.string(),
-  endDate: z.string(),
-  description: z.array(z.string())
+  company: localizedString,
+  position: localizedString,
+  location: localizedString,
+  startDate: localizedString,
+  endDate: localizedString,
+  description: localizedStringArray
 }));
 
 const skillsSchema = z.object({
@@ -65,7 +75,7 @@ const contactInfoSchema = z.object({
   email: z.string().email(),
   GitHub: z.string().url(),
   LinkedIn: z.string().url(),
-  about: z.string()
+  about: localizedString
 });
 
 const static_content = defineCollection({

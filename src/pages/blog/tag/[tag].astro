@@ -5,6 +5,7 @@ import PostCard from '../../../components/blog/PostCard.astro';
 import CategoryList from '../../../components/common/CategoryList.astro';
 import PopularItems from '../../../components/common/PopularItems.astro';
 import { slugify, getPublishedCollection } from '../../../ts/utils';
+import { localizePath, useTranslations } from '../../../i18n/utils';
 
 export const prerender = true;
 
@@ -46,21 +47,30 @@ interface TagPageProps {
 }
 
 const { tagName, posts } = Astro.props as TagPageProps;
-const title = `#${tagName} 的文章`;
-const description = `查看所有包含 #${tagName} 標籤的文章`;
+const { t, lang } = useTranslations(Astro);
+const title = t('blog.tag.title', { tag: tagName });
+const description = t('blog.tag.description', { tag: tagName });
+const ariaLabel = t('blog.tag.ariaLabel');
+const emptyTitle = t('blog.tag.emptyTitle');
+const emptyDescription = t('blog.tag.emptyDescription');
+const allPostsLabel = t('blog.tag.allPosts');
+const returnHomeLabel = t('blog.tag.returnHome');
+const blogHref = localizePath('/blog', lang);
+const homeHref = localizePath('/', lang);
+const categoryHeading = t('blog.sidebar.categories');
 ---
 
 <MainLayout title={title} description={description}>
-  <section 
+  <section
     class="container mx-auto px-4 py-16"
-    aria-label="標籤文章列表"
+    aria-label={ariaLabel}
   >
     <div class="flex gap-8 max-w-7xl mx-auto">
       <!-- 左側邊欄 -->
       <aside class="w-64 shrink-0 hidden lg:block">
         <div class="sticky-navbar-safe space-y-8">
           <!-- 分類列表 -->
-          <CategoryList collectionName="posts" heading="Categories" basePath="/blog" />
+          <CategoryList collectionName="posts" heading={categoryHeading} basePath="/blog" />
 
           <!-- 熱門文章 -->
           <PopularItems collectionName="posts" linkPrefix="/blog" limit={5} />
@@ -83,22 +93,22 @@ const description = `查看所有包含 #${tagName} 標籤的文章`;
             <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
               <span class="text-2xl">!</span>
             </div>
-            <h2 class="text-2xl font-semibold mb-2">尚無文章</h2>
+            <h2 class="text-2xl font-semibold mb-2">{emptyTitle}</h2>
             <p class="text-center max-w-md mb-8">
-              目前找不到包含此標籤的文章。
+              {emptyDescription}
             </p>
-            <a 
-              href={import.meta.env.BASE_URL}
+            <a
+              href={homeHref}
               class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
             >
-              返回首頁
+              {returnHomeLabel}
             </a>
           </div>
         )}
 
         <div class="mt-12 text-center" aria-hidden={posts.length === 0}>
-          <a href="/blog" class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
-            所有文章
+          <a href={blogHref} class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
+            {allPostsLabel}
           </a>
         </div>
       </div>

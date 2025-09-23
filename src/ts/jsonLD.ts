@@ -5,9 +5,10 @@ interface PostParam {
   type: string,
   post: any, // TODO FIX TYPE
   url: string,
+  siteName: string,
 }
 
-export default function jsonLDGenerator({ type, post, url }: PostParam) {
+export default function jsonLDGenerator({ type, post, url, siteName }: PostParam) {
   if (type === 'post') {
     return `<script type="application/ld+json">
       {
@@ -33,7 +34,7 @@ export default function jsonLDGenerator({ type, post, url }: PostParam) {
       {
       "@context": "https://schema.org/",
       "@type": "WebSite",
-      "name": "${siteData.title}",
+      "name": "${siteName}",
       "url": "${import.meta.env.SITE}"
       }
     </script>`;

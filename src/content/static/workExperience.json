@@ -2,46 +2,128 @@
   "_type": "workExperience",
   "data": [
     {
-      "company": "Synology",
-      "position": "Software Engineer",
-      "location": "New Taipei City, Taiwan",
-      "startDate": "Jan. 2023",
-      "endDate": "Present",
-      "description": [
-        "-",
-        "-"
-      ]
-    }, {
-      "company": "AppWorks School",
-      "position": "Front-End Engineer Trainee",
-      "location": "Taipei, Taiwan",
-      "startDate": "Jun. 2022",
-      "endDate": "Nov. 2022",
-      "description": [
-        "Discussed requirements and features as the lead of the front-end engineer while working with the back-end engineer on the project.",
-        "Acquired chrome extension-related technologies from scratch and developed a fully functional extension within five weeks.",
-        "Spontaneously initiated UI design lectures to share UI design-related knowledge with colleagues."
-      ]
-    }, {
-      "company": "Whispace Studio",
-      "position": "Architectural Designer",
-      "location": "Taipei, Taiwan",
-      "startDate": "Aug. 2021",
-      "endDate": "Jun. 2022",
-      "description": [
-        "Responsible for communicating needs with the owner, designing proposals, valuation, construction, and demolition. Independently completed the design case for Kingston.",
-        "Independently completed the planning of curved wall segmentation with digital analysis tools - could not be done by the construction plant - within two weeks."
-      ]
-    }, {
-      "company": "Bio-Architecture Formosana",
-      "position": "Architectural Designer",
-      "location": "Taipei, Taiwan",
-      "startDate": "Mar. 2019",
-      "endDate": "May. 2021",
-      "description": [
-        "Cooperated with the architectural design team and communicated with the engineering consultants to complete the design and details of the MRT station next to the National Palace Museum.",
-        "Worked with the architectural design team to win the office building design competition of the world's top three network companies within two weeks."
-      ]
+      "company": {
+        "zh-tw": "群暉科技 Synology",
+        "en": "Synology"
+      },
+      "position": {
+        "zh-tw": "軟體工程師",
+        "en": "Software Engineer"
+      },
+      "location": {
+        "zh-tw": "台灣新北市",
+        "en": "New Taipei City, Taiwan"
+      },
+      "startDate": {
+        "zh-tw": "2023 年 1 月",
+        "en": "Jan. 2023"
+      },
+      "endDate": {
+        "zh-tw": "至今",
+        "en": "Present"
+      },
+      "description": {
+        "zh-tw": ["-", "-"],
+        "en": ["-", "-"]
+      }
+    },
+    {
+      "company": {
+        "zh-tw": "AppWorks School",
+        "en": "AppWorks School"
+      },
+      "position": {
+        "zh-tw": "前端工程師培訓生",
+        "en": "Front-End Engineer Trainee"
+      },
+      "location": {
+        "zh-tw": "台灣台北",
+        "en": "Taipei, Taiwan"
+      },
+      "startDate": {
+        "zh-tw": "2022 年 6 月",
+        "en": "Jun. 2022"
+      },
+      "endDate": {
+        "zh-tw": "2022 年 11 月",
+        "en": "Nov. 2022"
+      },
+      "description": {
+        "zh-tw": [
+          "作為前端負責人與後端工程師協作，討論專案需求與功能。",
+          "自學 Chrome 擴充功能相關技術，於五週內完成可用的擴充功能。",
+          "主動開設 UI 設計課程，與同儕分享設計相關知識。"
+        ],
+        "en": [
+          "Discussed requirements and features as the lead front-end engineer while collaborating with the back-end engineer on the project.",
+          "Acquired chrome extension-related technologies from scratch and developed a fully functional extension within five weeks.",
+          "Spontaneously initiated UI design lectures to share UI design-related knowledge with colleagues."
+        ]
+      }
+    },
+    {
+      "company": {
+        "zh-tw": "Whispace Studio",
+        "en": "Whispace Studio"
+      },
+      "position": {
+        "zh-tw": "建築設計師",
+        "en": "Architectural Designer"
+      },
+      "location": {
+        "zh-tw": "台灣台北",
+        "en": "Taipei, Taiwan"
+      },
+      "startDate": {
+        "zh-tw": "2021 年 8 月",
+        "en": "Aug. 2021"
+      },
+      "endDate": {
+        "zh-tw": "2022 年 6 月",
+        "en": "Jun. 2022"
+      },
+      "description": {
+        "zh-tw": [
+          "負責與業主溝通需求、提出設計方案、估算預算並協調施工，獨立完成 Kingston 專案。",
+          "運用數位分析工具於兩週內完成曲牆分割規畫，解決廠商無法施工的問題。"
+        ],
+        "en": [
+          "Responsible for communicating needs with the owner, designing proposals, valuation, construction, and demolition. Independently completed the design case for Kingston.",
+          "Independently completed the planning of curved wall segmentation with digital analysis tools—unachievable by the construction plant—within two weeks."
+        ]
+      }
+    },
+    {
+      "company": {
+        "zh-tw": "Bio-Architecture Formosana",
+        "en": "Bio-Architecture Formosana"
+      },
+      "position": {
+        "zh-tw": "建築設計師",
+        "en": "Architectural Designer"
+      },
+      "location": {
+        "zh-tw": "台灣台北",
+        "en": "Taipei, Taiwan"
+      },
+      "startDate": {
+        "zh-tw": "2019 年 3 月",
+        "en": "Mar. 2019"
+      },
+      "endDate": {
+        "zh-tw": "2021 年 5 月",
+        "en": "May. 2021"
+      },
+      "description": {
+        "zh-tw": [
+          "與建築設計團隊及工程顧問協作，完成國立故宮博物院捷運站的設計與細部圖說。",
+          "與設計團隊在兩週內完成世界前三大網路公司辦公大樓競圖並獲勝。"
+        ],
+        "en": [
+          "Cooperated with the architectural design team and communicated with the engineering consultants to complete the design and details of the MRT station next to the National Palace Museum.",
+          "Worked with the architectural design team to win the office building design competition of the world's top three network companies within two weeks."
+        ]
+      }
     }
   ]
 }

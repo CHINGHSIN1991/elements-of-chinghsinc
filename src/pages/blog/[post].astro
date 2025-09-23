@@ -6,6 +6,7 @@ import RelatedItems from '../../components/common/RelatedItems.astro';
 import TagList from '../../components/common/TagList.astro';
 import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
 import { slugify, formatDate, getPublishedCollection } from '../../ts/utils';
+import { localizePath, useTranslations } from '../../i18n/utils';
 
 export const prerender = true;
 
@@ -28,6 +29,18 @@ if (!post) {
 }
 
 const { Content, headings } = await post.render();
+const { t, lang } = useTranslations(Astro);
+const categoryHeading = t('blog.sidebar.categories');
+const tableOfContentsLabel = t('blog.post.tableOfContents');
+const backToTopLabel = t('common.actions.backToTop');
+const expandAllLabel = t('common.actions.expandAll');
+const collapseAllLabel = t('common.actions.collapseAll');
+const scrollToBottomLabel = t('common.actions.scrollToBottom');
+const articleInfoLabel = t('blog.post.articleInfo');
+const wordCountLabel = t('blog.post.wordCount');
+const sectionsLabel = t('blog.post.sections');
+const tagsLabel = t('blog.post.tags');
+const categoryLink = localizePath(`/blog/category/${slugify(post.data.category)}`, lang);
 ---
 
 <PostLayout post={post}>
@@ -38,7 +51,7 @@ const { Content, headings } = await post.render();
         <!-- category list -->
         <CategoryList
           collectionName="posts"
-          heading="Categories"
+          heading={categoryHeading}
           basePath="/blog"
           currentCategory={post.data.category}
         />
@@ -56,7 +69,7 @@ const { Content, headings } = await post.render();
         <div class="bg-background-secondary p-4 rounded-lg">
           <CategoryList
             collectionName="posts"
-            heading="Categories"
+            heading={categoryHeading}
             basePath="/blog"
             currentCategory={post.data.category}
           />
@@ -69,10 +82,10 @@ const { Content, headings } = await post.render();
       <header class="mb-8">
         <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
         <div class="flex flex-wrap gap-4 text-text-secondary">
-          <div class="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
+        <div class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 mr-2"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -95,12 +108,12 @@ const { Content, headings } = await post.render();
             >
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
             </svg>
-            <a href={`/blog/category/${slugify(post.data.category)}`} class="hover:text-primary">
-              {post.data.category}
-            </a>
-          </div>
+          <a href={categoryLink} class="hover:text-primary">
+            {post.data.category}
+          </a>
         </div>
-      </header>
+      </div>
+    </header>
       <!-- article description -->
       <div class="mb-8">
         <p class="text-lg text-text-secondary italic">
@@ -122,7 +135,7 @@ const { Content, headings } = await post.render();
     <aside class="w-64 shrink-0 hidden xl:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-4">
                  <div class="px-2">
-           <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Table of Contents</h2>
+           <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{tableOfContentsLabel}</h2>
           <nav class="table-of-contents">
             <ul class="space-y-1">
               {headings.map(heading => (
@@ -142,37 +155,37 @@ const { Content, headings } = await post.render();
               id="backToTop"
               class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
             >
-              Back to Top
+              {backToTopLabel}
             </button>
             <button
               id="expandAll"
               class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
             >
-              Expand All
+              {expandAllLabel}
             </button>
             <button
               id="scrollToBottom"
               class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
             >
-              Scroll to Bottom
+              {scrollToBottomLabel}
             </button>
           </div>
         </div>
           <BuyMeACoffee />
 
          <div class="px-2">
-          <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Article Info</h2>
+          <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{articleInfoLabel}</h2>
           <div class="space-y-2 text-xs pl-2">
             <div class="flex justify-between">
-              <span class="text-text-muted">Word Count</span>
+              <span class="text-text-muted">{wordCountLabel}</span>
               <span class="font-normal text-text-secondary">{post.body?.length || 0}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-text-muted">Sections</span>
+              <span class="text-text-muted">{sectionsLabel}</span>
               <span class="font-normal text-text-secondary">{headings.length}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-text-muted">Tags</span>
+              <span class="text-text-muted">{tagsLabel}</span>
               <span class="font-normal text-text-secondary">{post.data.tags?.length || 0}</span>
             </div>
           </div>
@@ -186,7 +199,7 @@ const { Content, headings } = await post.render();
   import { setupScrollToTop, setupExpandAll, setupScrollToBottom } from '../../ts/scroll-utils';
 
   setupScrollToTop('backToTop');
-  setupExpandAll('expandAll', 'Expand All', 'Collapse All');
+  setupExpandAll('expandAll', expandAllLabel, collapseAllLabel);
   setupScrollToBottom('scrollToBottom');
 
   // smooth scroll to anchor

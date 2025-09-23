@@ -3,15 +3,26 @@ import PaginatedList, { createGetStaticPaths } from '../_templates/PaginatedList
 import ProjectCard from '../../components/project/ProjectCard.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import PopularItems from '../../components/common/PopularItems.astro';
+import { useTranslations } from '../../i18n/utils';
 
 export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('projects', 6);
 
+const { page } = Astro.props;
+const { t } = useTranslations(Astro);
 const sidebarComponents = [
-  { component: CategoryList, props: { collectionName: 'projects', heading: 'Project Categories', basePath: '/project' } },
+  {
+    component: CategoryList,
+    props: {
+      collectionName: 'projects',
+      heading: t('project.sidebar.categories'),
+      basePath: '/project',
+    }
+  },
   { component: PopularItems, props: { collectionName: 'projects', linkPrefix: '/project' } }
 ];
-const { page } = Astro.props;
+const title = t('project.list.title');
+const description = t('project.list.description');
 ---
 
 <PaginatedList
@@ -19,5 +30,6 @@ const { page } = Astro.props;
   cardComponent={ProjectCard}
   sidebarComponents={sidebarComponents}
   page={page}
-  title="案例作品"
+  title={title}
+  description={description}
 />

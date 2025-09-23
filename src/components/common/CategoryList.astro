@@ -1,5 +1,6 @@
 ---
 import { slugify, getPublishedCollection } from "../../ts/utils";
+import { localizePath, useTranslations } from "../../i18n/utils";
 
 interface Props {
   collectionName: string;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const { collectionName, heading, basePath, currentCategory } = Astro.props as Props;
+const { lang } = useTranslations(Astro);
 
 const allItems = await getPublishedCollection(collectionName as any);
 
@@ -28,7 +30,7 @@ const categoryCounts = categories.reduce((acc, category) => {
     {categories.map(cat => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a
-          href={`${basePath}/category/${slugify(cat)}`}
+          href={localizePath(`${basePath}/category/${slugify(cat)}`, lang)}
           class={`block hover:text-primary transition-colors flex justify-between items-center text-xs ${cat === currentCategory ? 'text-primary font-medium' : 'text-text-secondary'}`}
         >
           <span>{cat}</span>

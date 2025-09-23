@@ -4,6 +4,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import PopularItems from '../../components/common/PopularItems.astro';
 import { slugify, getPublishedCollection } from '../../ts/utils';
+import { localizePath, useTranslations } from '../../i18n/utils';
 
 export function createGetStaticPaths(collection: string) {
   return async function getStaticPaths() {
@@ -27,8 +28,6 @@ export function createGetStaticPaths(collection: string) {
 interface CategoryPageProps<T = any> {
   category: string;
   items: CollectionEntry<T>[];
-  /** Display name used in title and descriptions, e.g. "文章" or "專案" */
-  itemLabel: string;
   /** Name of the prop passed to CardComponent, e.g. "post" or "project" */
   itemPropName: string;
   CardComponent: any;
@@ -39,26 +38,50 @@ interface CategoryPageProps<T = any> {
   };
   /** Link to view all items of this type */
   allHref: string;
+  titleText?: string;
+  descriptionText?: string;
+  ariaLabelText?: string;
+  allLabelText?: string;
 }
 
 const {
   category,
   items,
-  itemLabel,
   itemPropName,
   CardComponent,
   categoryListProps,
-  allHref
+  allHref,
+  titleText,
+  descriptionText,
+  ariaLabelText,
+  allLabelText
 } = Astro.props as CategoryPageProps;
 
-const title = `${category} ${itemLabel}分類`;
-const description = `查看所有 ${category} 分類的${itemLabel}`;
+const { t, lang } = useTranslations(Astro);
+const collection = categoryListProps.collectionName;
+const title = titleText
+  ?? (collection === 'posts'
+    ? t('blog.category.title', { category })
+    : t('project.category.title', { category }));
+const description = descriptionText
+  ?? (collection === 'posts'
+    ? t('blog.category.description', { category })
+    : t('project.category.description', { category }));
+const ariaLabel = ariaLabelText
+  ?? (collection === 'posts'
+    ? t('blog.category.ariaLabel')
+    : t('project.category.ariaLabel'));
+const allLabel = allLabelText
+  ?? (collection === 'posts'
+    ? t('blog.category.allLabel')
+    : t('project.category.allLabel'));
+const allLink = localizePath(allHref, lang);
 ---
 
 <MainLayout title={title} description={description}>
   <section
     class="container mx-auto px-4 py-16"
-    aria-label={`分類${itemLabel}列表`}
+    aria-label={ariaLabel}
   >
     <div class="flex gap-8 max-w-7xl mx-auto">
       <aside class="w-64 shrink-0 hidden lg:block">
@@ -80,8 +103,8 @@ const description = `查看所有 ${category} 分類的${itemLabel}`;
         </div>
 
         <div class="mt-12 text-center">
-          <a href={allHref} class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
-            所有{itemLabel}
+          <a href={allLink} class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
+            {allLabel}
           </a>
         </div>
       </div>

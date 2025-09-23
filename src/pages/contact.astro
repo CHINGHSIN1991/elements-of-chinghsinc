@@ -1,9 +1,40 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import contactInfo from '../content/static/contactInfo.json';
+import { localizePath, useTranslations } from '../i18n/utils';
 
-const title = "Contact - Elements of ChingHsinC";
-const description = "Connect with me to explore collaboration opportunities and share ideas";
+const { t, lang } = useTranslations(Astro);
+const title = t('contact.meta.title');
+const description = t('contact.meta.description');
+const locale = lang as 'zh-tw' | 'en';
+const overlay = t('contact.overlay') as { title: string; message: string; status: string };
+const hero = t('contact.hero') as { title: string; subtitle: string };
+const main = t('contact.main') as { heading: string; description: string };
+const about = t('contact.about') as { title: string };
+const methods = t('contact.methods') as Record<string, { title: string; description: string }>;
+const form = t('contact.form') as {
+  title: string;
+  nameLabel: string;
+  emailLabel: string;
+  subjectLabel: string;
+  messageLabel: string;
+  namePlaceholder: string;
+  emailPlaceholder: string;
+  subjectPlaceholder: string;
+  messagePlaceholder: string;
+  privacy: string;
+  submit: string;
+  success: string;
+};
+const responseTime = t('contact.responseTime');
+const cta = t('contact.cta') as {
+  title: string;
+  description: string;
+  blogTitle: string;
+  blogDescription: string;
+  projectTitle: string;
+  projectDescription: string;
+};
 ---
 
 <MainLayout title={title} description={description}>
@@ -23,13 +54,13 @@ const description = "Connect with me to explore collaboration opportunities and 
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
         </svg>
       </div>
-      <h2 class="text-3xl font-light text-text mb-4">Under Construction</h2>
+      <h2 class="text-3xl font-light text-text mb-4">{overlay.title}</h2>
       <p class="text-text-secondary mb-6 leading-relaxed">
-        This page is currently being updated to provide you with a better experience. Please check back soon!
+        {overlay.message}
       </p>
       <div class="flex items-center justify-center text-sm text-text-secondary">
         <div class="w-2 h-2 bg-orange-500 rounded-full animate-pulse mr-2"></div>
-        <span>Working on improvements...</span>
+        <span>{overlay.status}</span>
       </div>
     </div>
   </div>
@@ -48,12 +79,12 @@ const description = "Connect with me to explore collaboration opportunities and 
     <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
       <!-- Main Title -->
       <h1 class="text-6xl md:text-8xl lg:text-9xl font-light text-gray-800 dark:text-white mb-8 leading-tight transition-colors duration-300">
-        <span class="bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300 bg-clip-text text-transparent">Contact</span>
+        <span class="bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300 bg-clip-text text-transparent">{hero.title}</span>
       </h1>
-      
+
       <!-- Subtitle -->
       <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light mb-12 max-w-3xl mx-auto transition-colors duration-300">
-        Let's connect to explore collaboration opportunities, discuss innovative projects, or share insights about design and technology
+        {hero.subtitle}
       </p>
     </div>
     
@@ -66,9 +97,9 @@ const description = "Connect with me to explore collaboration opportunities and 
   <section class="py-20 bg-background transition-colors duration-300">
     <div class="container mx-auto px-4 max-w-6xl">
       <div class="text-center mb-16">
-        <h2 class="text-4xl font-light text-text mb-4 transition-colors duration-300">Let's Connect</h2>
+        <h2 class="text-4xl font-light text-text mb-4 transition-colors duration-300">{main.heading}</h2>
         <p class="text-lg text-text-secondary leading-relaxed transition-colors duration-300 max-w-2xl mx-auto">
-          Ready to collaborate, discuss innovative ideas, or explore new possibilities together
+          {main.description}
         </p>
       </div>
 
@@ -81,9 +112,9 @@ const description = "Connect with me to explore collaboration opportunities and 
           <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
             ∞
           </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300 text-center">About Me</h3>
+          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300 text-center">{about.title}</h3>
           <p class="text-text-secondary transition-colors duration-300 leading-relaxed text-center">
-            {contactInfo.data.about}
+            {contactInfo.data.about[locale]}
           </p>
         </div>
 
@@ -96,7 +127,7 @@ const description = "Connect with me to explore collaboration opportunities and 
                 @
               </div>
               <div class="flex-1">
-                <h3 class="text-xl font-light text-text mb-1">Email</h3>
+                <h3 class="text-xl font-light text-text mb-1">{methods.email.title}</h3>
                 <a href={`mailto:${contactInfo.data.email}`} class="text-primary hover:text-primary-dark transition-colors text-sm">
                   {contactInfo.data.email}
                 </a>
@@ -121,9 +152,9 @@ const description = "Connect with me to explore collaboration opportunities and 
                 &lt;/&gt;
               </div>
               <div class="flex-1">
-                <h3 class="text-xl font-light text-text mb-1">GitHub</h3>
+                <h3 class="text-xl font-light text-text mb-1">{methods.github.title}</h3>
                 <a href={contactInfo.data.GitHub} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-dark transition-colors text-sm">
-                  Explore my code repositories
+                  {methods.github.description}
                 </a>
               </div>
               <svg
@@ -146,9 +177,9 @@ const description = "Connect with me to explore collaboration opportunities and 
                 ⌘
               </div>
               <div class="flex-1">
-                <h3 class="text-xl font-light text-text mb-1">LinkedIn</h3>
+                <h3 class="text-xl font-light text-text mb-1">{methods.linkedin.title}</h3>
                 <a href={contactInfo.data.LinkedIn} target="_blank" rel="noopener noreferrer" class="text-primary hover:text-primary-dark transition-colors text-sm">
-                  Professional profile & experience
+                  {methods.linkedin.description}
                 </a>
               </div>
               <svg
@@ -171,76 +202,77 @@ const description = "Connect with me to explore collaboration opportunities and 
         <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
           ✦
         </div>
-        <h2 class="text-2xl font-light text-text mb-6 transition-colors duration-300 text-center">Send Message</h2>
-        
+        <h2 class="text-2xl font-light text-text mb-6 transition-colors duration-300 text-center">{form.title}</h2>
+
         <form class="space-y-6" id="contact-form">
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label for="name" class="block text-sm font-light text-text mb-2">Name *</label>
-              <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                required 
+              <label for="name" class="block text-sm font-light text-text mb-2">{form.nameLabel}</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
                 class="input w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
-                placeholder="Your name"
+                placeholder={form.namePlaceholder}
               >
             </div>
             <div>
-              <label for="email" class="block text-sm font-light text-text mb-2">Email *</label>
-              <input 
-                type="email" 
-                id="email" 
-                name="email" 
-                required 
+              <label for="email" class="block text-sm font-light text-text mb-2">{form.emailLabel}</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
                 class="input w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
-                placeholder="your@email.com"
+                placeholder={form.emailPlaceholder}
               >
             </div>
           </div>
-          
+
           <div>
-            <label for="subject" class="block text-sm font-light text-text mb-2">Subject *</label>
-            <input 
-              type="text" 
-              id="subject" 
-              name="subject" 
-              required 
+            <label for="subject" class="block text-sm font-light text-text mb-2">{form.subjectLabel}</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              required
               class="input w-full focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
-              placeholder="Message subject"
+              placeholder={form.subjectPlaceholder}
             >
           </div>
-          
+
           <div>
-            <label for="message" class="block text-sm font-light text-text mb-2">Message *</label>
-            <textarea 
-              id="message" 
-              name="message" 
-              rows="6" 
-              required 
+            <label for="message" class="block text-sm font-light text-text mb-2">{form.messageLabel}</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              required
               class="input w-full resize-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
-              placeholder="What would you like to discuss..."
+              placeholder={form.messagePlaceholder}
             ></textarea>
           </div>
-          
+
           <div class="flex items-center">
-            <input 
-              type="checkbox" 
-              id="privacy" 
-              name="privacy" 
-              required 
+            <input
+              type="checkbox"
+              id="privacy"
+              name="privacy"
+              required
               class="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary focus:ring-2"
             >
             <label for="privacy" class="ml-2 text-sm text-text-secondary font-light">
-              I agree to you using this information to reply to my inquiry *
+              {form.privacy}
             </label>
           </div>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             class="btn btn-primary w-full text-lg py-3 font-light shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+            data-success-text={form.success}
           >
-            Send Message
+            {form.submit}
             <svg
               class="w-5 h-5 ml-2 inline"
               fill="none"
@@ -256,7 +288,7 @@ const description = "Connect with me to explore collaboration opportunities and 
         
         <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
           <p class="text-sm text-text-secondary font-light text-center">
-            <strong>Response Time:</strong> I typically respond within 24-48 hours. Looking forward to connecting!
+            {responseTime}
           </p>
         </div>
       </div>
@@ -264,24 +296,24 @@ const description = "Connect with me to explore collaboration opportunities and 
     
     <!-- Call to Action Section -->
     <div class="mt-16 text-center">
-      <h3 class="text-4xl font-light text-text mb-4 transition-colors duration-300">Explore More</h3>
+      <h3 class="text-4xl font-light text-text mb-4 transition-colors duration-300">{cta.title}</h3>
       <p class="text-text-secondary mb-8 max-w-3xl mx-auto leading-relaxed transition-colors duration-300">
-        Discover my thoughts on design and technology, or browse through my portfolio of innovative projects
+        {cta.description}
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-        <a href="/blog" class="group p-6 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
+        <a href={localizePath('/blog', lang)} class="group p-6 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
           <div class="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-xl font-bold transition-transform duration-300 group-hover:rotate-12">
             ∑
           </div>
-          <h4 class="text-xl font-light text-text mb-2">Read Articles</h4>
-          <p class="text-text-secondary text-sm">Insights on design & technology</p>
+          <h4 class="text-xl font-light text-text mb-2">{cta.blogTitle}</h4>
+          <p class="text-text-secondary text-sm">{cta.blogDescription}</p>
         </a>
-        <a href="/project" class="group p-6 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
+        <a href={localizePath('/project', lang)} class="group p-6 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
           <div class="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-xl font-bold transition-transform duration-300 group-hover:rotate-12">
             ⌘
           </div>
-          <h4 class="text-xl font-light text-text mb-2">View Projects</h4>
-          <p class="text-text-secondary text-sm">Portfolio of innovative work</p>
+          <h4 class="text-xl font-light text-text mb-2">{cta.projectTitle}</h4>
+          <p class="text-text-secondary text-sm">{cta.projectDescription}</p>
         </a>
       </div>
     </div>
@@ -311,7 +343,8 @@ const description = "Connect with me to explore collaboration opportunities and 
     // Show success message
     const button = this.querySelector('button[type="submit"]') as HTMLButtonElement;
     const originalText = button.innerHTML;
-    button.innerHTML = '✓ Email client opened';
+    const successText = button.dataset.successText || '';
+    button.innerHTML = successText || originalText;
     button.disabled = true;
     
     setTimeout(() => {

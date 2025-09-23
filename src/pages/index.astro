@@ -1,8 +1,19 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import { useTranslations } from '../i18n/utils';
 
-const title = "The New World - Elements of ChingHsinC";
-const description = "A land of hope and opportunity";
+const { t } = useTranslations(Astro);
+const title = t('home.meta.title');
+const description = t('home.meta.description');
+const hero = t('home.hero') as {
+  title: Array<Array<{ text: string; accent?: boolean }>>;
+  subtitle: string;
+  sections: string[];
+  years: { start: string; divider?: string; end: string };
+};
+const overview = t('home.overview') as { heading: string; description: string };
+const features = t('home.features') as Array<{ icon: string; title: string; description: string; meta: string }>;
+const philosophy = t('home.philosophy') as { title: string; quote: string };
 ---
 
 <MainLayout title={title} description={description}>
@@ -18,29 +29,40 @@ const description = "A land of hope and opportunity";
     <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
       <!-- Year Display - Top Right -->
       <div class="absolute top-0 right-0 text-gray-600 dark:text-white opacity-60 font-light transition-colors duration-300">
-        <div class="text-4xl md:text-5xl">1991</div>
-        <div class="text-2xl md:text-3xl mt-2">/</div>
-        <div class="text-4xl md:text-5xl mt-2">9999</div>
+        <div class="text-4xl md:text-5xl">{hero.years.start}</div>
+        {hero.years.divider && <div class="text-2xl md:text-3xl mt-2">{hero.years.divider}</div>}
+        <div class="text-4xl md:text-5xl mt-2">{hero.years.end}</div>
       </div>
-      
+
       <!-- Main Title -->
       <h1 class="text-6xl md:text-8xl lg:text-9xl font-light text-gray-800 dark:text-white mb-8 leading-tight transition-colors duration-300">
-        Elements <span class="bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300 bg-clip-text text-transparent">of</span>
-        <br>
-        <span class="bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-300 dark:to-cyan-200 bg-clip-text text-transparent">Ching Hsin</span>
+        {hero.title.map((line, lineIndex) => (
+          <Fragment>
+            {line.map((segment) => {
+              const accentClass = lineIndex === 0
+                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300'
+                : 'bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-300 dark:to-cyan-200';
+              return segment.accent ? (
+                <span class={`${accentClass} bg-clip-text text-transparent`}>{segment.text}</span>
+              ) : (
+                segment.text
+              );
+            })}
+            {lineIndex < hero.title.length - 1 && <br />}
+          </Fragment>
+        ))}
       </h1>
-      
+
       <!-- Subtitle -->
       <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light mb-12 max-w-2xl mx-auto transition-colors duration-300">
-        A Land of hope and opportunity
+        {hero.subtitle}
       </p>
-      
+
       <!-- Navigation Hints -->
       <div class="flex justify-center items-center gap-8 text-gray-500 dark:text-white opacity-60 text-sm font-light transition-colors duration-300">
-        <span class="hidden md:block">Section 1</span>
-        <span class="hidden md:block">Section 2</span>
-        <span class="hidden md:block">Section 3</span>
-        <span class="hidden md:block">Section 4</span>
+        {hero.sections.map((label) => (
+          <span class="hidden md:block">{label}</span>
+        ))}
       </div>
     </div>
     
@@ -59,60 +81,41 @@ const description = "A land of hope and opportunity";
   <!-- Additional Content Section -->
   <section class="py-20 bg-background transition-colors duration-300">
     <div class="container mx-auto px-4 text-center">
-      <h2 class="text-4xl font-light text-text mb-4 transition-colors duration-300">Cross-Disciplinary Innovation</h2>
+      <h2 class="text-4xl font-light text-text mb-4 transition-colors duration-300">{overview.heading}</h2>
       <p class="text-lg text-text-secondary mb-16 max-w-4xl mx-auto leading-relaxed transition-colors duration-300">
-        Integrating logical thinking, aesthetic design, and technological innovation to explore the infinite possibilities of cross-disciplinary professional knowledge
+        {overview.description}
       </p>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Logical Thinking -->
-        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
-            ∑
+        {features.map((feature, index) => {
+          const gradients = [
+            'from-purple-500 to-pink-500',
+            'from-blue-500 to-cyan-500',
+            'from-green-500 to-teal-500',
+          ];
+          const gradientClass = gradients[index % gradients.length];
+          return (
+          <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
+            <div class={`w-16 h-16 mx-auto mb-6 bg-gradient-to-br ${gradientClass} rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12`}>
+              {feature.icon}
+            </div>
+            <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">{feature.title}</h3>
+            <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
+              {feature.description}
+            </p>
+            <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
+              {feature.meta}
+            </div>
           </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Logical Thinking</h3>
-          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
-            Based on mathematical logic, employing rigorous analytical methods to solve complex problems, pursuing the perfect balance between precision and efficiency
-          </p>
-          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
-            Mathematical Logic | Problem Solving
-          </div>
-        </div>
-        
-        <!-- Design Aesthetics -->
-        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
-            ⌘
-          </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Design Aesthetics</h3>
-          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
-            Committed to creating designs that combine functionality with aesthetic value, from spatial planning to user experience comprehensive thinking
-          </p>
-          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
-            Aesthetic Design | User Experience
-          </div>
-        </div>
-        
-        <!-- Technology Innovation -->
-        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
-            &lt;/&gt;
-          </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Technology Innovation</h3>
-          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
-            Utilizing modern technological tools to realize creative ideas, continuously exploring the integration of new technologies with traditional design concepts
-          </p>
-          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
-            Technology Innovation | Creative Solutions
-          </div>
-        </div>
+          );
+        })}
       </div>
-      
+
       <!-- Core Philosophy -->
       <div class="mt-16 p-8 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 transition-all duration-300">
-        <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Core Philosophy</h3>
+        <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">{philosophy.title}</h3>
         <p class="text-lg text-text-secondary max-w-3xl mx-auto leading-relaxed italic transition-colors duration-300">
-          "A cross-disciplinary learner who pursues innovative solutions and is curious about everything. A deep thinker who is passionate about combining knowledge from different professional fields to create unique value."
+          {philosophy.quote}
         </p>
       </div>
     </div>

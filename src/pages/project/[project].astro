@@ -7,6 +7,7 @@ import TagList from '../../components/common/TagList.astro';
 import ProjectInfo from '../../components/project/ProjectInfo.astro';
 import PostHeader from '../../components/layout/PostHeader.astro';
 import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
+import { useTranslations } from '../../i18n/utils';
 
 export const prerender = true;
 
@@ -29,6 +30,10 @@ const dateObj = new Date(data.date);
 const coverData = typeof data.cover === 'string' && data.cover
   ? { src: data.cover, alt: data.title || '專案封面' }
   : undefined;
+const { t } = useTranslations(Astro);
+const descriptionHeading = t('project.detail.descriptionHeading');
+const tagsHeading = t('project.detail.tagsHeading');
+const imagesHeading = t('project.detail.imagesHeading');
 ---
 
 <MainLayout title={data.title} description={data.description}>
@@ -57,27 +62,27 @@ const coverData = typeof data.cover === 'string' && data.cover
           <div class="bg-background-secondary p-4 rounded-lg">
             <RelatedItems currentItem={project} collection="projects" linkPrefix="/project" limit={3} />
           </div>
-        </div>
+      </div>
       <!-- project description -->
       <div id="description" class="mb-8">
-        <h2 class="text-3xl font-bold mb-4">Project Description</h2>
+        <h2 class="text-3xl font-bold mb-4">{descriptionHeading}</h2>
         <p class="text-lg text-text-secondary leading-relaxed">
           {data.description}
         </p>
       </div>
-      
+
       <!-- tag list -->
       {data.tags && data.tags.length > 0 && (
         <div id="tags" class="mb-8">
-          <h3 class="text-2xl font-bold mb-4">Tags</h3>
+          <h3 class="text-2xl font-bold mb-4">{tagsHeading}</h3>
           <TagList tags={data.tags} basePath="/tag" />
         </div>
       )}
-      
+
       <!-- project images -->
       {data.images && data.images.length > 0 && (
         <div id="images" class="mb-8">
-          <h3 class="text-2xl font-bold mb-6">Project Images</h3>
+          <h3 class="text-2xl font-bold mb-6">{imagesHeading}</h3>
           <div class="space-y-8">
             {data.images.map((image: { src: string; description?: string }) => (
               <div class="w-full">

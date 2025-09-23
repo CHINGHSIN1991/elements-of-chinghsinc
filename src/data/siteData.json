@@ -1,8 +1,17 @@
 {
-  "title": "Elements of ChingHsinChen",
-  "description": "The use of meticulous approach to ...",
+  "title": {
+    "zh-tw": "Elements of ChingHsinChen",
+    "en": "Elements of ChingHsinChen"
+  },
+  "description": {
+    "zh-tw": "以細膩的態度結合設計、科技與邏輯思維，探索跨域創新的無限可能。",
+    "en": "Exploring cross-disciplinary innovation by blending design, technology, and logical thinking with care."
+  },
   "image": {
     "src": "/images/image-default.jpg",
-    "alt": "Elements of ChingHsinChen"
+    "alt": {
+      "zh-tw": "Elements of ChingHsinChen",
+      "en": "Elements of ChingHsinChen"
+    }
   }
 }

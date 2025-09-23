@@ -1,6 +1,18 @@
 ---
 import siteData from "../../data/siteData.json";
 import jsonLDGenerator from "../../ts/jsonLD";
+import { defaultLocale, type Locale } from "../../i18n/ui";
+
+interface Props {
+  title: string;
+  description: string;
+  url?: string | URL;
+  image?: { src?: string; alt?: string };
+  robots?: string;
+  project?: unknown;
+  lang?: Locale;
+  siteName: string;
+}
 
 const {
   title,
@@ -9,40 +21,50 @@ const {
   image,
   robots,
   project,
-} = Astro.props;
+  lang = defaultLocale,
+  siteName,
+} = Astro.props as Props;
+
+const canonicalUrl = typeof url === 'string' ? url : url.toString();
+const fallbackImageSrc = image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''));
+const imageAltData = siteData.image.alt;
+const fallbackImageAlt = typeof imageAltData === 'string'
+  ? imageAltData
+  : imageAltData[lang] || imageAltData[defaultLocale] || '';
 
 const jsonLD = jsonLDGenerator({
   type: project ? "post" : "website",
   post: project,
-  url,
+  url: canonicalUrl,
+  siteName,
 });
 ---
 
 <!-- SEO -->
-<link rel="canonical" href={url} />
+<link rel="canonical" href={canonicalUrl} />
 
 <!-- Open Graph -->
-<meta property="og:site_name" content="My Astro Blog" />
+<meta property="og:site_name" content={siteName} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={url} />
-<meta property="og:image" content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))} />
-<meta property="og:image:url" content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={fallbackImageSrc} />
+<meta property="og:image:url" content={fallbackImageSrc} />
 <meta
   property="og:image:secure_url"
-  content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))}
+  content={fallbackImageSrc}
 />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="600" />
-<meta property="og:image:alt" content={image?.alt || siteData.image.alt} />
+<meta property="og:image:alt" content={image?.alt || fallbackImageAlt} />
 
 <!-- Twitter -->
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))} />
-<meta name="twitter:image:alt" content={title} />
+<meta name="twitter:image" content={fallbackImageSrc} />
+<meta name="twitter:image:alt" content={image?.alt || fallbackImageAlt} />
 <meta name="twitter:domain" content={import.meta.env.SITE} />
 
 {robots && <meta name="robots" content="noindex, nofollow" />}

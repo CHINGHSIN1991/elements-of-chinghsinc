@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 import { formatDate, slugify, sortAndLimit, getPublishedCollection } from '../../ts/utils';
+import { localizePath, useTranslations } from '../../i18n/utils';
 
 interface Props {
   currentItem: CollectionEntry<any>;
@@ -16,6 +17,9 @@ const {
   limit = 3,
 } = Astro.props as Props;
 
+const { t, lang } = useTranslations(Astro);
+const headingTitle = collection === 'posts' ? t('blog.relatedItemsTitle') : t('project.relatedItemsTitle');
+
 const allItems = await getPublishedCollection(collection as any);
 
 const relatedItems = sortAndLimit(
@@ -30,12 +34,12 @@ const relatedItems = sortAndLimit(
 
 {relatedItems.length > 0 && (
   <div class="px-2">
-    <h2 class="text-xl font-bold mb-4 pl-2">Related Items</h2>
+    <h2 class="text-xl font-bold mb-4 pl-2">{headingTitle}</h2>
     <ul class="space-y-1">
       {relatedItems.map(item => (
         <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
           <a
-            href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
+          href={localizePath(`${linkPrefix}/${item.id || slugify(item.data.title)}`, lang)}
             class="block hover:text-primary-500 transition-colors"
           >
             <h3 class="font-medium text-sm line-clamp-2">

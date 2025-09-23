@@ -1,20 +1,26 @@
 ---
 import CategoryPage, { createGetStaticPaths } from '../../_templates/CategoryPage.astro';
 import PostCard from '../../../components/blog/PostCard.astro';
-import PopularItems from '../../../components/common/PopularItems.astro';
+import { useTranslations } from '../../../i18n/utils';
 
 export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('posts');
 
 const { category, items } = Astro.props;
+const { t } = useTranslations(Astro);
+const categoryListProps = {
+  collectionName: 'posts',
+  heading: t('blog.sidebar.categories'),
+  basePath: '/blog',
+};
+const allHref = '/blog';
 ---
 
 <CategoryPage
   category={category}
   items={items}
-  itemLabel="文章"
   itemPropName="post"
   CardComponent={PostCard}
-  categoryListProps={{ collectionName: 'posts', heading: 'Categories', basePath: '/blog' }}
-  allHref="/blog"
+  categoryListProps={categoryListProps}
+  allHref={allHref}
 />
