@@ -10,6 +10,7 @@
     "deploy": "astro build && touch dist/.nojekyll"
   },
   "dependencies": {
+    "@astrojs/i18n": "file:packages/astrojs-i18n",
     "@astrojs/cloudflare": "^12.3.0",
     "@astrojs/react": "^4.2.1",
     "@iconify-json/lets-icons": "^1.2.1",

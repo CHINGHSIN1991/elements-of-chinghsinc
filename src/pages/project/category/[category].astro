@@ -1,20 +1,26 @@
 ---
 import CategoryPage, { createGetStaticPaths } from '../../_templates/CategoryPage.astro';
 import ProjectCard from '../../../components/project/ProjectCard.astro';
-import PopularItems from '../../../components/common/PopularItems.astro';
+import { useTranslations } from '../../../i18n/utils';
 
 export const prerender = true;
 export const getStaticPaths = createGetStaticPaths('projects');
 
 const { category, items } = Astro.props;
+const { t } = useTranslations(Astro);
+const categoryListProps = {
+  collectionName: 'projects',
+  heading: t('project.sidebar.categories'),
+  basePath: '/project',
+};
+const allHref = '/project';
 ---
 
 <CategoryPage
   category={category}
   items={items}
-  itemLabel="專案"
   itemPropName="project"
   CardComponent={ProjectCard}
-  categoryListProps={{ collectionName: 'projects', heading: 'Project Categories', basePath: '/project' }}
-  allHref="/project"
+  categoryListProps={categoryListProps}
+  allHref={allHref}
 />

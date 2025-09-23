@@ -1,12 +1,20 @@
 ---
 // 可以接收額外的 class
-const { class: className = "" } = Astro.props;
+interface Props {
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  class: className = "",
+  ariaLabel = "Toggle dark mode",
+} = Astro.props as Props;
 ---
 
 <button
   id="theme-toggle"
   type="button"
-  aria-label="切換深色模式"
+  aria-label={ariaLabel}
   class={`theme-toggle ${className}`}
 >
   <svg

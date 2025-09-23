@@ -3,6 +3,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import Pagination from '../../components/common/Pagination.astro';
 import type { CollectionEntry } from 'astro:content';
 import { getPublishedCollection } from '../../ts/utils';
+import { localizePath, useTranslations } from '../../i18n/utils';
 
 export function createGetStaticPaths(collectionName: string, pageSize = 6) {
   return async function getStaticPaths({ paginate }: { paginate: any }) {
@@ -23,6 +24,7 @@ interface PaginatedListProps<T = any> {
     };
   };
   title?: string;
+  description?: string;
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   sidebarComponents = [],
   page,
   title,
+  description,
 } = Astro.props as PaginatedListProps;
 
 const itemPropName = collectionName.endsWith('s') ? collectionName.slice(0, -1) : 'item';
@@ -40,9 +43,15 @@ const gridClass = collectionName === 'projects'
 const cardWrapperClass = collectionName === 'projects'
   ? 'bg-white dark:bg-background-secondary rounded-lg overflow-hidden shadow-dark border border-gray-100 dark:border-gray-700 hover:shadow-dark-lg transition-all duration-300'
   : '';
+
+const { t, lang } = useTranslations(Astro);
+const emptyState = collectionName === 'posts'
+  ? t('common.empty.posts') as { title: string; description: string }
+  : t('common.empty.projects') as { title: string; description: string };
+const homeHref = localizePath('/', lang);
 ---
 
-<MainLayout {title}>
+<MainLayout {title} description={description}>
   <section
     class="container mx-auto px-4 py-16"
   >
@@ -80,16 +89,16 @@ const cardWrapperClass = collectionName === 'projects'
               <span class="text-2xl">!</span>
             </div>
             <h2 class="text-2xl font-semibold mb-2">
-              尚無{collectionName === 'posts' ? '文章' : '專案'}
+              {emptyState.title}
             </h2>
             <p class="text-center max-w-md mb-8">
-              目前尚未有任何{collectionName === 'posts' ? '文章' : '專案作品'}，請稍後再查看。
+              {emptyState.description}
             </p>
             <a
-              href={import.meta.env.BASE_URL}
+              href={homeHref}
               class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
             >
-              返回首頁
+              {t('common.actions.returnHome')}
             </a>
           </div>
         )}

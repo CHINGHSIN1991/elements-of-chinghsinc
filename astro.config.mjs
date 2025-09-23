@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config'
 import icon from 'astro-icon'
 import UnoCSS from 'unocss/astro'
 import react from '@astrojs/react'
+import i18n from '@astrojs/i18n'
 
 const LOCAL_URL = 'http://localhost:4321'
 const LIVE_URL = 'https://chinghsin1991.github.io'
@@ -26,6 +27,13 @@ export default defineConfig({
       injectReset: true,
     }),
     react(),
+    i18n({
+      defaultLocale: 'zh-tw',
+      locales: ['zh-tw', 'en'],
+      routing: {
+        strategy: 'prefix-always',
+      },
+    }),
   ],
   vite: {
     build: {

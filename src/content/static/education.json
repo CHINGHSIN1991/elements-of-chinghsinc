@@ -1,18 +1,57 @@
 {
   "_type": "education",
-  "data": [{
-    "school": "National Chiao Tung University",
-    "degree": "Bachelor's in Applied Mathematics",
-    "location": "Hsinchu, Taiwan",
-    "startDate": "Aug.2014",
-    "endDate": "Feb. 2018",
-    "description": "Studied applied mathematics with a focus on computational methods, statistics, and mathematical modeling."
-  }, {
-    "school": "National Chiao Tung University",
-    "degree": "Master of Architecture, M.Arch. I",
-    "location": "Hsinchu, Taiwan",
-    "startDate": "Aug. 2010",
-    "endDate": "Jul. 2014",
-    "description": "Post-baccalaureate graduate program in architecture, focusing on urban design, sustainable architecture, and computational design methods."
-  }]
+  "data": [
+    {
+      "school": {
+        "zh-tw": "國立交通大學",
+        "en": "National Chiao Tung University"
+      },
+      "degree": {
+        "zh-tw": "應用數學學士",
+        "en": "Bachelor's in Applied Mathematics"
+      },
+      "location": {
+        "zh-tw": "台灣新竹",
+        "en": "Hsinchu, Taiwan"
+      },
+      "startDate": {
+        "zh-tw": "2014 年 8 月",
+        "en": "Aug. 2014"
+      },
+      "endDate": {
+        "zh-tw": "2018 年 2 月",
+        "en": "Feb. 2018"
+      },
+      "description": {
+        "zh-tw": "主修應用數學，聚焦於計算方法、統計與數學建模。",
+        "en": "Studied applied mathematics with a focus on computational methods, statistics, and mathematical modeling."
+      }
+    },
+    {
+      "school": {
+        "zh-tw": "國立交通大學",
+        "en": "National Chiao Tung University"
+      },
+      "degree": {
+        "zh-tw": "建築碩士（M.Arch. I）",
+        "en": "Master of Architecture, M.Arch. I"
+      },
+      "location": {
+        "zh-tw": "台灣新竹",
+        "en": "Hsinchu, Taiwan"
+      },
+      "startDate": {
+        "zh-tw": "2010 年 8 月",
+        "en": "Aug. 2010"
+      },
+      "endDate": {
+        "zh-tw": "2014 年 7 月",
+        "en": "Jul. 2014"
+      },
+      "description": {
+        "zh-tw": "修讀建築專業學位，聚焦於都市設計、永續建築與計算設計方法。",
+        "en": "Post-baccalaureate graduate program in architecture, focusing on urban design, sustainable architecture, and computational design methods."
+      }
+    }
+  ]
 }

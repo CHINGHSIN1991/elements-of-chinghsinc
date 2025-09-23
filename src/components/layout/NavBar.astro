@@ -1,14 +1,33 @@
 ---
 import ThemeToggle from "../common/ThemeToggle.astro"
 import navData from '../../data/navdata';
+import { getLocaleFromUrl, getPathWithoutLocale, localizePath, localizeUrl } from '../../i18n/utils';
+import { locales, type Locale } from '../../i18n/ui';
 
-// 獲取當前路徑，用於確定活動頁籤
-const currentPath = Astro.url.pathname;
+interface Props {
+  lang?: Locale;
+  t?: (key: string, replacements?: Record<string, string | number>) => any;
+}
 
-// 確定活動頁籤索引
-const activeTabIndex = navData.findIndex(
-  (item) => currentPath === item.path || currentPath.startsWith(`${item.path}/`)
-);
+const { lang: incomingLang, t: translate } = Astro.props as Props;
+const lang = incomingLang ?? getLocaleFromUrl(Astro.url);
+const t = translate ?? ((key: string) => key);
+
+const currentPath = getPathWithoutLocale(Astro.url);
+
+const activeTabIndex = navData.findIndex((item) => {
+  const normalizedItem = item.path === '/' ? '/' : item.path.replace(/\/$/, '');
+  const normalizedCurrent = currentPath === '/' ? '/' : currentPath.replace(/\/$/, '');
+  return (
+    normalizedCurrent === normalizedItem ||
+    normalizedCurrent.startsWith(`${normalizedItem}/`)
+  );
+});
+
+const languageNameResult = t('common.languageNames');
+const languageNames = typeof languageNameResult === 'object' && languageNameResult !== null
+  ? (languageNameResult as Record<string, string>)
+  : {};
 ---
 
 <nav 
@@ -36,14 +55,14 @@ const activeTabIndex = navData.findIndex(
         {navData.map((item, index) => (
           <li>
             <a
-              href={import.meta.env.BASE_URL + item.path.replace(/^\//, '')}
+              href={localizePath(item.path, lang)}
               class={`nav-item block px-3 py-1 relative z-10 text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300 transition-colors ${
                 index === activeTabIndex ? 'active text-primary font-bold' : ''
               }`}
               data-index={index}
               aria-current={index === activeTabIndex ? 'page' : undefined}
             >
-              {item.name}
+              {t(item.id)}
             </a>
           </li>
         ))}
@@ -58,8 +77,31 @@ const activeTabIndex = navData.findIndex(
     </div>
     
     <!-- Right: Theme Toggle -->
-    <div class="flex justify-end">
-      <ThemeToggle />
+    <div class="flex justify-end items-center gap-2">
+      <div class="hidden sm:flex gap-2">
+        {locales.map((locale) => {
+          const label = languageNames?.[locale] ?? locale.toUpperCase();
+          const isActive = locale === lang;
+          const title = isActive
+            ? t('common.languageSwitcher.current', { language: label })
+            : t('common.languageSwitcher.switchTo', { language: label });
+          return (
+            <a
+              href={localizeUrl(Astro.url, locale)}
+              class={`px-3 py-1 rounded-md text-xs border transition-colors ${
+                isActive
+                  ? 'bg-primary text-white border-primary'
+                  : 'border-gray-300 dark:border-gray-700 text-text-secondary hover:bg-gray-100 dark:hover:bg-background-secondary'
+              }`}
+              aria-current={isActive ? 'true' : undefined}
+              aria-label={title}
+            >
+              {label}
+            </a>
+          );
+        })}
+      </div>
+      <ThemeToggle ariaLabel={t('nav.themeToggle')} />
     </div>
   </div>
 </nav>

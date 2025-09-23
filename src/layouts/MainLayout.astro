@@ -4,23 +4,47 @@ import MainHead from "./MainHead.astro"
 import NavBar from "../components/layout/NavBar.astro"
 import Footer from "../components/layout/Footer.astro"
 import { ClientRouter } from "astro:transitions";
+import { defaultLocale, locales } from "../i18n/ui";
+import { localizeUrl, useTranslations } from "../i18n/utils";
 
 // styles import
 import "../styles/theme.css"
 import "../styles/components.css"
 
 const {
-  title = "My Astro Blog",
-  description = "My musings about the Astro framework",
-	image,
-	robots,
-	project,
-} = Astro.props;
+  title: incomingTitle,
+  description: incomingDescription,
+  image,
+  robots,
+  project,
+} = Astro.props as {
+  title?: string;
+  description?: string;
+  image?: unknown;
+  robots?: unknown;
+  project?: unknown;
+};
+
+const { lang, t } = useTranslations(Astro);
+const title = incomingTitle ?? t('common.siteName');
+const description = incomingDescription ?? t('common.siteDescription');
+const siteName = t('common.siteName');
+
+const origin = Astro.site ? new URL(Astro.site) : Astro.url;
+const alternateLinks: { locale: string; href: string }[] = locales.map((locale) => ({
+  locale,
+  href: new URL(localizeUrl(Astro.url, locale), origin).toString(),
+}));
+
+const defaultAlt = alternateLinks.find((link) => link.locale === defaultLocale);
+if (defaultAlt) {
+  alternateLinks.push({ locale: 'x-default', href: defaultAlt.href });
+}
 ---
 <!doctype html>
-<html lang="zh-tw" class="w-full h-full">
-	<head>
-		<script is:inline>
+<html lang={lang} class="w-full h-full">
+        <head>
+                <script is:inline>
 			// Process the theme setting before page conversion
 			const savedTheme = localStorage.getItem('theme');
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -32,16 +56,25 @@ const {
 				document.documentElement.classList.remove('dark');
 			}
 		</script>
-		<MainHead {title} {description} {image} {robots} {project}/>
-		<ClientRouter />
-	</head>
+                <MainHead
+                  {title}
+                  {description}
+                  {image}
+                  {robots}
+                  {project}
+                  {lang}
+                  siteName={siteName}
+                  alternateLinks={alternateLinks}
+                />
+                <ClientRouter />
+        </head>
         <body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">
-                <a href="#main-content" class="sr-only focus:not-sr-only">跳到主要內容</a>
-                <NavBar transition:persist />
+                <a href="#main-content" class="sr-only focus:not-sr-only">{t('common.skipToContent')}</a>
+                <NavBar {lang} {t} transition:persist />
                 <main id="main-content" class="flex-grow">
-                        <slot />
+                        <slot {lang} {t} />
                 </main>
-                <Footer class="mt-auto" transition:persist />
+                <Footer lang={lang} t={t} transition:persist />
         </body>
 </html>
 

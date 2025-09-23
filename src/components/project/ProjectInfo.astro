@@ -1,4 +1,7 @@
 ---
+import { formatDate } from '../../ts/utils';
+import { useTranslations } from '../../i18n/utils';
+
 interface Props {
   category: string;
   date: string;
@@ -8,30 +11,30 @@ interface Props {
 }
 
 const { category, date, designers, tags, images } = Astro.props;
-import { formatDate } from '../../ts/utils';
+const { t } = useTranslations(Astro);
 ---
 
 <div class="px-2">
-  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Project Info</h2>
+  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{t('project.info.title')}</h2>
   <div class="space-y-2 text-xs pl-2">
     <div class="flex justify-between">
-      <span class="text-text-muted">Category</span>
+      <span class="text-text-muted">{t('project.info.category')}</span>
       <span class="font-normal text-text-secondary">{category}</span>
     </div>
     <div class="flex justify-between">
-      <span class="text-text-muted">Date</span>
+      <span class="text-text-muted">{t('project.info.date')}</span>
       <span class="font-normal text-text-secondary">{formatDate(new Date(date))}</span>
     </div>
     <div class="flex justify-between">
-      <span class="text-text-muted">Designers</span>
+      <span class="text-text-muted">{t('project.info.designers')}</span>
       <span class="font-normal text-text-secondary">{designers?.length || 0}</span>
     </div>
     <div class="flex justify-between">
-      <span class="text-text-muted">Tags</span>
+      <span class="text-text-muted">{t('project.info.tags')}</span>
       <span class="font-normal text-text-secondary">{tags?.length || 0}</span>
     </div>
     <div class="flex justify-between">
-      <span class="text-text-muted">Images</span>
+      <span class="text-text-muted">{t('project.info.images')}</span>
       <span class="font-normal text-text-secondary">{images?.length || 0}</span>
     </div>
   </div>
@@ -42,12 +45,12 @@ import { formatDate } from '../../ts/utils';
     id="backToTop"
     class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
   >
-    Back to Top
+    {t('common.actions.backToTop')}
   </button>
   <button
     id="scrollToBottom"
     class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
   >
-    Scroll to Bottom
+    {t('common.actions.scrollToBottom')}
   </button>
 </div>

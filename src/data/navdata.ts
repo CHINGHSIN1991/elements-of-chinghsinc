@@ -1,20 +1,25 @@
-const navData = [
+export interface NavItem {
+  id: string;
+  path: string;
+}
+
+const navData: NavItem[] = [
   {
-    name: "About",
-    path: "/about"
+    id: 'nav.about',
+    path: '/about',
   },
   {
-    name: "Project",
-    path: "/project"
+    id: 'nav.project',
+    path: '/project',
   },
   {
-    name: "Blog",
-    path: "/blog"
+    id: 'nav.blog',
+    path: '/blog',
   },
   {
-    name: "Contact",
-    path: "/contact"
-  }
-]
+    id: 'nav.contact',
+    path: '/contact',
+  },
+];
 
 export default navData;

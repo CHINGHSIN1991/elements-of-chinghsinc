@@ -4,6 +4,9 @@
     "email": "chinghsinchen1991@gmail.com",
     "GitHub": "https://github.com/CHINGHSIN1991",
     "LinkedIn": "https://www.linkedin.com/in/ching-hsin-chen",
-    "about": "I am an adaptable learner in different professional fields, pursuing innovative solutions, and curious about everything. I am also a deep thinker, exceptionally enthusiastic about combining design and technology. After training in mathematics, design, graphics, and computer science, I try to organize these knowledge into a whole picture."
+    "about": {
+      "zh-tw": "我是一位能在不同專業領域中靈活學習、追求創新解決方案、對所有事物保持好奇的創作者。經過數學、設計、圖像與程式訓練，我試著統整這些知識，尋找完整的觀點。",
+      "en": "I am an adaptable learner in different professional fields, pursuing innovative solutions, and curious about everything. After training in mathematics, design, graphics, and computer science, I continue organising these skills into a cohesive perspective."
+    }
   }
 }

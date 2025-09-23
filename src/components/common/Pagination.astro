@@ -1,14 +1,16 @@
 ---
 import Link from './Link.astro'
+import { useTranslations } from '../../i18n/utils';
 
 const { prevUrl, nextUrl } = Astro.props;
+const { t } = useTranslations(Astro);
 ---
 
 <nav aria-label="Pages">
   {
     prevUrl && (
       <Link
-        text="Previous"
+        text={t('common.actions.previous')}
         href={prevUrl}
         style="primary"
         borderVisible
@@ -20,7 +22,7 @@ const { prevUrl, nextUrl } = Astro.props;
   {
     nextUrl && (
       <Link
-        text="Next"
+        text={t('common.actions.next')}
         href={nextUrl}
         style="primary"
         borderVisible
