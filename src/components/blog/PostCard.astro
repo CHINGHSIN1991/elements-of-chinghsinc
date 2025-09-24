@@ -5,12 +5,24 @@ import { slugify, formatDate } from "../../ts/utils";
 const { post } = Astro.props;
 const { title, description, date, image, tags, category } = post.data;
 
-const imageUrl = image?.src || post.data.cover || "/assets/images/fallback-image.png";
+const baseUrl = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const withBase = (path: string) => {
+  let normalizedPath = path;
+  while (normalizedPath.startsWith("/")) {
+    normalizedPath = normalizedPath.slice(1);
+  }
+  return `${baseUrl}${normalizedPath}`;
+};
+
+const imageUrl = image?.src || post.data.cover || withBase("assets/images/fallback-image.png");
 const imageAlt = image?.alt || title || "文章圖片";
+const postUrl = withBase(`blog/${post.id}`);
 ---
 
 <Card>
-  <a slot="image" href={`/blog/${post.id}`} class="block overflow-hidden relative">
+  <a slot="image" href={postUrl} class="block overflow-hidden relative">
     <div class="aspect-video overflow-hidden">
       <img
         src={imageUrl}
@@ -28,7 +40,7 @@ const imageAlt = image?.alt || title || "文章圖片";
 
   <span slot="time">{formatDate(new Date(date))}</span>
 
-  <a slot="title" href={`/blog/${post.id}`} class="block">
+  <a slot="title" href={postUrl} class="block">
     <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">
       {title}
     </h2>
@@ -42,7 +54,7 @@ const imageAlt = image?.alt || title || "文章圖片";
     {tags && tags.length > 0 && (
       <div class="flex flex-wrap gap-2 mb-4">
         {tags.slice(0, 3).map((tag: string) => (
-          <a href={`/blog/tag/${slugify(tag)}`} class="text-xs px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <a href={withBase(`blog/tag/${slugify(tag)}`)} class="text-xs px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
             #{tag}
           </a>
         ))}
@@ -50,7 +62,7 @@ const imageAlt = image?.alt || title || "文章圖片";
     )}
 
     <a
-      href={`/blog/${post.id}`}
+      href={postUrl}
       class="inline-flex items-center px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-medium text-sm"
     >
       閱讀更多
