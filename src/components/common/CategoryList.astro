@@ -10,6 +10,17 @@ interface Props {
 
 const { collectionName, heading, basePath, currentCategory } = Astro.props as Props;
 
+const baseUrl = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const withBase = (path: string) => {
+  let normalizedPath = path;
+  while (normalizedPath.startsWith("/")) {
+    normalizedPath = normalizedPath.slice(1);
+  }
+  return `${baseUrl}${normalizedPath}`;
+};
+
 const allItems = await getPublishedCollection(collectionName as any);
 
 const categories = [...new Set(allItems.map(item => item.data.category))];
@@ -28,7 +39,7 @@ const categoryCounts = categories.reduce((acc, category) => {
     {categories.map(cat => (
       <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
         <a
-          href={`${basePath}/category/${slugify(cat)}`}
+          href={withBase(`${basePath}/category/${slugify(cat)}`)}
           class={`block hover:text-primary transition-colors flex justify-between items-center text-xs ${cat === currentCategory ? 'text-primary font-medium' : 'text-text-secondary'}`}
         >
           <span>{cat}</span>

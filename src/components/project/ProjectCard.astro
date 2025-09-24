@@ -10,10 +10,22 @@ interface Props {
 const { project } = Astro.props;
 const { title, description, date, tags, cover } = project.data;
 const projectId = project.id || slugify(title);
+
+const baseUrl = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const withBase = (path: string) => {
+  let normalizedPath = path;
+  while (normalizedPath.startsWith("/")) {
+    normalizedPath = normalizedPath.slice(1);
+  }
+  return `${baseUrl}${normalizedPath}`;
+};
+const projectUrl = withBase(`project/${projectId}`);
 ---
 
 <Card>
-  <a slot="image" href={`/project/${projectId}`} class="block overflow-hidden rounded-t-lg relative">
+  <a slot="image" href={projectUrl} class="block overflow-hidden rounded-t-lg relative">
     <div class="aspect-video overflow-hidden">
       <img
         src={cover}
@@ -25,7 +37,7 @@ const projectId = project.id || slugify(title);
 
   <span slot="time">{formatDate(new Date(date))}</span>
 
-  <a slot="title" href={`/project/${projectId}`} class="block">
+  <a slot="title" href={projectUrl} class="block">
     <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">
       {title}
     </h2>
@@ -39,7 +51,7 @@ const projectId = project.id || slugify(title);
     {tags && tags.length > 0 && (
       <div class="flex flex-wrap gap-2 mb-4">
         {tags.slice(0, 3).map((tag: string) => (
-          <a href={`/project/tag/${slugify(tag)}`} class="text-xs px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <a href={withBase(`project/tag/${slugify(tag)}`)} class="text-xs px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
             #{tag}
           </a>
         ))}
@@ -47,7 +59,7 @@ const projectId = project.id || slugify(title);
     )}
 
     <a
-      href={`/project/${projectId}`}
+      href={projectUrl}
       class="inline-flex items-center px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-medium text-sm"
     >
       查看專案
