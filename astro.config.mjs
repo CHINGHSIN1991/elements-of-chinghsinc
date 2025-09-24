@@ -20,6 +20,17 @@ export default defineConfig({
   output: 'static',
   site: url,
   base,
+  i18n: {
+    defaultLocale: 'zh-tw',
+    locales: ['zh-tw', 'en'],
+    fallback: {
+      en: 'zh-tw',
+    },
+    routing: {
+      prefixDefaultLocale: true,
+      fallbackType: 'rewrite',
+    },
+  },
   integrations: [
     icon(),
     UnoCSS({
