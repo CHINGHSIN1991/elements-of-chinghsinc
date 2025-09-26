@@ -12,13 +12,14 @@ import "../styles/components.css"
 const {
   title = "My Astro Blog",
   description = "My musings about the Astro framework",
-	image,
-	robots,
-	project,
+  image,
+  robots,
+  project,
+  lang = "en",
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="zh-tw" class="w-full h-full">
+<html lang={lang} class="w-full h-full">
 	<head>
 		<script is:inline>
 			// Process the theme setting before page conversion
