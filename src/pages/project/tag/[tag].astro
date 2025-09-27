@@ -1,0 +1,102 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro';
+import ProjectCard from '../../../components/project/ProjectCard.astro';
+import CategoryList from '../../../components/common/CategoryList.astro';
+import PopularItems from '../../../components/common/PopularItems.astro';
+import { slugify, getPublishedCollection } from '../../../ts/utils';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const allProjects = await getPublishedCollection('projects');
+
+  const allTags = allProjects
+    .flatMap((project) => (project.data.tags || []) as string[])
+    .filter(Boolean);
+
+  const uniqueTagSlugs = Array.from(new Set(allTags.map((t) => slugify(t)))).filter(Boolean);
+
+  // 建立 slug -> 顯示名稱 的對應（取第一個出現的名稱）
+  const slugToName = new Map<string, string>();
+  for (const project of allProjects) {
+    for (const tag of (project.data.tags || []) as string[]) {
+      const key = slugify(tag);
+      if (!slugToName.has(key)) slugToName.set(key, tag);
+    }
+  }
+
+  return uniqueTagSlugs.map((slug) => {
+    const filteredProjects = allProjects.filter((project) =>
+      (project.data.tags || []).some((t: string) => slugify(t) === slug)
+    );
+    return {
+      params: { tag: slug },
+      props: {
+        projects: filteredProjects,
+        tagName: slugToName.get(slug) || slug,
+      },
+    };
+  });
+}
+
+interface TagPageProps {
+  tagName: string;
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { tagName, projects } = Astro.props as TagPageProps;
+const title = `#${tagName} 的專案`;
+const description = `查看所有包含 #${tagName} 標籤的專案`;
+---
+
+<MainLayout title={title} description={description}>
+  <section 
+    class="container mx-auto px-4 py-16"
+    aria-label="標籤專案列表"
+  >
+    <div class="flex gap-8 max-w-7xl mx-auto">
+      <aside class="w-64 shrink-0 hidden lg:block">
+        <div class="sticky-navbar-safe space-y-8">
+          <CategoryList collectionName="projects" heading="Project Categories" basePath="/project" />
+          <PopularItems collectionName="projects" linkPrefix="/project" limit={5} />
+        </div>
+      </aside>
+
+      <div class="flex-grow mt-8">
+        <h1 class="text-3xl font-bold mb-6">{title}</h1>
+        <p class="mb-8">{description}</p>
+
+        {projects && projects.length > 0 ? (
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {projects.map((project) => (
+              <ProjectCard project={project} />
+            ))}
+          </div>
+        ) : (
+          <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary rounded-lg shadow-inner">
+            <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
+              <span class="text-2xl">!</span>
+            </div>
+            <h2 class="text-2xl font-semibold mb-2">尚無專案</h2>
+            <p class="text-center max-w-md mb-8">
+              目前找不到包含此標籤的專案。
+            </p>
+            <a 
+              href={import.meta.env.BASE_URL}
+              class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              返回首頁
+            </a>
+          </div>
+        )}
+
+        <div class="mt-12 text-center" aria-hidden={projects.length === 0}>
+          <a href="/project" class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
+            所有專案
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
