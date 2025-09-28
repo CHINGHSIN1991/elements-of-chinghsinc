@@ -9,10 +9,15 @@ export function slugify(text: string) {
     return text
     .toString()
     .toLowerCase()
+    // Replace whitespace with dash
     .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
+    // Remove or replace special characters, but keep Chinese characters
+    .replace(/[^\w\u4e00-\u9fff-]+/g, '')
+    // Merge multiple consecutive dashes into one
     .replace(/--+/g, '-')
+    // Remove leading dash
     .replace(/^-+/, '')
+    // Remove trailing dash
     .replace(/-+$/, '');
   } else {
     return invalidResult()
