@@ -121,46 +121,58 @@ const { Content, headings } = await post.render();
     <!-- right sidebar -->
     <aside class="w-64 shrink-0 hidden xl:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-4">
-                 <div class="px-2">
-           <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Table of Contents</h2>
-          <nav class="table-of-contents">
-            <ul class="space-y-1">
-              {headings.map(heading => (
-                <li class={`pl-${(heading.depth - 1) * 4} hover:bg-background-tertiary transition-colors duration-300 px-2 py-1 rounded-md`}>
-                  <a
-                    href={`#${heading.slug}`}
-                    class="block hover:text-primary transition-colors text-xs text-text-secondary"
-                  >
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div class="mt-4 pl-2">
+        <div class="px-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Table of Contents</h2>
             <button
-              id="backToTop"
-              class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
+              id="toggleToc"
+              class="text-xs text-text-muted hover:text-text-primary transition"
+              aria-expanded="true"
+              aria-controls="tocContent"
             >
-              Back to Top
-            </button>
-            <button
-              id="expandAll"
-              class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
-            >
-              Expand All
-            </button>
-            <button
-              id="scrollToBottom"
-              class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
-            >
-              Scroll to Bottom
+              Collapse
             </button>
           </div>
+          <div id="tocContent" class="space-y-4">
+            <nav id="tableOfContents" class="table-of-contents">
+              <ul class="space-y-1">
+                {headings.map(heading => (
+                  <li class={`pl-${(heading.depth - 1) * 4} hover:bg-background-tertiary transition-colors duration-300 px-2 py-1 rounded-md`}>
+                    <a
+                      href={`#${heading.slug}`}
+                      class="block hover:text-primary transition-colors text-xs text-text-secondary"
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <div class="pl-2 space-y-0">
+              <button
+                id="backToTop"
+                class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
+              >
+                Back to Top
+              </button>
+              <button
+                id="expandAll"
+                class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
+              >
+                Expand All
+              </button>
+              <button
+                id="scrollToBottom"
+                class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
+              >
+                Scroll to Bottom
+              </button>
+            </div>
+          </div>
         </div>
-          <BuyMeACoffee />
+        <BuyMeACoffee />
 
-         <div class="px-2">
+        <div class="px-2">
           <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Article Info</h2>
           <div class="space-y-2 text-xs pl-2">
             <div class="flex justify-between">
@@ -188,6 +200,26 @@ const { Content, headings } = await post.render();
   setupScrollToTop('backToTop');
   setupExpandAll('expandAll', 'Expand All', 'Collapse All');
   setupScrollToBottom('scrollToBottom');
+
+  const tocToggleButton = document.getElementById('toggleToc');
+  const tocContent = document.getElementById('tocContent');
+  if (tocToggleButton && tocContent) {
+    const setTocState = (collapsed: boolean) => {
+      tocToggleButton.textContent = collapsed ? 'Expand' : 'Collapse';
+      tocToggleButton.setAttribute('aria-expanded', String(!collapsed));
+      tocToggleButton.setAttribute(
+        'aria-label',
+        collapsed ? 'Expand table of contents' : 'Collapse table of contents'
+      );
+    };
+
+    setTocState(false);
+
+    tocToggleButton.addEventListener('click', () => {
+      const isCollapsed = tocContent.classList.toggle('hidden');
+      setTocState(isCollapsed);
+    });
+  }
 
   // smooth scroll to anchor
   document.querySelectorAll('.table-of-contents a').forEach(link => {
