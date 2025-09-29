@@ -7,6 +7,7 @@ const { class: className = "" } = Astro.props;
   id="theme-toggle"
   type="button"
   aria-label="切換深色模式"
+  aria-pressed="false"
   class={`theme-toggle ${className}`}
 >
   <svg
@@ -36,21 +37,29 @@ const { class: className = "" } = Astro.props;
 </button>
 
 <script>
+  function syncThemeToggle(themeToggle) {
+    const isDark = document.documentElement.classList.contains('dark');
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+    themeToggle.setAttribute('aria-label', isDark ? '切換淺色模式' : '切換深色模式');
+  }
+
   function setupThemeToggle() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle) return;
-    
+
+    syncThemeToggle(themeToggle);
+
+    if (themeToggle.dataset.initialized === 'true') return;
+    themeToggle.dataset.initialized = 'true';
+
     themeToggle.addEventListener('click', () => {
       const isDark = document.documentElement.classList.contains('dark');
       const newTheme = isDark ? 'light' : 'dark';
-      
-      if (newTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      
+
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+
       localStorage.setItem('theme', newTheme);
+      syncThemeToggle(themeToggle);
     });
   }
 
