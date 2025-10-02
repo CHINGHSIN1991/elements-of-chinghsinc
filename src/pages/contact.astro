@@ -8,7 +8,14 @@ const description = "Connect with me to explore collaboration opportunities and 
 
 <MainLayout title={title} description={description}>
   <!-- Under Construction Overlay -->
-  <div class="fixed top-16 left-0 right-0 bottom-0 z-40 bg-black/20 backdrop-blur-md flex items-center justify-center">
+  <div
+    id="under-construction-overlay"
+    class="fixed top-16 left-0 right-0 bottom-0 z-40 bg-black/20 backdrop-blur-md flex items-center justify-center"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="under-construction-title"
+    tabindex="-1"
+  >
     <div class="text-center p-8 bg-background/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-border max-w-md mx-4">
       <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
         <svg
@@ -23,7 +30,7 @@ const description = "Connect with me to explore collaboration opportunities and 
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
         </svg>
       </div>
-      <h2 class="text-3xl font-light text-text mb-4">Under Construction</h2>
+      <h2 id="under-construction-title" class="text-3xl font-light text-text mb-4">Under Construction</h2>
       <p class="text-text-secondary mb-6 leading-relaxed">
         This page is currently being updated to provide you with a better experience. Please check back soon!
       </p>
@@ -35,7 +42,7 @@ const description = "Connect with me to explore collaboration opportunities and 
   </div>
 
   <!-- Main Content (Blurred) -->
-  <div class="filter blur-sm pointer-events-none select-none">
+  <div class="filter blur-sm pointer-events-none select-none" inert data-under-construction-content>
   <!-- Hero Section -->
   <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-slate-900 dark:via-gray-900 dark:to-black transition-colors duration-500">
     <!-- Background overlay with texture -->
@@ -291,46 +298,151 @@ const description = "Connect with me to explore collaboration opportunities and 
 </MainLayout>
 
 <script>
-  // Form submission handling
-  document.getElementById('contact-form')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(this as HTMLFormElement);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const subject = formData.get('subject');
-    const message = formData.get('message');
-    
-    // Build mailto link
-    const mailtoLink = `mailto:chinghsinchen1991@gmail.com?subject=${encodeURIComponent(subject as string)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-    
-    // Show success message
-    const button = this.querySelector('button[type="submit"]') as HTMLButtonElement;
-    const originalText = button.innerHTML;
-    button.innerHTML = '✓ Email client opened';
-    button.disabled = true;
-    
-    setTimeout(() => {
-      button.innerHTML = originalText;
-      button.disabled = false;
-    }, 3000);
-  });
-  
-  // Input focus effects
-  const inputs = document.querySelectorAll('input, textarea');
-  inputs.forEach(input => {
-    input.addEventListener('focus', function(this: HTMLInputElement | HTMLTextAreaElement) {
-      this.parentElement?.classList.add('ring-2', 'ring-primary/20');
+  const initializeContactPage = () => {
+    const overlay = document.getElementById('under-construction-overlay');
+    const blurredContent = document.querySelector('[data-under-construction-content]');
+
+    if (!overlay) {
+      if (blurredContent) {
+        blurredContent.removeAttribute('inert');
+      }
+    } else {
+      if (blurredContent) {
+        blurredContent.setAttribute('inert', '');
+      }
+
+      const focusOverlay = () => {
+        if (typeof overlay.focus === 'function') {
+          overlay.focus({ preventScroll: true });
+        }
+      };
+
+      focusOverlay();
+
+      const focusableSelectors = [
+        'a[href]',
+        'area[href]',
+        'button:not([disabled])',
+        'input:not([disabled]):not([type="hidden"])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])'
+      ];
+
+      const getFocusableElements = () =>
+        Array.from(overlay.querySelectorAll(focusableSelectors.join(','))).filter((element) => {
+          const tabindex = element.getAttribute('tabindex');
+          return !element.hasAttribute('inert') && tabindex !== '-1';
+        });
+
+      const handleKeydown = (event) => {
+        if (event.key !== 'Tab') {
+          return;
+        }
+
+        const focusableElements = getFocusableElements();
+
+        if (focusableElements.length === 0) {
+          event.preventDefault();
+          focusOverlay();
+          return;
+        }
+
+        const first = focusableElements[0];
+        const last = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey) {
+          if (document.activeElement === first || document.activeElement === overlay) {
+            event.preventDefault();
+            last.focus();
+          }
+          return;
+        }
+
+        if (document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      };
+
+      if (!overlay.dataset.focusTrapInitialized) {
+        overlay.addEventListener('keydown', handleKeydown);
+        overlay.dataset.focusTrapInitialized = 'true';
+      }
+
+      const cleanup = () => {
+        overlay.removeEventListener('keydown', handleKeydown);
+        delete overlay.dataset.focusTrapInitialized;
+        if (blurredContent) {
+          blurredContent.removeAttribute('inert');
+        }
+        document.removeEventListener('astro:before-swap', cleanup);
+      };
+
+      document.addEventListener('astro:before-swap', cleanup);
+    }
+
+    const form = document.getElementById('contact-form');
+    if (form instanceof HTMLFormElement && !form.dataset.submitHandlerAttached) {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+
+        const encodedBody = encodeURIComponent(
+          `Name: ${name ?? ''}\nEmail: ${email ?? ''}\n\nMessage:\n${message ?? ''}`
+        );
+        const mailtoLink = `mailto:chinghsinchen1991@gmail.com?subject=${encodeURIComponent(subject ?? '')}&body=${encodedBody}`;
+
+        window.location.href = mailtoLink;
+
+        const button = form.querySelector('button[type="submit"]');
+        if (button instanceof HTMLButtonElement) {
+          const originalText = button.innerHTML;
+          button.innerHTML = '✓ Email client opened';
+          button.disabled = true;
+
+          setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+          }, 3000);
+        }
+      });
+
+      form.dataset.submitHandlerAttached = 'true';
+    }
+
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach((input) => {
+      if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+        if (input.dataset.focusEffectsAttached === 'true') {
+          return;
+        }
+
+        input.addEventListener('focus', () => {
+          input.parentElement?.classList.add('ring-2', 'ring-primary/20');
+        });
+
+        input.addEventListener('blur', () => {
+          input.parentElement?.classList.remove('ring-2', 'ring-primary/20');
+        });
+
+        input.dataset.focusEffectsAttached = 'true';
+      }
     });
-    
-    input.addEventListener('blur', function(this: HTMLInputElement | HTMLTextAreaElement) {
-      this.parentElement?.classList.remove('ring-2', 'ring-primary/20');
-    });
-  });
+  };
+
+  document.addEventListener('astro:page-load', initializeContactPage);
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initializeContactPage();
+  } else {
+    document.addEventListener('DOMContentLoaded', initializeContactPage, { once: true });
+  }
 </script>
 
 <style>
