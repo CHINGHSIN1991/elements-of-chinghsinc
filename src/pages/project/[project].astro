@@ -44,6 +44,57 @@ const coverData = typeof data.cover === 'string' && data.cover
     <!-- left sidebar -->
     <aside class="w-64 shrink-0 hidden md:block py-16 px-2">
       <div class="sticky-navbar-safe space-y-8">
+          <!-- navigation links -->
+          <div class="px-2">
+            <h2 class="text-xl font-bold mb-4 pl-2">Navigation</h2>
+            <ul class="space-y-1">
+              <!-- First level: Back to Projects -->
+              <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+                <a
+                  href="/project"
+                  class="block hover:text-primary-500 transition-colors"
+                >
+                  <h3 class="font-medium text-sm flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Projects
+                  </h3>
+                  <span class="text-xs text-gray-500 mt-1 block">
+                    All projects
+                  </span>
+                </a>
+              </li>
+              
+              <!-- Second level: Category page -->
+              <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+                <a
+                  href={`/project/category/${slugify(data.category)}`}
+                  class="block hover:text-primary-500 transition-colors"
+                >
+                  <h3 class="font-medium text-sm">
+                    {data.category} Projects
+                  </h3>
+                  <span class="text-xs text-gray-500 mt-1 block">
+                    Category: {data.category}
+                  </span>
+                </a>
+              </li>
+              
+              <!-- Current project info -->
+              <li class="px-2 py-1 rounded-md bg-background-secondary">
+                <div class="block">
+                  <h3 class="font-medium text-sm text-text-primary">
+                    Current Project
+                  </h3>
+                  <span class="text-xs text-gray-500 mt-1 block line-clamp-2">
+                    {data.title}
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          
           <!-- related projects -->
           <RelatedItems currentItem={project} collection="projects" linkPrefix="/project" limit={3} />
       </div>
