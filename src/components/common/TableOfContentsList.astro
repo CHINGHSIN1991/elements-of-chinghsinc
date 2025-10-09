@@ -1,0 +1,38 @@
+---
+interface TocItem {
+  depth: number;
+  slug: string;
+  text: string;
+  children: TocItem[];
+}
+
+interface TableOfContentsListProps {
+  items: TocItem[];
+  isRoot?: boolean;
+}
+
+const { items, isRoot = true } = Astro.props as TableOfContentsListProps;
+---
+{items.length > 0 && (
+  <ul
+    class:list={{
+      'space-y-1': true,
+      'toc-list': isRoot,
+      'toc-sublist': !isRoot,
+    }}
+  >
+    {items.map((item) => (
+      <li class="toc-item" data-depth={item.depth}>
+        <a
+          href={`#${item.slug}`}
+          class="toc-link block rounded-md px-2 py-1 text-xs text-text-secondary transition-colors"
+        >
+          {item.text}
+        </a>
+        {item.children.length > 0 && (
+          <Component this={Astro.self} items={item.children} isRoot={false} />
+        )}
+      </li>
+    ))}
+  </ul>
+)}
