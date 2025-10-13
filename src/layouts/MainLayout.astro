@@ -3,19 +3,23 @@
 import MainHead from "./MainHead.astro"
 import NavBar from "../components/layout/NavBar.astro"
 import Footer from "../components/layout/Footer.astro"
-import { ClientRouter } from "astro:transitions";
+import siteData from "../data/siteData.json"
+import { ClientRouter } from "astro:transitions"
 
 // styles import
 import "../styles/theme.css"
 import "../styles/components.css"
 
+const defaultLang = siteData.locale?.split(/[-_]/)[0] ?? "en";
+
 const {
-  title = "My Astro Blog",
-  description = "My musings about the Astro framework",
+  title = siteData.title,
+  description = siteData.description,
   image,
   robots,
   project,
-  lang = "en",
+  post,
+  lang = defaultLang,
 } = Astro.props;
 ---
 <!doctype html>
@@ -33,7 +37,7 @@ const {
 				document.documentElement.classList.remove('dark');
 			}
 		</script>
-		<MainHead {title} {description} {image} {robots} {project}/>
+                <MainHead {title} {description} {image} {robots} {project} {post}/>
 		<ClientRouter />
 	</head>
         <body class="flex flex-col min-h-screen w-full m-0 bg-background text-text transition-colors duration-300">

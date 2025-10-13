@@ -1,6 +1,19 @@
 {
   "title": "Elements of ChingHsinChen",
   "description": "The use of meticulous approach to ...",
+  "locale": "en_US",
+  "author": "Ching Hsin Chen",
+  "keywords": [
+    "Ching Hsin Chen",
+    "Elements of ChingHsinChen",
+    "Cross-disciplinary innovation",
+    "Design and technology"
+  ],
+  "themeColor": "#0f172a",
+  "sameAs": [
+    "https://github.com/CHINGHSIN1991",
+    "https://www.linkedin.com/in/ching-hsin-chen"
+  ],
   "image": {
     "src": "/images/image-default.jpg",
     "alt": "Elements of ChingHsinChen"
