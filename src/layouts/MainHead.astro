@@ -1,6 +1,21 @@
 ---
-import Seo from "../components/layout/Seo.astro";
-const { title, description, image, robots, project } = Astro.props;
+import Seo from "../components/layout/Seo.astro"
+import siteData from "../data/siteData.json"
+
+const {
+  title,
+  description,
+  image,
+  robots,
+  project,
+  post,
+} = Astro.props;
+
+const metaTitle = title || siteData.title;
+const metaDescription = description || siteData.description;
+const keywords = Array.isArray(siteData.keywords)
+  ? siteData.keywords.join(", ")
+  : siteData.keywords;
 ---
 
 <head>
@@ -8,9 +23,20 @@ const { title, description, image, robots, project } = Astro.props;
   <link rel="icon" type="image/svg+xml" href={import.meta.env.BASE_URL + "favicon.svg"} />
   <meta name="viewport" content="width=device-width" />
   <meta name="generator" content={Astro.generator} />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <Seo {title} {description} url={Astro.url} {image} {robots} {project} />
+  <title>{metaTitle}</title>
+  <meta name="description" content={metaDescription} />
+  {keywords && <meta name="keywords" content={keywords} />}
+  {siteData.author && <meta name="author" content={siteData.author} />}
+  {siteData.themeColor && <meta name="theme-color" content={siteData.themeColor} />}
+  <Seo
+    title={metaTitle}
+    description={metaDescription}
+    url={Astro.url}
+    {image}
+    {robots}
+    {project}
+    {post}
+  />
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>

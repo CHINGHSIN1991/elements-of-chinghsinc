@@ -1,6 +1,6 @@
 ---
-import siteData from "../../data/siteData.json";
-import jsonLDGenerator from "../../ts/jsonLD";
+import siteData from "../../data/siteData.json"
+import jsonLDGenerator from "../../ts/jsonLD"
 
 const {
   title,
@@ -9,43 +9,117 @@ const {
   image,
   robots,
   project,
+  post,
 } = Astro.props;
 
+const canonicalUrl =
+  url instanceof URL
+    ? url.href
+    : typeof url === "string" && url.length > 0
+      ? url
+      : "/";
+
+const siteOrigin =
+  import.meta.env.SITE ||
+  (url instanceof URL
+    ? url.origin
+    : (() => {
+        try {
+          return new URL(canonicalUrl).origin;
+        } catch {
+          return undefined;
+        }
+      })());
+
+const resolvedTitle = title || siteData.title;
+const resolvedDescription = description || siteData.description;
+const locale = siteData.locale || "en_US";
+
+const resolveAbsoluteUrl = (value?: string) => {
+  if (!value) return undefined;
+  if (/^https?:/i.test(value)) return value;
+
+  if (url instanceof URL) {
+    try {
+      return new URL(value, url).href;
+    } catch {
+      // ignore fallthrough
+    }
+  }
+
+  if (siteOrigin) {
+    try {
+      return new URL(value, siteOrigin).href;
+    } catch {
+      // ignore fallthrough
+    }
+  }
+
+  return value;
+};
+
+const resolvedImage =
+  resolveAbsoluteUrl(image?.src) ||
+  resolveAbsoluteUrl(siteData.image?.src) ||
+  siteData.image?.src;
+
+const imageAlt = image?.alt || siteData.image?.alt || resolvedTitle;
+
+const structuredItem = project ?? post;
+
 const jsonLD = jsonLDGenerator({
-  type: project ? "post" : "website",
-  post: project,
-  url,
+  type: structuredItem ? "post" : "website",
+  post: structuredItem,
+  url: canonicalUrl,
 });
+
+const ogType = structuredItem ? "article" : "website";
+
+const twitterDomain = (() => {
+  try {
+    return new URL(canonicalUrl).hostname;
+  } catch {
+    if (siteOrigin) {
+      try {
+        return new URL(siteOrigin).hostname;
+      } catch {
+        return undefined;
+      }
+    }
+    return undefined;
+  }
+})();
 ---
 
 <!-- SEO -->
-<link rel="canonical" href={url} />
+<link rel="canonical" href={canonicalUrl} />
 
 <!-- Open Graph -->
-<meta property="og:site_name" content="My Astro Blog" />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={url} />
-<meta property="og:image" content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))} />
-<meta property="og:image:url" content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))} />
-<meta
-  property="og:image:secure_url"
-  content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))}
-/>
-<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:site_name" content={siteData.title} />
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={resolvedTitle} />
+<meta property="og:description" content={resolvedDescription} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:locale" content={locale} />
+{resolvedImage && <meta property="og:image" content={resolvedImage} />}
+{resolvedImage && <meta property="og:image:url" content={resolvedImage} />}
+{resolvedImage && <meta property="og:image:secure_url" content={resolvedImage} />}
 <meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="600" />
-<meta property="og:image:alt" content={image?.alt || siteData.image.alt} />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
 
 <!-- Twitter -->
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content={image?.src || (import.meta.env.BASE_URL + siteData.image.src.replace(/^\//, ''))} />
-<meta name="twitter:image:alt" content={title} />
-<meta name="twitter:domain" content={import.meta.env.SITE} />
+<meta name="twitter:title" content={resolvedTitle} />
+<meta name="twitter:description" content={resolvedDescription} />
+{resolvedImage && <meta name="twitter:image" content={resolvedImage} />}
+<meta name="twitter:image:alt" content={imageAlt} />
+{siteData.author && <meta name="twitter:creator" content={siteData.author} />}
+{twitterDomain && <meta name="twitter:domain" content={twitterDomain} />}
 
-{robots && <meta name="robots" content="noindex, nofollow" />}
+{typeof robots === "string"
+  ? <meta name="robots" content={robots} />
+  : robots && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- JSON LD -->
 <Fragment set:html={jsonLD} />
