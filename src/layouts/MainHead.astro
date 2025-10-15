@@ -1,6 +1,7 @@
 ---
 import Seo from "../components/layout/Seo.astro"
 import siteData from "../data/siteData.json"
+import { createAbsoluteUrl, ensureBasePath } from "../ts/siteUrl"
 
 const {
   title,
@@ -16,6 +17,10 @@ const metaDescription = description || siteData.description;
 const keywords = Array.isArray(siteData.keywords)
   ? siteData.keywords.join(", ")
   : siteData.keywords;
+
+const rssHref = createAbsoluteUrl("/rss.xml") ?? ensureBasePath("/rss.xml");
+const sitemapHref =
+  createAbsoluteUrl("/sitemap.xml") ?? ensureBasePath("/sitemap.xml");
 ---
 
 <head>
@@ -28,6 +33,17 @@ const keywords = Array.isArray(siteData.keywords)
   {keywords && <meta name="keywords" content={keywords} />}
   {siteData.author && <meta name="author" content={siteData.author} />}
   {siteData.themeColor && <meta name="theme-color" content={siteData.themeColor} />}
+  {rssHref && (
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${siteData.title} RSS Feed`}
+      href={rssHref}
+    />
+  )}
+  {sitemapHref && (
+    <link rel="sitemap" type="application/xml" href={sitemapHref} />
+  )}
   <Seo
     title={metaTitle}
     description={metaDescription}
@@ -37,6 +53,11 @@ const keywords = Array.isArray(siteData.keywords)
     {project}
     {post}
   />
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet"
+  />
   <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
