@@ -46,9 +46,21 @@ const description = "Connect with me to explore collaboration opportunities and 
   <!-- Hero Section -->
   <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 dark:from-slate-900 dark:via-gray-900 dark:to-black transition-colors duration-500">
     <!-- Background overlay with texture -->
-    <div class="absolute inset-0 opacity-20 dark:opacity-20">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(59,130,246,0.2),transparent_50%)] dark:bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.3),transparent_50%)]"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(99,102,241,0.15),transparent_50%)] dark:bg-[radial-gradient(circle_at_75%_75%,rgba(59,130,246,0.2),transparent_50%)]"></div>
+    <div
+      class="absolute inset-0 opacity-20 dark:opacity-20"
+      aria-hidden="true"
+      role="presentation"
+    >
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(59,130,246,0.2),transparent_50%)] dark:bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.3),transparent_50%)]"
+        aria-hidden="true"
+        role="presentation"
+      ></div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(99,102,241,0.15),transparent_50%)] dark:bg-[radial-gradient(circle_at_75%_75%,rgba(59,130,246,0.2),transparent_50%)]"
+        aria-hidden="true"
+        role="presentation"
+      ></div>
     </div>
     
     <!-- Content Container -->
@@ -65,8 +77,16 @@ const description = "Connect with me to explore collaboration opportunities and 
     </div>
     
     <!-- Decorative Elements -->
-    <div class="absolute top-1/4 left-8 w-px h-32 bg-gradient-to-b from-transparent via-gray-400 dark:via-white to-transparent opacity-30 transition-colors duration-300"></div>
-    <div class="absolute bottom-1/4 right-8 w-px h-32 bg-gradient-to-b from-transparent via-gray-400 dark:via-white to-transparent opacity-30 transition-colors duration-300"></div>
+    <div
+      class="absolute top-1/4 left-8 w-px h-32 bg-gradient-to-b from-transparent via-gray-400 dark:via-white to-transparent opacity-30 transition-colors duration-300"
+      aria-hidden="true"
+      role="presentation"
+    ></div>
+    <div
+      class="absolute bottom-1/4 right-8 w-px h-32 bg-gradient-to-b from-transparent via-gray-400 dark:via-white to-transparent opacity-30 transition-colors duration-300"
+      aria-hidden="true"
+      role="presentation"
+    ></div>
   </div>
 
   <!-- Main Content Section -->
@@ -298,18 +318,115 @@ const description = "Connect with me to explore collaboration opportunities and 
 </MainLayout>
 
 <script>
+  const focusableSelectors = [
+    'a[href]',
+    'area[href]',
+    'button:not([disabled])',
+    'input:not([disabled]):not([type="hidden"])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+  ];
+
+  const supportsNativeInert = 'inert' in HTMLElement.prototype;
+
+  const applyInert = (element) => {
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+
+    if (supportsNativeInert) {
+      element.setAttribute('inert', '');
+      return;
+    }
+
+    if (element.dataset.inertFallbackApplied === 'true') {
+      return;
+    }
+
+    element.dataset.inertFallbackApplied = 'true';
+    element.setAttribute('aria-hidden', 'true');
+
+    const focusable = element.querySelectorAll(focusableSelectors.join(','));
+    focusable.forEach((focusableElement) => {
+      if (!(focusableElement instanceof HTMLElement)) {
+        return;
+      }
+
+      if (!focusableElement.dataset.prevTabindex) {
+        const existingTabindex = focusableElement.getAttribute('tabindex');
+        focusableElement.dataset.prevTabindex = existingTabindex ?? 'none';
+      }
+
+      if (!focusableElement.dataset.prevAriaHidden) {
+        focusableElement.dataset.prevAriaHidden = focusableElement.hasAttribute('aria-hidden')
+          ? focusableElement.getAttribute('aria-hidden') ?? 'true'
+          : 'none';
+      }
+
+      focusableElement.setAttribute('tabindex', '-1');
+      focusableElement.setAttribute('aria-hidden', 'true');
+    });
+  };
+
+  const removeInert = (element) => {
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+
+    if (supportsNativeInert) {
+      element.removeAttribute('inert');
+      return;
+    }
+
+    if (element.dataset.inertFallbackApplied !== 'true') {
+      return;
+    }
+
+    element.removeAttribute('aria-hidden');
+
+    const focusable = element.querySelectorAll(focusableSelectors.join(','));
+    focusable.forEach((focusableElement) => {
+      if (!(focusableElement instanceof HTMLElement)) {
+        return;
+      }
+
+      const previousTabindex = focusableElement.dataset.prevTabindex;
+      if (previousTabindex === 'none') {
+        focusableElement.removeAttribute('tabindex');
+      } else if (typeof previousTabindex === 'string') {
+        focusableElement.setAttribute('tabindex', previousTabindex);
+      }
+      delete focusableElement.dataset.prevTabindex;
+
+      const previousAriaHidden = focusableElement.dataset.prevAriaHidden;
+      if (previousAriaHidden === 'none') {
+        focusableElement.removeAttribute('aria-hidden');
+      } else if (typeof previousAriaHidden === 'string') {
+        focusableElement.setAttribute('aria-hidden', previousAriaHidden);
+      }
+      delete focusableElement.dataset.prevAriaHidden;
+    });
+
+    delete element.dataset.inertFallbackApplied;
+  };
+
   const initializeContactPage = () => {
     const overlay = document.getElementById('under-construction-overlay');
     const blurredContent = document.querySelector('[data-under-construction-content]');
 
-    if (!overlay) {
-      if (blurredContent) {
-        blurredContent.removeAttribute('inert');
+    if (!overlay || overlay.hasAttribute('hidden')) {
+      if (blurredContent instanceof HTMLElement) {
+        removeInert(blurredContent);
+        blurredContent.classList.remove('blur-sm', 'pointer-events-none', 'select-none');
       }
     } else {
-      if (blurredContent) {
-        blurredContent.setAttribute('inert', '');
+      if (blurredContent instanceof HTMLElement) {
+        applyInert(blurredContent);
       }
+
+      const previouslyFocusedElement =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
       const focusOverlay = () => {
         if (typeof overlay.focus === 'function') {
@@ -319,23 +436,13 @@ const description = "Connect with me to explore collaboration opportunities and 
 
       focusOverlay();
 
-      const focusableSelectors = [
-        'a[href]',
-        'area[href]',
-        'button:not([disabled])',
-        'input:not([disabled]):not([type="hidden"])',
-        'select:not([disabled])',
-        'textarea:not([disabled])',
-        '[tabindex]:not([tabindex="-1"])'
-      ];
-
       const getFocusableElements = () =>
         Array.from(overlay.querySelectorAll(focusableSelectors.join(','))).filter((element) => {
           const tabindex = element.getAttribute('tabindex');
           return !element.hasAttribute('inert') && tabindex !== '-1';
         });
 
-      const handleKeydown = (event) => {
+      const handleTabKeydown = (event) => {
         if (event.key !== 'Tab') {
           return;
         }
@@ -365,21 +472,53 @@ const description = "Connect with me to explore collaboration opportunities and 
         }
       };
 
+      const restoreContent = () => {
+        if (blurredContent instanceof HTMLElement) {
+          removeInert(blurredContent);
+          blurredContent.classList.remove('blur-sm', 'pointer-events-none', 'select-none');
+        }
+
+        if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
+          previouslyFocusedElement.focus({ preventScroll: true });
+        }
+      };
+
+      const cleanup = () => {
+        overlay.removeEventListener('keydown', handleTabKeydown);
+        overlay.removeEventListener('keydown', handleDismissKeydown);
+        delete overlay.dataset.focusTrapInitialized;
+        delete overlay.dataset.dismissHandlerInitialized;
+        document.removeEventListener('astro:before-swap', handleBeforeSwap);
+      };
+
+      const handleDismissKeydown = (event) => {
+        if (event.key !== 'Escape') {
+          return;
+        }
+
+        event.preventDefault();
+        overlay.setAttribute('hidden', '');
+        overlay.setAttribute('aria-hidden', 'true');
+        restoreContent();
+        cleanup();
+      };
+
+      const handleBeforeSwap = () => {
+        restoreContent();
+        cleanup();
+      };
+
       if (!overlay.dataset.focusTrapInitialized) {
-        overlay.addEventListener('keydown', handleKeydown);
+        overlay.addEventListener('keydown', handleTabKeydown);
         overlay.dataset.focusTrapInitialized = 'true';
       }
 
-      const cleanup = () => {
-        overlay.removeEventListener('keydown', handleKeydown);
-        delete overlay.dataset.focusTrapInitialized;
-        if (blurredContent) {
-          blurredContent.removeAttribute('inert');
-        }
-        document.removeEventListener('astro:before-swap', cleanup);
-      };
+      if (!overlay.dataset.dismissHandlerInitialized) {
+        overlay.addEventListener('keydown', handleDismissKeydown);
+        overlay.dataset.dismissHandlerInitialized = 'true';
+      }
 
-      document.addEventListener('astro:before-swap', cleanup);
+      document.addEventListener('astro:before-swap', handleBeforeSwap, { once: true });
     }
 
     const form = document.getElementById('contact-form');
