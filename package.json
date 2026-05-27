@@ -10,7 +10,6 @@
     "deploy": "astro build && touch dist/.nojekyll"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.3.0",
     "@iconify-json/lets-icons": "^1.2.1",
     "@types/three": "^0.184.1",
     "astro": "^5.4.3",
