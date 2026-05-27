@@ -1,20 +1,26 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Pagination from '../../components/common/Pagination.astro';
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry, CollectionKey } from 'astro:content';
+import type { GetStaticPathsOptions } from 'astro';
 import { getPublishedCollection } from '../../ts/utils';
 
 export function createGetStaticPaths(collectionName: string, pageSize = 6) {
-  return async function getStaticPaths({ paginate }: { paginate: any }) {
+  return async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     const allItems = await getPublishedCollection(collectionName);
     return paginate(allItems, { pageSize });
   };
 }
 
-interface PaginatedListProps<T = any> {
+// Astro component factories don't have a clean public type; using a named
+// alias here documents intent and can be updated when Astro exposes AstroComponentFactory.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AstroComponentLike = (...args: any[]) => unknown;
+
+interface PaginatedListProps<T extends CollectionKey = CollectionKey> {
   collectionName: string;
-  cardComponent: any;
-  sidebarComponents: Array<{ component: any; props?: Record<string, any> }>;
+  cardComponent: AstroComponentLike;
+  sidebarComponents: Array<{ component: AstroComponentLike; props?: Record<string, unknown> }>;
   page: {
     data: CollectionEntry<T>[];
     url: {

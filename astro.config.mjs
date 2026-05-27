@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config'
 import icon from 'astro-icon'
 import UnoCSS from 'unocss/astro'
-import react from '@astrojs/react'
 
 const LOCAL_URL = 'http://localhost:4321'
 const LIVE_URL = 'https://chinghsin1991.github.io'
@@ -25,7 +24,6 @@ export default defineConfig({
     UnoCSS({
       injectReset: true,
     }),
-    react(),
   ],
   vite: {
     build: {

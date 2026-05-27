@@ -44,5 +44,5 @@ export function sortAndLimit<T extends { data: { date?: string | number } }>(
 }
 
 export function getPublishedCollection(collection: string) {
-  return getCollection(collection as any, ({ data }) => !data.draft);
+  return getCollection(collection as any, (entry: unknown) => !(entry as { data: { draft?: unknown } }).data?.draft);
 }
