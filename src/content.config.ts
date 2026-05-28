@@ -1,7 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const posts = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
   schema: z.object({
     id: z.string().optional(),
     title: z.string(),
@@ -19,7 +21,7 @@ const posts = defineCollection({
 });
 
 const projects = defineCollection({
-  type: 'data',
+  loader: glob({ pattern: '**/*.{json,yaml,yml}', base: './src/content/projects' }),
   schema: z.object({
     id: z.string().optional(),
     title: z.string(),
@@ -62,14 +64,14 @@ const skillsSchema = z.object({
 });
 
 const contactInfoSchema = z.object({
-  email: z.string().email(),
-  GitHub: z.string().url(),
-  LinkedIn: z.string().url(),
+  email: z.email(),
+  GitHub: z.url(),
+  LinkedIn: z.url(),
   about: z.string()
 });
 
 const static_content = defineCollection({
-  type: 'data',
+  loader: glob({ pattern: '**/*.json', base: './src/content/static' }),
   schema: z.discriminatedUnion('_type', [
     z.object({ _type: z.literal('education'), data: educationSchema }),
     z.object({ _type: z.literal('workExperience'), data: workExperienceSchema }),
