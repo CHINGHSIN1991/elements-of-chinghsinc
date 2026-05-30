@@ -36,7 +36,6 @@ const {
   images,
 } = post.data as PostFrontmatter;
 
-// console.log('aaa', post);
 const relatedPosts = sortAndLimit(
   allPosts.filter(
     (post: CollectionEntry<'posts'>) =>

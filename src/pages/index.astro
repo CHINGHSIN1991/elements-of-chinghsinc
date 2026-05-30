@@ -178,13 +178,15 @@ const description = "A land of hope and opportunity";
 
   const SCENE_NAMES = ['Section 1', 'Section 2', 'Section 3', 'Section 4'];
 
-  const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
-  const prevBtn = document.getElementById('hero-prev') as HTMLElement;
-  const nextBtn = document.getElementById('hero-next') as HTMLElement;
-  const indicators = document.querySelectorAll('.hero-dot');
-  const sceneLabel = document.getElementById('scene-label') as HTMLElement;
+  function init() {
+    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
+    const prevBtn = document.getElementById('hero-prev') as HTMLElement;
+    const nextBtn = document.getElementById('hero-next') as HTMLElement;
+    const indicators = document.querySelectorAll('.hero-dot');
+    const sceneLabel = document.getElementById('scene-label') as HTMLElement;
 
-  if (canvas && prevBtn && nextBtn) {
+    if (!canvas || !prevBtn || !nextBtn) return;
+
     const { destroy } = initHeroScene(canvas, prevBtn, nextBtn, indicators);
 
     // Keep scene label in sync with indicator changes
@@ -202,4 +204,7 @@ const description = "A land of hope and opportunity";
       destroy();
     }, { once: true });
   }
+
+  // Runs on first load and every time the page is visited via View Transitions
+  document.addEventListener('astro:page-load', init);
 </script>

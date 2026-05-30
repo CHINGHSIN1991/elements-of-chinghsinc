@@ -2,7 +2,7 @@
 import { type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
-import PopularItems from '../../components/common/PopularItems.astro';
+import LatestItems from '../../components/common/LatestItems.astro';
 import { slugify, getPublishedCollection } from '../../ts/utils';
 
 export function createGetStaticPaths(collection: string) {
@@ -65,7 +65,7 @@ const description = `查看所有 ${category} 分類的${itemLabel}`;
         <div class="sticky-navbar-safe space-y-8">
           <CategoryList {...categoryListProps} currentCategory={category} />
 
-          <PopularItems collectionName={categoryListProps.collectionName} linkPrefix={categoryListProps.basePath} limit={5} />
+          <LatestItems collectionName={categoryListProps.collectionName} linkPrefix={categoryListProps.basePath} limit={5} />
         </div>
       </aside>
 

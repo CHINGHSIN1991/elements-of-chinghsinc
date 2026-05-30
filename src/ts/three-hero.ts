@@ -93,20 +93,23 @@ export function initHeroScene(
   }
 
   // ── Button events ─────────────────────────────────────────────────────────
-  prevBtn.addEventListener('click', () => goToScene(((currentIndex - 1) + 4) % 4));
-  nextBtn.addEventListener('click', () => goToScene((currentIndex + 1) % 4));
+  const onPrevClick = () => goToScene(((currentIndex - 1) + 4) % 4);
+  const onNextClick = () => goToScene((currentIndex + 1) % 4);
+  prevBtn.addEventListener('click', onPrevClick);
+  nextBtn.addEventListener('click', onNextClick);
 
   // ── Pointer events ────────────────────────────────────────────────────────
-  canvas.addEventListener('pointerdown', (e) => {
+  const onPointerDown = (e: PointerEvent) => {
     isDragging = true;
     pointerStartX = lastPointerX = e.clientX;
     pointerStartY = lastPointerY = e.clientY;
     gestureType = 'unknown';
     pauseAutoRotate();
     canvas.setPointerCapture(e.pointerId);
-  });
+  };
+  canvas.addEventListener('pointerdown', onPointerDown);
 
-  canvas.addEventListener('pointermove', (e) => {
+  const onPointerMove = (e: PointerEvent) => {
     if (!isDragging) return;
     const dx = e.clientX - pointerStartX;
     const dy = e.clientY - pointerStartY;
@@ -129,9 +132,10 @@ export function initHeroScene(
 
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
-  });
+  };
+  canvas.addEventListener('pointermove', onPointerMove);
 
-  canvas.addEventListener('pointerup', (e) => {
+  const onPointerUp = (e: PointerEvent) => {
     if (!isDragging) return;
 
     if (gestureType === 'swipe') {
@@ -144,13 +148,15 @@ export function initHeroScene(
     isDragging = false;
     gestureType = 'unknown';
     resumeAutoRotate();
-  });
+  };
+  canvas.addEventListener('pointerup', onPointerUp);
 
-  canvas.addEventListener('pointercancel', () => {
+  const onPointerCancel = () => {
     isDragging = false;
     gestureType = 'unknown';
     resumeAutoRotate();
-  });
+  };
+  canvas.addEventListener('pointercancel', onPointerCancel);
 
   // ── Auto-rotation control ──────────────────────────────────────────────────
   function pauseAutoRotate() {
@@ -238,6 +244,12 @@ export function initHeroScene(
       resizeObserver.disconnect();
       themeObserver.disconnect();
       if (autoRotateTimer) clearTimeout(autoRotateTimer);
+      prevBtn.removeEventListener('click', onPrevClick);
+      nextBtn.removeEventListener('click', onNextClick);
+      canvas.removeEventListener('pointerdown', onPointerDown);
+      canvas.removeEventListener('pointermove', onPointerMove);
+      canvas.removeEventListener('pointerup', onPointerUp);
+      canvas.removeEventListener('pointercancel', onPointerCancel);
       entries.forEach(({ scene, mesh, mat }) => {
         mesh.geometry.dispose();
         mat.dispose();

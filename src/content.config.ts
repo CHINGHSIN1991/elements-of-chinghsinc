@@ -8,7 +8,7 @@ const posts = defineCollection({
     id: z.string().optional(),
     title: z.string(),
     description: z.string(),
-    date: z.string(),
+    date: z.coerce.date(),
     author: z.string().optional(),
     image: z.object({
       src: z.string(),
@@ -26,7 +26,7 @@ const projects = defineCollection({
     id: z.string().optional(),
     title: z.string(),
     description: z.string(),
-    date: z.string(),
+    date: z.coerce.date(),
     category: z.string(),
     tags: z.array(z.string()).optional(),
     cover: z.string(),

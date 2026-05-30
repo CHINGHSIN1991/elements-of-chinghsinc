@@ -1,4 +1,9 @@
-const navData = [
+interface NavItem {
+  name: string;
+  path: string;
+}
+
+const navData: NavItem[] = [
   {
     name: "About",
     path: "/about"

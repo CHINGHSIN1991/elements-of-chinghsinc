@@ -3,7 +3,7 @@ import { type CollectionEntry } from 'astro:content';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import ProjectCard from '../../../components/project/ProjectCard.astro';
 import CategoryList from '../../../components/common/CategoryList.astro';
-import PopularItems from '../../../components/common/PopularItems.astro';
+import LatestItems from '../../../components/common/LatestItems.astro';
 import { slugify, getPublishedCollection } from '../../../ts/utils';
 
 export const prerender = true;
@@ -59,7 +59,7 @@ const description = `查看所有包含 #${tagName} 標籤的專案`;
       <aside class="w-64 shrink-0 hidden lg:block">
         <div class="sticky-navbar-safe space-y-8">
           <CategoryList collectionName="projects" heading="Project Categories" basePath="/project" />
-          <PopularItems collectionName="projects" linkPrefix="/project" limit={5} />
+          <LatestItems collectionName="projects" linkPrefix="/project" limit={5} />
         </div>
       </aside>
 
