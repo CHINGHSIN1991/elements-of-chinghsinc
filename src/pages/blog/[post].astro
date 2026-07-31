@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry } from 'astro:content';
+import { render, type CollectionEntry } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
@@ -27,7 +27,7 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
-const { Content, headings } = await post.render();
+const { Content, headings } = await render(post);
 ---
 
 <PostLayout post={post}>

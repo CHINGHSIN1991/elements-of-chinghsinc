@@ -4,20 +4,15 @@ import icon from 'astro-icon'
 import UnoCSS from 'unocss/astro'
 
 const LOCAL_URL = 'http://localhost:4321'
-const LIVE_URL = 'https://chinghsin1991.github.io'
-const REPO_NAME = 'elements-of-chinghsinc'
+// Served at the subdomain root via public/CNAME, so no `base` is needed.
+const LIVE_URL = 'https://blog.chinghsinchen.com'
 const isBuild = process.env.NODE_ENV === 'production'
 
-let url = LOCAL_URL
-let base = `/${REPO_NAME}/`
-if (isBuild) {
-  url = `${LIVE_URL}/${REPO_NAME}`
-}
+const url = isBuild ? LIVE_URL : LOCAL_URL
 
 export default defineConfig({
   output: 'static',
   site: url,
-  base,
   integrations: [
     icon(),
     UnoCSS({
