@@ -1,0 +1,28 @@
+{
+  "title": "Smart Home Control Dashboard",
+  "description": "An innovative smart home control dashboard that centralizes IoT device management with real-time monitoring, energy efficiency tracking, and automated scheduling features. The interface prioritizes ease of use and visual clarity.",
+  "date": "2024-01-10",
+  "category": "IoT Design",
+  "tags": ["IoT", "Dashboard", "Smart Home", "Data Visualization", "Interface Design"],
+  "designers": ["James Wilson", "Lisa Zhang"],
+  "cover": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  "images": [
+    {
+      "src": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Main dashboard view showing real-time status of all connected devices with visual indicators and quick control toggles"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Energy consumption analytics with interactive charts displaying usage patterns, cost breakdowns, and efficiency recommendations"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1493804714600-6edb1cd93080?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Device management interface allowing users to add, configure, and control individual smart devices with detailed settings"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Automated scheduling system with calendar view, scenario creation, and condition-based automation rules setup"
+    }
+  ],
+  "draft": false
+}

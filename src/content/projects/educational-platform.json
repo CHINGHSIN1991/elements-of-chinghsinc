@@ -1,0 +1,28 @@
+{
+  "title": "Online Learning Platform",
+  "description": "A modern online learning platform designed to facilitate interactive education with video lectures, progress tracking, collaborative tools, and gamification elements. Built with both educators and students in mind.",
+  "date": "2023-11-18",
+  "category": "Education",
+  "tags": ["EdTech", "Learning Management", "Video Streaming", "Gamification", "Collaboration"],
+  "designers": ["Jennifer Lee", "Robert Kumar"],
+  "cover": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  "images": [
+    {
+      "src": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Course catalog homepage featuring organized course categories, instructor profiles, and student reviews with easy enrollment process"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Video player interface with note-taking capabilities, chapter navigation, playback speed controls, and interactive transcripts"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Student progress dashboard showing completion rates, achievement badges, quiz scores, and personalized learning recommendations"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Discussion forum and collaboration space with threaded conversations, peer-to-peer learning, and instructor moderation tools"
+    }
+  ],
+  "draft": false
+}

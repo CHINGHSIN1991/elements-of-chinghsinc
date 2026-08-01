@@ -1,0 +1,28 @@
+{
+  "title": "E-commerce Platform Design",
+  "description": "A comprehensive e-commerce platform featuring modern UI/UX design, seamless shopping experience, and advanced product management capabilities. The project focuses on user-centered design principles and conversion optimization.",
+  "date": "2024-03-15",
+  "category": "Web Development",
+  "tags": ["E-commerce", "UI/UX", "React", "TypeScript", "Responsive Design"],
+  "designers": ["Alex Chen", "Sarah Kim"],
+  "cover": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  "images": [
+    {
+      "src": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Homepage design featuring hero section with product showcase, intuitive navigation, and call-to-action elements optimized for conversion"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Product listing page with advanced filtering options, grid and list view toggles, and sophisticated search functionality"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1556742111-a301076d9d18?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Product detail page showcasing high-quality product images, detailed specifications, customer reviews, and seamless add-to-cart experience"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Shopping cart and checkout process design emphasizing security, trust indicators, and streamlined payment flow"
+    }
+  ],
+  "draft": false
+}

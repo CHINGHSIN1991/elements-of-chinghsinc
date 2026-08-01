@@ -1,0 +1,28 @@
+{
+  "title": "Mobile Banking Application",
+  "description": "A secure and user-friendly mobile banking application with biometric authentication, real-time transactions, and comprehensive financial management tools. Designed with accessibility and security as top priorities.",
+  "date": "2024-02-20",
+  "category": "Mobile App",
+  "tags": ["FinTech", "Mobile Design", "Security", "UX Research", "Accessibility"],
+  "designers": ["Maria Rodriguez", "David Park"],
+  "cover": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  "images": [
+    {
+      "src": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Login screen with biometric authentication options, featuring clean design and multiple security layers for user protection"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Dashboard overview displaying account balances, recent transactions, and quick action buttons with intuitive iconography"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Transaction history with advanced filtering, search capabilities, and detailed transaction information in an easy-to-scan format"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Money transfer interface with contact selection, amount input, and confirmation screens designed for error prevention"
+    }
+  ],
+  "draft": false
+}

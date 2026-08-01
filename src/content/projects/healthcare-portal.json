@@ -1,0 +1,28 @@
+{
+  "title": "Healthcare Patient Portal",
+  "description": "A comprehensive healthcare patient portal designed to improve patient engagement and streamline medical communication. Features appointment scheduling, medical record access, and telemedicine capabilities with HIPAA compliance.",
+  "date": "2023-12-05",
+  "category": "Healthcare",
+  "tags": ["Healthcare", "Patient Portal", "Telemedicine", "HIPAA", "Accessibility"],
+  "designers": ["Dr. Emily Roberts", "Michael Chang"],
+  "cover": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  "images": [
+    {
+      "src": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Patient dashboard providing quick access to upcoming appointments, recent test results, and important health notifications"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Medical records interface with secure document viewing, download capabilities, and chronological health history timeline"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Appointment scheduling system with calendar integration, provider selection, and automated reminder notifications"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Telemedicine video consultation interface with screen sharing, chat functionality, and secure communication features"
+    }
+  ],
+  "draft": false
+}

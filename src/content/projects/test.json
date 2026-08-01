@@ -1,0 +1,24 @@
+{
+  "title": "Test Project",
+  "description": "A comprehensive test project showcasing various design and development techniques",
+  "date": "2021-01-01",
+  "tags": ["Design", "Development", "Testing"],
+  "designers": ["Designer Name"],
+  "cover": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+  "images": [
+    {
+      "src": "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Initial design concepts and wireframes showing the project's foundation and user experience planning"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Development process visualization including code architecture and technical implementation details"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+      "description": "Final product showcase demonstrating the completed interface and user interaction flow"
+    }
+  ],
+  "category": "Web Development",
+  "draft": true
+}
