@@ -24,7 +24,9 @@ jobs:
         uses: withastro/action@v3
         with:
           path: .
-          node-version: 20
+          # Astro 6 requires Node >= 22.12.0 (see astro's package.json engines).
+          # Keep in sync with the volta pin in package.json.
+          node-version: 22
           package-manager: npm
 
   deploy:
