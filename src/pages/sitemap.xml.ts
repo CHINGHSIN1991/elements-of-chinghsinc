@@ -6,7 +6,8 @@ export const prerender = true;
 
 const PAGE_SIZE = 6;
 
-const toIsoDate = (value?: string) => {
+// `z.coerce.date()` in the content schema yields Date, not string.
+const toIsoDate = (value?: string | Date) => {
   if (!value) return undefined;
   const parsed = new Date(value);
   return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
@@ -50,7 +51,7 @@ const addEntry = (map: Map<string, SitemapEntry>, entry: SitemapEntry) => {
   }
 };
 
-const updateLatest = (map: Map<string, number>, value?: string, date?: string) => {
+const updateLatest = (map: Map<string, number>, value?: string, date?: string | Date) => {
   if (!value) return;
   const slug = slugify(value);
   if (!slug) return;
@@ -84,8 +85,7 @@ export async function GET() {
   staticPages.forEach((entry) => addEntry(entries, entry));
 
   posts.forEach((post) => {
-    const identifier = post.slug || post.id;
-    const path = `/blog/${identifier}`;
+    const path = `/blog/${post.id}`;
     addEntry(entries, {
       path,
       changefreq: "monthly",

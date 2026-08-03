@@ -3,9 +3,9 @@ import { type CollectionEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import LatestItems from '../../components/common/LatestItems.astro';
-import { slugify, getPublishedCollection } from '../../ts/utils';
+import { slugify, getPublishedCollection, type ContentCollectionKey } from '../../ts/utils';
 
-export function createGetStaticPaths(collection: string) {
+export function createGetStaticPaths(collection: ContentCollectionKey) {
   return async function getStaticPaths() {
     const allItems = await getPublishedCollection(collection);
 
@@ -24,7 +24,7 @@ export function createGetStaticPaths(collection: string) {
   };
 }
 
-interface CategoryPageProps<T = any> {
+interface CategoryPageProps<T extends ContentCollectionKey = ContentCollectionKey> {
   category: string;
   items: CollectionEntry<T>[];
   /** Display name used in title and descriptions, e.g. "文章" or "專案" */
@@ -33,7 +33,7 @@ interface CategoryPageProps<T = any> {
   itemPropName: string;
   CardComponent: any;
   categoryListProps: {
-    collectionName: string;
+    collectionName: ContentCollectionKey;
     heading: string;
     basePath: string;
   };

@@ -1,14 +1,16 @@
 ---
+import { formatDate } from '../../ts/utils';
+
 interface Props {
   category: string;
-  date: string;
+  // `z.coerce.date()` in the content schema yields Date, not string.
+  date: Date | string;
   designers?: string[];
   tags?: string[];
-  images?: { src: string; description: string }[];
+  images?: { src: string; description?: string }[];
 }
 
-const { category, date, designers, tags, images } = Astro.props;
-import { formatDate } from '../../ts/utils';
+const { category, date, designers, tags, images } = Astro.props as Props;
 ---
 
 <div class="px-2">

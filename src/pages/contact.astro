@@ -330,7 +330,7 @@ const description = "Connect with me to explore collaboration opportunities and 
 
   const supportsNativeInert = 'inert' in HTMLElement.prototype;
 
-  const applyInert = (element) => {
+  const applyInert = (element: unknown) => {
     if (!(element instanceof HTMLElement)) {
       return;
     }
@@ -369,7 +369,7 @@ const description = "Connect with me to explore collaboration opportunities and 
     });
   };
 
-  const removeInert = (element) => {
+  const removeInert = (element: unknown) => {
     if (!(element instanceof HTMLElement)) {
       return;
     }
@@ -437,12 +437,14 @@ const description = "Connect with me to explore collaboration opportunities and 
       focusOverlay();
 
       const getFocusableElements = () =>
-        Array.from(overlay.querySelectorAll(focusableSelectors.join(','))).filter((element) => {
+        Array.from(
+          overlay.querySelectorAll<HTMLElement>(focusableSelectors.join(','))
+        ).filter((element) => {
           const tabindex = element.getAttribute('tabindex');
           return !element.hasAttribute('inert') && tabindex !== '-1';
         });
 
-      const handleTabKeydown = (event) => {
+      const handleTabKeydown = (event: KeyboardEvent) => {
         if (event.key !== 'Tab') {
           return;
         }
@@ -491,7 +493,7 @@ const description = "Connect with me to explore collaboration opportunities and 
         document.removeEventListener('astro:before-swap', handleBeforeSwap);
       };
 
-      const handleDismissKeydown = (event) => {
+      const handleDismissKeydown = (event: KeyboardEvent) => {
         if (event.key !== 'Escape') {
           return;
         }
@@ -535,7 +537,7 @@ const description = "Connect with me to explore collaboration opportunities and 
         const encodedBody = encodeURIComponent(
           `Name: ${name ?? ''}\nEmail: ${email ?? ''}\n\nMessage:\n${message ?? ''}`
         );
-        const mailtoLink = `mailto:chinghsinchen1991@gmail.com?subject=${encodeURIComponent(subject ?? '')}&body=${encodedBody}`;
+        const mailtoLink = `mailto:chinghsinchen1991@gmail.com?subject=${encodeURIComponent(String(subject ?? ''))}&body=${encodedBody}`;
 
         window.location.href = mailtoLink;
 

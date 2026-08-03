@@ -5,7 +5,7 @@ import CategoryList from '../../components/common/CategoryList.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
 import TagList from '../../components/common/TagList.astro';
 import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
-import { slugify, formatDate, getPublishedCollection } from '../../ts/utils';
+import { slugify, formatDate, toDateAttr, getPublishedCollection } from '../../ts/utils';
 
 export const prerender = true;
 
@@ -81,7 +81,7 @@ const { Content, headings } = await render(post);
             >
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <time datetime={post.data.date}>{formatDate(new Date(post.data.date))}</time>
+            <time datetime={toDateAttr(post.data.date)}>{formatDate(new Date(post.data.date))}</time>
           </div>
           <div class="flex items-center">
             <svg

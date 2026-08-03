@@ -37,7 +37,7 @@ const { class: className = "" } = Astro.props;
 </button>
 
 <script>
-  function syncThemeToggle(themeToggle) {
+  function syncThemeToggle(themeToggle: Element) {
     const isDark = document.documentElement.classList.contains('dark');
     themeToggle.setAttribute('aria-pressed', String(isDark));
     themeToggle.setAttribute('aria-label', isDark ? '切換淺色模式' : '切換深色模式');

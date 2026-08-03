@@ -12,7 +12,8 @@ const escapeXml = (value: string) =>
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&apos;");
 
-const formatRssDate = (value?: string) => {
+// `z.coerce.date()` in the content schema yields Date, not string.
+const formatRssDate = (value?: string | Date) => {
   if (!value) return undefined;
   const parsed = new Date(value);
   return Number.isNaN(parsed.getTime()) ? undefined : parsed.toUTCString();
@@ -37,7 +38,7 @@ export async function GET() {
 
   const itemsXml = sortedPosts
     .map((post) => {
-      const identifier = post.slug || post.id;
+      const identifier = post.id;
       const link = resolveUrl(`/blog/${identifier}`);
       const pubDate = formatRssDate(post.data.date);
       const description = post.data.description

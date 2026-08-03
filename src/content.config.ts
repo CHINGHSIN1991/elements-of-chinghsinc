@@ -58,15 +58,18 @@ const workExperienceSchema = z.array(z.object({
   description: z.array(z.string())
 }));
 
+// Zod 4 (astro/zod re-exports zod/v4): z.record requires an explicit key
+// schema, and the top-level z.email() / z.url() replace the deprecated
+// z.string().email() / z.string().url() chains.
 const skillsSchema = z.object({
-  architecture: z.record(z.any()),
-  software: z.record(z.any())
+  architecture: z.record(z.string(), z.any()),
+  software: z.record(z.string(), z.any())
 });
 
 const contactInfoSchema = z.object({
-  email: z.string().email(),
-  GitHub: z.string().url(),
-  LinkedIn: z.string().url(),
+  email: z.email(),
+  GitHub: z.url(),
+  LinkedIn: z.url(),
   about: z.string()
 });
 

@@ -1,13 +1,13 @@
 ---
-import { slugify, formatDate, sortAndLimit, getPublishedCollection } from "../../ts/utils";
+import { slugify, formatDate, sortAndLimit, getPublishedCollection, type ContentCollectionKey } from "../../ts/utils";
 
 interface Props {
-  collectionName: string;
+  collectionName: ContentCollectionKey;
   linkPrefix: string;
   limit?: number;
 }
 
-const { collectionName, linkPrefix, limit = 5 } = Astro.props;
+const { collectionName, linkPrefix, limit = 5 } = Astro.props as Props;
 
 const allItems = await getPublishedCollection(collectionName);
 
