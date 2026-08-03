@@ -7,20 +7,21 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "deploy": "astro build && touch dist/.nojekyll"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.9",
     "@iconify-json/lets-icons": "^1.2.1",
-    "@types/three": "^0.184.1",
     "astro": "^6.4.1",
     "astro-icon": "^1.1.5",
-    "three": "^0.184.0",
-    "typescript": "^6.0.3"
+    "three": "^0.184.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/three": "^0.184.1",
     "@unocss/astro": "^66.7.0",
     "@unocss/reset": "^66.7.0",
+    "typescript": "^6.0.3",
     "unocss": "^66.7.0"
   },
   "volta": {
