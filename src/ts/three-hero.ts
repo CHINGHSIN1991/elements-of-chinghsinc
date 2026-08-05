@@ -196,13 +196,19 @@ export function initHeroScene(
   resizeObserver.observe(canvas);
 
   // ── Animation loop ─────────────────────────────────────────────────────────
-  const clock = new THREE.Clock();
   const FADE_SPEED = 2.5;
+  // THREE.Clock is deprecated; plain timestamps do the same job here.
+  let lastFrameTime = performance.now();
+  // rAF pauses on a hidden tab, so the first frame back can report a huge
+  // delta and snap the fade to its end. Cap it at ~3 frames' worth.
+  const MAX_DELTA = 0.05;
   let animFrameId: number;
 
   function animate() {
     animFrameId = requestAnimationFrame(animate);
-    const delta = clock.getDelta();
+    const now = performance.now();
+    const delta = Math.min((now - lastFrameTime) / 1000, MAX_DELTA);
+    lastFrameTime = now;
 
     if (fadeState === 'fading-out') {
       fadeProgress += delta * FADE_SPEED;

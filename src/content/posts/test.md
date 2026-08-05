@@ -5,7 +5,7 @@ description: "這是一篇用於測試部落格功能的文章，包含了各種
 date: "2024-03-20"
 author: "作者名稱"
 image: 
-    src: "/images/blog-placeholder.jpg"
+    src: "/assets/images/fallback-image.png"
     alt: "文章封面圖片"
 draft: true
 category: "bbb"
@@ -46,7 +46,7 @@ console.log(sayHello('World'));
 
 ## 圖片展示
 
-![示例圖片](/images/example.jpg)
+![示例圖片](/assets/images/fallback-image.png)
 
 *圖：這是一個示例圖片，展示了文章內容的視覺化呈現*
 

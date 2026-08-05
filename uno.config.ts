@@ -1,9 +1,11 @@
-import { defineConfig, presetUno, presetTypography, presetWebFonts, presetIcons, transformerVariantGroup, transformerDirectives } from 'unocss'
+import { defineConfig, presetWind3, presetTypography, presetWebFonts, presetIcons, transformerVariantGroup, transformerDirectives } from 'unocss'
 
 export default defineConfig({
   // ...UnoCSS options
   presets: [
-    presetUno(),
+    // presetWind3 is the current name for the preset formerly called presetUno.
+    // (presetWind4 is a redesign with different output — not a drop-in swap.)
+    presetWind3(),
     presetTypography(),
     presetWebFonts({
       fonts: {
