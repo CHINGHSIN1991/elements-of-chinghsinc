@@ -10,6 +10,9 @@ export default defineConfig({
     presetWebFonts({
       fonts: {
         sans: 'Atkinson Hyperlegible',
+        // Headline face for the homepage hero / section titles
+        // (ui-ux-pro-max typography: "Minimalist Portfolio" pairing).
+        display: 'Space Grotesk:400,500,600,700',
       },
     }),
     presetIcons({

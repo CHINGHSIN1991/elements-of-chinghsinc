@@ -1,12 +1,17 @@
 /* base variables */
 :root {
   /* light mode variables */
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #60a5fa;
   --color-background: #ffffff;
   --color-background-secondary: #f3f4f6;
+  --color-background-tertiary: #e5e7eb;
   --color-text: #1f2937;
   --color-text-secondary: #4b5563;
+  --color-text-muted: #596273;
+  --color-border: #e4e4e7;
+  --color-border-dark: #d4d4d8;
 
   /* navbar related settings */
   --navbar-height: 4rem; /* 64px - navbar height */
@@ -18,15 +23,38 @@
 :root.dark {
   --color-primary: #60a5fa;
   --color-primary-dark: #3b82f6;
+  --color-primary-light: #93c5fd;
   --color-background: #292f3e;
   --color-background-secondary: #3a404a;
+  --color-background-tertiary: #4b5563;
   --color-text: #f9fafb;
   --color-text-secondary: #e5e7eb;
+  --color-text-muted: #a3adbf;
+  --color-border: #475569;
+  --color-border-dark: #64748b;
 }
 
 /* 全局樣式 */
 html {
   @apply w-full h-full;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Respect the user's motion preference globally (ux: reduced-motion, High) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 body {

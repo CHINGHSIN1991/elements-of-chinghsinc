@@ -8,15 +8,34 @@ interface SceneEntry {
   mat: THREE.MeshStandardMaterial;
 }
 
+export interface HeroSceneOptions {
+  /** Element that receives ArrowLeft / ArrowRight to switch scenes. */
+  keyboardRoot?: HTMLElement;
+  /** Called after a scene change has fully settled. */
+  onSceneChange?: (index: number) => void;
+}
+
+// Light / dark accent for the mesh, mirroring --color-primary in theme.css.
+const MESH_COLOR_LIGHT = 0x2563eb;
+const MESH_COLOR_DARK = 0x60a5fa;
+
 export function initHeroScene(
   canvas: HTMLCanvasElement,
   prevBtn: HTMLElement,
   nextBtn: HTMLElement,
-  indicators: NodeListOf<Element>
+  indicators: NodeListOf<Element>,
+  options: HeroSceneOptions = {}
 ) {
   // ── Renderer ────────────────────────────────────────────────────────────
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  // Transparent clear colour: the page background shows through, so the hero
+  // never has a visible seam against the surrounding layout in either theme.
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  // ── Motion preference ───────────────────────────────────────────────────
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduceMotion = motionQuery.matches;
 
   // ── Camera ──────────────────────────────────────────────────────────────
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
@@ -33,7 +52,7 @@ export function initHeroScene(
   const entries: SceneEntry[] = geometries.map((geo, i) => {
     const scene = new THREE.Scene();
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambient = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambient);
 
     const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -45,7 +64,7 @@ export function initHeroScene(
     scene.add(fillLight);
 
     const mat = new THREE.MeshStandardMaterial({
-      color: 0x4a90e2,
+      color: MESH_COLOR_LIGHT,
       metalness: 0.2,
       roughness: 0.4,
       transparent: true,
@@ -59,13 +78,16 @@ export function initHeroScene(
   });
 
   // ── State ────────────────────────────────────────────────────────────────
+  // On wide viewports the mesh sits to the right of the copy; on narrow ones
+  // it stays centred behind the copy at reduced opacity so text stays legible.
+  let maxOpacity = 1;
   let currentIndex = 0;
   let nextIndex = 0;
   let fadeState: FadeState = 'idle';
   let fadeProgress = 0;
 
   // ── Auto-rotation ────────────────────────────────────────────────────────
-  let autoRotate = true;
+  let autoRotate = !reduceMotion;
   let autoRotateTimer: ReturnType<typeof setTimeout> | null = null;
 
   // ── Drag / gesture state ─────────────────────────────────────────────────
@@ -88,15 +110,38 @@ export function initHeroScene(
 
   function updateIndicators() {
     indicators.forEach((dot, i) => {
-      dot.classList.toggle('active', i === currentIndex);
+      const active = i === currentIndex;
+      dot.classList.toggle('active', active);
+      if (active) dot.setAttribute('aria-current', 'true');
+      else dot.removeAttribute('aria-current');
     });
+    options.onSceneChange?.(currentIndex);
   }
 
-  // ── Button events ─────────────────────────────────────────────────────────
+  // ── Button / indicator / keyboard events ──────────────────────────────────
   const onPrevClick = () => goToScene(((currentIndex - 1) + 4) % 4);
   const onNextClick = () => goToScene((currentIndex + 1) % 4);
   prevBtn.addEventListener('click', onPrevClick);
   nextBtn.addEventListener('click', onNextClick);
+
+  const indicatorHandlers: Array<[Element, () => void]> = [];
+  indicators.forEach((dot, i) => {
+    const handler = () => goToScene(i);
+    dot.addEventListener('click', handler);
+    indicatorHandlers.push([dot, handler]);
+  });
+
+  const keyboardRoot = options.keyboardRoot;
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      onPrevClick();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      onNextClick();
+    }
+  };
+  keyboardRoot?.addEventListener('keydown', onKeyDown);
 
   // ── Pointer events ────────────────────────────────────────────────────────
   const onPointerDown = (e: PointerEvent) => {
@@ -166,15 +211,24 @@ export function initHeroScene(
 
   function resumeAutoRotate() {
     if (autoRotateTimer) clearTimeout(autoRotateTimer);
+    if (reduceMotion) return;
     autoRotateTimer = setTimeout(() => {
       autoRotate = true;
     }, 2000);
   }
 
+  const onMotionPrefChange = (e: MediaQueryListEvent) => {
+    reduceMotion = e.matches;
+    if (reduceMotion) pauseAutoRotate();
+    else resumeAutoRotate();
+  };
+  motionQuery.addEventListener('change', onMotionPrefChange);
+
   // ── Dark mode ──────────────────────────────────────────────────────────────
   function updateBackground() {
     const isDark = document.documentElement.classList.contains('dark');
-    renderer.setClearColor(isDark ? 0x0f172a : 0xf3f4f6);
+    const color = isDark ? MESH_COLOR_DARK : MESH_COLOR_LIGHT;
+    entries.forEach(({ mat }) => mat.color.setHex(color));
   }
 
   const themeObserver = new MutationObserver(updateBackground);
@@ -190,29 +244,45 @@ export function initHeroScene(
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+
+    const wide = w >= 768 && camera.aspect > 1.1;
+    maxOpacity = wide ? 1 : 0.4;
+    // 0 at a 1.1 aspect (tablet landscape) → 1 from 1.6 (desktop) upwards, so
+    // the mesh grows and moves right as there is room for it beside the copy.
+    const t = Math.min(1, Math.max(0, (camera.aspect - 1.1) / 0.5));
+    entries.forEach(({ mesh, mat }, i) => {
+      mesh.position.x = wide ? 1.1 + 0.4 * t : 0;
+      // Portrait viewports have a narrow horizontal FOV; shrink so the mesh
+      // reads as a backdrop rather than filling the screen.
+      mesh.scale.setScalar(wide ? 0.65 + 0.35 * t : 0.6);
+      if (fadeState === 'idle' && i === currentIndex) mat.opacity = maxOpacity;
+    });
   }
 
   const resizeObserver = new ResizeObserver(handleResize);
   resizeObserver.observe(canvas);
 
   // ── Animation loop ─────────────────────────────────────────────────────────
-  const FADE_SPEED = 2.5;
+  // Under reduced motion the cross-fade is near-instant instead of 400ms.
+  const fadeSpeed = () => (reduceMotion ? 40 : 2.5);
   // THREE.Clock is deprecated; plain timestamps do the same job here.
   let lastFrameTime = performance.now();
   // rAF pauses on a hidden tab, so the first frame back can report a huge
   // delta and snap the fade to its end. Cap it at ~3 frames' worth.
   const MAX_DELTA = 0.05;
-  let animFrameId: number;
+  let animFrameId = 0;
+  let running = false;
 
   function animate() {
+    if (!running) return;
     animFrameId = requestAnimationFrame(animate);
     const now = performance.now();
     const delta = Math.min((now - lastFrameTime) / 1000, MAX_DELTA);
     lastFrameTime = now;
 
     if (fadeState === 'fading-out') {
-      fadeProgress += delta * FADE_SPEED;
-      entries[currentIndex].mat.opacity = Math.max(0, 1 - fadeProgress);
+      fadeProgress += delta * fadeSpeed();
+      entries[currentIndex].mat.opacity = Math.max(0, 1 - fadeProgress) * maxOpacity;
       if (fadeProgress >= 1) {
         entries[currentIndex].mat.opacity = 0;
         currentIndex = nextIndex;
@@ -222,10 +292,10 @@ export function initHeroScene(
         updateIndicators();
       }
     } else if (fadeState === 'fading-in') {
-      fadeProgress += delta * FADE_SPEED;
-      entries[currentIndex].mat.opacity = Math.min(1, fadeProgress);
+      fadeProgress += delta * fadeSpeed();
+      entries[currentIndex].mat.opacity = Math.min(1, fadeProgress) * maxOpacity;
       if (fadeProgress >= 1) {
-        entries[currentIndex].mat.opacity = 1;
+        entries[currentIndex].mat.opacity = maxOpacity;
         fadeState = 'idle';
       }
     }
@@ -238,20 +308,49 @@ export function initHeroScene(
     renderer.render(entries[currentIndex].scene, camera);
   }
 
+  function startLoop() {
+    if (running) return;
+    running = true;
+    lastFrameTime = performance.now();
+    animFrameId = requestAnimationFrame(animate);
+  }
+
+  function stopLoop() {
+    running = false;
+    cancelAnimationFrame(animFrameId);
+  }
+
+  // Pause rendering while the hero is scrolled out of view (landing guidance:
+  // pause hero media offscreen). One static frame is always drawn first so
+  // the canvas is never blank when it scrolls back in.
+  const visibilityObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry?.isIntersecting) startLoop();
+      else stopLoop();
+    },
+    { threshold: 0 }
+  );
+
   // ── Init ──────────────────────────────────────────────────────────────────
   handleResize();
   updateBackground();
   updateIndicators();
-  animate();
+  renderer.render(entries[currentIndex].scene, camera);
+  visibilityObserver.observe(canvas);
 
   return {
+    goToScene,
     destroy() {
-      cancelAnimationFrame(animFrameId);
+      stopLoop();
+      visibilityObserver.disconnect();
       resizeObserver.disconnect();
       themeObserver.disconnect();
+      motionQuery.removeEventListener('change', onMotionPrefChange);
       if (autoRotateTimer) clearTimeout(autoRotateTimer);
       prevBtn.removeEventListener('click', onPrevClick);
       nextBtn.removeEventListener('click', onNextClick);
+      indicatorHandlers.forEach(([dot, handler]) => dot.removeEventListener('click', handler));
+      keyboardRoot?.removeEventListener('keydown', onKeyDown);
       canvas.removeEventListener('pointerdown', onPointerDown);
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerup', onPointerUp);

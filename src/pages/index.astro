@@ -1,208 +1,277 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import ProjectCard from '../components/project/ProjectCard.astro';
+import PostCard from '../components/blog/PostCard.astro';
+import { Icon } from 'astro-icon/components';
+import { getPublishedCollection, sortAndLimit } from '../ts/utils';
 
 const title = "The New World - Elements of ChingHsinC";
 const description = "A land of hope and opportunity";
+
+// Landing pattern (ui-ux-pro-max "Portfolio Grid"):
+// Hero (name/role) > Project grid > About/Philosophy > Contact cue.
+const projects = sortAndLimit(await getPublishedCollection('projects'), 3);
+const posts = sortAndLimit(await getPublishedCollection('posts'), 3);
+
+// One scene per pillar. Names stay meaningful instead of "Section 1…4".
+const SCENES = [
+  { name: 'Logic', shape: 'Cube' },
+  { name: 'Design', shape: 'Sphere' },
+  { name: 'Technology', shape: 'Cylinder' },
+  { name: 'Curiosity', shape: 'Cone' },
+];
+
+const PILLARS = [
+  {
+    icon: 'lets-icons:structure-light',
+    title: 'Logical Thinking',
+    body: 'Mathematical logic and rigorous analysis applied to complex problems, balancing precision with efficiency.',
+    meta: 'Mathematical Logic · Problem Solving',
+  },
+  {
+    icon: 'lets-icons:pen-light',
+    title: 'Design Aesthetics',
+    body: 'Designs that pair function with aesthetic value, from spatial planning through to the full user experience.',
+    meta: 'Aesthetic Design · User Experience',
+  },
+  {
+    icon: 'lets-icons:code-light',
+    title: 'Technology Innovation',
+    body: 'Modern tooling used to realise creative ideas, exploring where new technology meets established design practice.',
+    meta: 'Technology · Creative Solutions',
+  },
+];
+
+// Shared classes — single accent colour, 44px minimum hit area, visible focus.
+const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+const btnBase = `inline-flex items-center justify-center gap-2 min-h-11 px-6 rounded-full font-medium transition-colors duration-200 pointer-events-auto ${focusRing}`;
+const btnPrimary = `${btnBase} bg-primary text-white hover:bg-primary-dark`;
+const btnSecondary = `${btnBase} border border-border text-text hover:bg-background-secondary`;
+const iconBtn = `absolute top-1/2 -translate-y-1/2 z-20 w-11 h-11 hidden md:inline-flex items-center justify-center rounded-full border border-border bg-[color-mix(in_srgb,var(--color-background)_70%,transparent)] text-text backdrop-blur-sm hover:bg-background-secondary transition-colors duration-200 ${focusRing}`;
+const viewAll = `inline-flex items-center gap-1.5 min-h-11 px-2 -mx-2 rounded-md text-primary font-medium hover:underline underline-offset-4 ${focusRing}`;
 ---
 
 <MainLayout title={title} description={description}>
-  <!-- Hero Section — Three.js Carousel -->
-  <div id="hero-container" class="relative min-h-screen overflow-hidden">
-    <!-- Three.js Canvas -->
+  <!-- ───────────── Hero: Three.js scene carousel ───────────── -->
+  <section
+    id="hero-container"
+    class="relative min-h-[100svh] overflow-hidden"
+    aria-labelledby="hero-title"
+  >
     <canvas id="hero-canvas" class="absolute inset-0 w-full h-full" aria-hidden="true"></canvas>
 
-    <!-- Text overlay -->
-    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen pointer-events-none select-none px-4">
-      <!-- Year Display - Top Right -->
-      <div
-        class="absolute top-8 right-8 text-gray-600 dark:text-white opacity-60 font-light text-right"
-        aria-hidden="true"
-      >
-        <div class="text-4xl md:text-5xl">1991</div>
-        <div class="text-2xl md:text-3xl mt-2">/</div>
-        <div class="text-4xl md:text-5xl mt-2">9999</div>
-      </div>
+    <!-- Copy overlay — pointer events pass through to the canvas except on controls -->
+    <div class="relative z-10 w-full px-6 md:px-24 lg:px-28 flex flex-col items-center md:items-start justify-center min-h-[100svh] pb-36 pt-8 pointer-events-none select-none text-center md:text-left">
+      <p class="font-display text-xs md:text-sm uppercase tracking-[0.3em] text-text-muted mb-6">
+        Portfolio · Journal · Notes
+      </p>
 
-      <!-- Main Title -->
-      <h1 class="text-6xl md:text-8xl lg:text-9xl font-light text-gray-800 dark:text-white mb-8 leading-tight text-center">
-        Elements <span class="bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300 bg-clip-text text-transparent">of</span>
-        <br>
-        <span class="bg-gradient-to-r from-blue-500 to-cyan-500 dark:from-blue-300 dark:to-cyan-200 bg-clip-text text-transparent">Ching Hsin</span>
+      <h1
+        id="hero-title"
+        class="font-display font-medium tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.95] text-text mb-6"
+      >
+        Elements <span class="text-text-muted font-light">of</span>
+        <br />
+        <span class="text-primary">Ching Hsin</span>
       </h1>
 
-      <!-- Subtitle -->
-      <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 font-light mb-12 max-w-2xl text-center">
-        A Land of hope and opportunity
+      <p class="text-lg md:text-2xl text-text-secondary font-light max-w-xl mb-10">
+        A land of hope and opportunity
       </p>
 
-      <!-- Scene label -->
-      <p id="scene-label" class="text-sm font-light tracking-widest uppercase text-gray-500 dark:text-gray-400 opacity-70">
-        Section 1
-      </p>
-    </div>
-
-    <!-- Prev / Next buttons (desktop) -->
-    <button
-      id="hero-prev"
-      class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 dark:bg-white/10 hover:bg-white/40 dark:hover:bg-white/25 backdrop-blur-sm text-gray-700 dark:text-white transition-all duration-200"
-      aria-label="Previous scene"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-      </svg>
-    </button>
-    <button
-      id="hero-next"
-      class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 dark:bg-white/10 hover:bg-white/40 dark:hover:bg-white/25 backdrop-blur-sm text-gray-700 dark:text-white transition-all duration-200"
-      aria-label="Next scene"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-      </svg>
-    </button>
-
-    <!-- Indicator dots -->
-    <div class="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3" aria-hidden="true">
-      <span class="hero-dot w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300"></span>
-      <span class="hero-dot w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300"></span>
-      <span class="hero-dot w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300"></span>
-      <span class="hero-dot w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300"></span>
-    </div>
-
-    <!-- Drag hint -->
-    <p class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-xs text-gray-500 dark:text-gray-400 opacity-60 select-none">
-      拖曳旋轉 · 箭頭切換場景
-    </p>
-
-    <!-- Scroll Indicator -->
-    <div
-      class="absolute bottom-8 right-8 text-gray-600 dark:text-white opacity-60 animate-bounce"
-      aria-hidden="true"
-    >
-      <div class="w-6 h-10 border-2 border-gray-600 dark:border-white rounded-full flex justify-center">
-        <div class="w-1 h-3 bg-gray-600 dark:bg-white rounded-full mt-2 animate-pulse"></div>
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-3">
+        <a href="/project" class={btnPrimary}>
+          View projects
+          <Icon name="lets-icons:arrow-right-long-light" class="w-5 h-5" aria-hidden="true" />
+        </a>
+        <a href="/blog" class={btnSecondary}>Read the blog</a>
       </div>
     </div>
-    <p class="sr-only">向下捲動以檢視下一段內容</p>
-  </div>
-  
-  <!-- Additional Content Section -->
-  <section class="py-20 bg-background transition-colors duration-300">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-4xl font-light text-text mb-4 transition-colors duration-300">Cross-Disciplinary Innovation</h2>
-      <p class="text-lg text-text-secondary mb-16 max-w-4xl mx-auto leading-relaxed transition-colors duration-300">
-        Integrating logical thinking, aesthetic design, and technological innovation to explore the infinite possibilities of cross-disciplinary professional knowledge
+
+    <!-- Prev / Next (desktop). Swipe handles it on touch. -->
+    <button id="hero-prev" type="button" class={`${iconBtn} left-6 lg:left-10`} aria-label="Previous scene">
+      <Icon name="lets-icons:expand-left-light" class="w-6 h-6" aria-hidden="true" />
+    </button>
+    <button id="hero-next" type="button" class={`${iconBtn} right-6 lg:right-10`} aria-label="Next scene">
+      <Icon name="lets-icons:expand-right-light" class="w-6 h-6" aria-hidden="true" />
+    </button>
+
+    <!-- Bottom bar: year · scene controls · scroll cue -->
+    <div class="absolute inset-x-0 bottom-0 z-20 px-6 lg:px-10 pb-6 grid grid-cols-[1fr_auto_1fr] items-end gap-4">
+      <p class="font-display text-sm tracking-widest text-text-muted tabular-nums whitespace-nowrap" aria-label="Since 1991">
+        1991 <span aria-hidden="true">/</span> 9999
       </p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Logical Thinking -->
-        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
-            ∑
-          </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Logical Thinking</h3>
-          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
-            Based on mathematical logic, employing rigorous analytical methods to solve complex problems, pursuing the perfect balance between precision and efficiency
-          </p>
-          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
-            Mathematical Logic | Problem Solving
-          </div>
+
+      <div class="flex flex-col items-center gap-1">
+        <p id="scene-label" class="font-display text-xs uppercase tracking-[0.25em] text-text-muted" aria-live="polite">
+          {SCENES[0].name}
+        </p>
+        <div class="flex items-center" role="group" aria-label="Hero scenes">
+          {SCENES.map((scene, i) => (
+            <button
+              type="button"
+              class={`hero-dot w-11 h-11 inline-flex items-center justify-center rounded-full ${focusRing}`}
+              aria-label={`Show scene ${i + 1}: ${scene.name}`}
+              aria-current={i === 0 ? 'true' : undefined}
+            >
+              <span class="hero-dot-fill block w-2 h-2 rounded-full bg-border-dark transition-[transform,background-color] duration-300" aria-hidden="true"></span>
+            </button>
+          ))}
         </div>
-        
-        <!-- Design Aesthetics -->
-        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
-            ⌘
-          </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Design Aesthetics</h3>
-          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
-            Committed to creating designs that combine functionality with aesthetic value, from spatial planning to user experience comprehensive thinking
-          </p>
-          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
-            Aesthetic Design | User Experience
-          </div>
-        </div>
-        
-        <!-- Technology Innovation -->
-        <div class="group p-8 rounded-xl bg-background-secondary transition-all duration-300 hover:shadow-dark-lg hover:shadow-blue-500/20 hover:scale-105">
-          <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-transform duration-300 group-hover:rotate-12">
-            &lt;/&gt;
-          </div>
-          <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Technology Innovation</h3>
-          <p class="text-text-secondary transition-colors duration-300 leading-relaxed">
-            Utilizing modern technological tools to realize creative ideas, continuously exploring the integration of new technologies with traditional design concepts
-          </p>
-          <div class="mt-4 text-sm text-text-secondary opacity-80 transition-colors duration-300">
-            Technology Innovation | Creative Solutions
-          </div>
-        </div>
+        <p class="text-xs text-text-muted hidden md:block">拖曳旋轉 · 方向鍵或箭頭切換場景</p>
       </div>
-      
-      <!-- Core Philosophy -->
-      <div class="mt-16 p-8 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 transition-all duration-300">
-        <h3 class="text-2xl font-light text-text mb-4 transition-colors duration-300">Core Philosophy</h3>
-        <p class="text-lg text-text-secondary max-w-3xl mx-auto leading-relaxed italic transition-colors duration-300">
-          "A cross-disciplinary learner who pursues innovative solutions and is curious about everything. A deep thinker who is passionate about combining knowledge from different professional fields to create unique value."
+
+      <a
+        href="#intro"
+        class={`justify-self-end inline-flex items-center gap-1.5 min-h-11 px-2 -mr-2 rounded-md text-sm text-text-muted hover:text-text transition-colors duration-200 ${focusRing}`}
+      >
+        <span class="hidden sm:inline">Scroll</span>
+        <Icon name="lets-icons:expand-down-light" class="w-5 h-5 motion-safe:animate-[nudge_2.4s_ease-in-out_infinite]" aria-hidden="true" />
+      </a>
+    </div>
+  </section>
+
+  <!-- ───────────── Pillars ───────────── -->
+  <section id="intro" class="py-20 md:py-28 scroll-mt-16" aria-labelledby="intro-title">
+    <div class="container">
+      <div class="max-w-3xl">
+        <p class="font-display text-xs uppercase tracking-[0.3em] text-primary mb-4">About</p>
+        <h2 id="intro-title" class="font-display text-3xl md:text-5xl font-medium tracking-tight text-text mb-5">
+          Cross-disciplinary innovation
+        </h2>
+        <p class="text-lg text-text-secondary leading-relaxed">
+          Integrating logical thinking, aesthetic design and technological innovation to explore
+          what becomes possible when professional fields overlap.
         </p>
       </div>
+
+      <ul class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-14 list-none p-0 m-0">
+        {PILLARS.map((pillar) => (
+          <li class="group h-full rounded-2xl border border-border bg-background-secondary p-7 motion-safe:transition-[transform,border-color] motion-safe:duration-300 hover:border-primary motion-safe:hover:-translate-y-1">
+            <span class="inline-flex w-12 h-12 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-primary mb-6">
+              <Icon name={pillar.icon} class="w-6 h-6" aria-hidden="true" />
+            </span>
+            <h3 class="font-display text-xl font-medium text-text mb-3">{pillar.title}</h3>
+            <p class="text-text-secondary leading-relaxed">{pillar.body}</p>
+            <p class="mt-5 text-sm text-text-muted">{pillar.meta}</p>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Core philosophy -->
+      <figure class="mt-16 md:mt-20 border-l-4 border-primary pl-6 md:pl-8 max-w-3xl">
+        <blockquote class="font-display text-xl md:text-2xl font-light leading-snug text-text">
+          A cross-disciplinary learner who pursues innovative solutions and is curious about everything.
+          A deep thinker who combines knowledge from different professional fields to create unique value.
+        </blockquote>
+        <figcaption class="mt-4 text-sm text-text-muted">Core philosophy</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ───────────── Selected projects ───────────── -->
+  {projects.length > 0 && (
+    <section class="py-20 md:py-28 bg-background-secondary border-y border-border" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
+          <div>
+            <p class="font-display text-xs uppercase tracking-[0.3em] text-primary mb-3">Work</p>
+            <h2 id="projects-title" class="font-display text-3xl md:text-4xl font-medium tracking-tight text-text">Selected projects</h2>
+          </div>
+          <a href="/project" class={viewAll}>
+            All projects
+            <Icon name="lets-icons:arrow-right-long-light" class="w-5 h-5" aria-hidden="true" />
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ───────────── Latest writing ───────────── -->
+  {posts.length > 0 && (
+    <section class="py-20 md:py-28" aria-labelledby="posts-title">
+      <div class="container">
+        <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
+          <div>
+            <p class="font-display text-xs uppercase tracking-[0.3em] text-primary mb-3">Journal</p>
+            <h2 id="posts-title" class="font-display text-3xl md:text-4xl font-medium tracking-tight text-text">Latest writing</h2>
+          </div>
+          <a href="/blog" class={viewAll}>
+            All posts
+            <Icon name="lets-icons:arrow-right-long-light" class="w-5 h-5" aria-hidden="true" />
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ───────────── Contact cue ───────────── -->
+  <section class="py-16 md:py-20 border-t border-border" aria-labelledby="contact-title">
+    <div class="container flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div>
+        <h2 id="contact-title" class="font-display text-2xl md:text-3xl font-medium tracking-tight text-text mb-2">
+          Working on something at the intersection?
+        </h2>
+        <p class="text-text-secondary">Let's talk about design, code, and the space in between.</p>
+      </div>
+      <a href="/contact" class={btnPrimary.replace('pointer-events-auto', '')}>
+        Get in touch
+        <Icon name="lets-icons:arrow-right-long-light" class="w-5 h-5" aria-hidden="true" />
+      </a>
     </div>
   </section>
 </MainLayout>
 
 <style>
-  /* Indicator dot active state */
-  .hero-dot.active {
-    background-color: #3b82f6;
+  /* Active indicator: colour + transform only (no width animation). */
+  .hero-dot[aria-current="true"] .hero-dot-fill {
+    background-color: var(--color-primary);
     transform: scale(1.5);
   }
-  :global(.dark) .hero-dot.active {
-    background-color: #93c5fd;
+  .hero-dot:hover .hero-dot-fill {
+    background-color: var(--color-text-secondary);
   }
 
-  /* Enhance text readability */
-  h1 {
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  :global(.dark) h1 {
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  }
-
-  .bg-clip-text {
-    -webkit-background-clip: text;
-    background-clip: text;
+  /* Scroll cue: a small translateY nudge, disabled by motion-safe: when reduced motion is on. */
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
   }
 </style>
 
 <script>
   import { initHeroScene } from '../ts/three-hero';
 
-  const SCENE_NAMES = ['Section 1', 'Section 2', 'Section 3', 'Section 4'];
-
   function init() {
-    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
-    const prevBtn = document.getElementById('hero-prev') as HTMLElement;
-    const nextBtn = document.getElementById('hero-next') as HTMLElement;
+    const container = document.getElementById('hero-container') as HTMLElement | null;
+    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
+    const prevBtn = document.getElementById('hero-prev') as HTMLElement | null;
+    const nextBtn = document.getElementById('hero-next') as HTMLElement | null;
+    const sceneLabel = document.getElementById('scene-label');
     const indicators = document.querySelectorAll('.hero-dot');
-    const sceneLabel = document.getElementById('scene-label') as HTMLElement;
 
-    if (!canvas || !prevBtn || !nextBtn) return;
+    if (!container || !canvas || !prevBtn || !nextBtn) return;
 
-    const { destroy } = initHeroScene(canvas, prevBtn, nextBtn, indicators);
+    // Scene names come from the indicator labels so markup stays the source of truth.
+    const sceneNames = Array.from(indicators).map(
+      (dot) => dot.getAttribute('aria-label')?.split(': ')[1] ?? ''
+    );
 
-    // Keep scene label in sync with indicator changes
-    const labelObserver = new MutationObserver(() => {
-      const activeIdx = Array.from(indicators).findIndex(d => d.classList.contains('active'));
-      if (activeIdx >= 0 && sceneLabel) {
-        sceneLabel.textContent = SCENE_NAMES[activeIdx];
-      }
+    const { destroy } = initHeroScene(canvas, prevBtn, nextBtn, indicators, {
+      keyboardRoot: container,
+      onSceneChange(index) {
+        if (sceneLabel && sceneNames[index]) sceneLabel.textContent = sceneNames[index];
+      },
     });
-    indicators.forEach(dot => labelObserver.observe(dot, { attributes: true, attributeFilter: ['class'] }));
 
     // Clean up on Astro page transitions
-    document.addEventListener('astro:before-swap', () => {
-      labelObserver.disconnect();
-      destroy();
-    }, { once: true });
+    document.addEventListener('astro:before-swap', destroy, { once: true });
   }
 
   // Runs on first load and every time the page is visited via View Transitions
