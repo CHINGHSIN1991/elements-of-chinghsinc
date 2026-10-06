@@ -1,12 +1,13 @@
 ---
 import { type CollectionEntry } from 'astro:content';
-import { formatDate, slugify, sortAndLimit, getPublishedCollection, type ContentCollectionKey } from '../../ts/utils';
+import { formatDate, toDateAttr, slugify, sortAndLimit, getPublishedCollection, type ContentCollectionKey } from '../../ts/utils';
 
 interface Props {
   currentItem: CollectionEntry<ContentCollectionKey>;
   collection: ContentCollectionKey;
   linkPrefix: string;
   limit?: number;
+  heading?: string;
 }
 
 const {
@@ -14,42 +15,43 @@ const {
   collection,
   linkPrefix,
   limit = 3,
+  heading = 'Related',
 } = Astro.props as Props;
 
 const allItems = await getPublishedCollection(collection);
 
-const relatedItems = sortAndLimit(
-  allItems.filter(
-    item =>
-      item.id !== currentItem.id &&
-      item.data.category === currentItem.data.category
-  ),
-  limit
+// Same category first; if that comes up short, fill from the rest so the
+// block never renders empty on a category with a single item.
+const sameCategory = allItems.filter(
+  (item) => item.id !== currentItem.id && item.data.category === currentItem.data.category
 );
+const others = allItems.filter(
+  (item) => item.id !== currentItem.id && item.data.category !== currentItem.data.category
+);
+const relatedItems = [...sortAndLimit(sameCategory), ...sortAndLimit(others)].slice(0, limit);
 ---
 
 {relatedItems.length > 0 && (
-  <div class="px-2">
-    <h2 class="text-xl font-bold mb-4 pl-2">Related Items</h2>
-    <ul class="space-y-1">
+  <section aria-labelledby="related-items-title">
+    <h2 id="related-items-title" class="font-display text-xs uppercase tracking-[0.25em] text-text-muted mb-4">{heading}</h2>
+    <ul class="space-y-1 list-none m-0 p-0">
       {relatedItems.map(item => (
-        <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
+        <li>
           <a
             href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
-            class="block hover:text-primary-500 transition-colors"
+            class="block -mx-2 px-2 py-2 rounded-md hover:bg-background-secondary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <h3 class="font-medium text-sm line-clamp-2">
-              {item.data.title}
-            </h3>
-            <span class="text-xs text-gray-500 mt-1 block">
-              {item.data.date
-                ? formatDate(new Date(item.data.date))
-                : item.data.category}
+            <span class="block font-medium text-sm text-text line-clamp-2">{item.data.title}</span>
+            <span class="mt-1 flex items-center gap-2 text-xs text-text-muted">
+              {item.data.date && (
+                <time datetime={toDateAttr(item.data.date)} class="tabular-nums">{formatDate(new Date(item.data.date))}</time>
+              )}
+              <span aria-hidden="true">·</span>
+              <span>{item.data.category}</span>
             </span>
           </a>
         </li>
       ))}
     </ul>
-  </div>
+  </section>
 )}
-

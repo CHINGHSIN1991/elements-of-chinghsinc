@@ -1,32 +1,51 @@
 ---
-import Link from './Link.astro'
+import { Icon } from 'astro-icon/components';
 
-const { prevUrl, nextUrl } = Astro.props;
+interface Props {
+  prevUrl?: string;
+  nextUrl?: string;
+  currentPage?: number;
+  lastPage?: number;
+}
+
+const { prevUrl, nextUrl, currentPage, lastPage } = Astro.props as Props;
+
+const linkBase =
+  'inline-flex items-center gap-2 min-h-11 px-4 rounded-full border text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+const linkActive = `${linkBase} border-border text-text hover:border-primary hover:text-primary`;
+const linkDisabled = `${linkBase} border-border text-text-muted opacity-50`;
 ---
 
-<nav aria-label="Pages">
-  {
-    prevUrl && (
-      <Link
-        text="Previous"
-        href={prevUrl}
-        style="primary"
-        borderVisible
-        isFilled
-        rel="prev"
-      />
-    )
-  }
-  {
-    nextUrl && (
-      <Link
-        text="Next"
-        href={nextUrl}
-        style="primary"
-        borderVisible
-        isFilled
-        rel="next"
-      />
-    )
-  }
-</nav>
+{(prevUrl || nextUrl) && (
+  <nav aria-label="Pagination" class="flex items-center justify-between gap-4">
+    {prevUrl ? (
+      <a href={prevUrl} rel="prev" class={linkActive}>
+        <Icon name="lets-icons:expand-left-light" class="w-5 h-5" aria-hidden="true" />
+        Previous
+      </a>
+    ) : (
+      <span class={linkDisabled} aria-disabled="true">
+        <Icon name="lets-icons:expand-left-light" class="w-5 h-5" aria-hidden="true" />
+        Previous
+      </span>
+    )}
+
+    {currentPage && lastPage && (
+      <p class="text-sm text-text-muted tabular-nums">
+        Page {currentPage} <span aria-hidden="true">/</span><span class="sr-only">of</span> {lastPage}
+      </p>
+    )}
+
+    {nextUrl ? (
+      <a href={nextUrl} rel="next" class={linkActive}>
+        Next
+        <Icon name="lets-icons:expand-right-light" class="w-5 h-5" aria-hidden="true" />
+      </a>
+    ) : (
+      <span class={linkDisabled} aria-disabled="true">
+        Next
+        <Icon name="lets-icons:expand-right-light" class="w-5 h-5" aria-hidden="true" />
+      </span>
+    )}
+  </nav>
+)}

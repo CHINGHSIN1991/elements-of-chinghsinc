@@ -1,0 +1,65 @@
+---
+/**
+ * Horizontal category chips shown above a listing grid on every viewport
+ * (the sidebar CategoryList is desktop-only). "Filter by category" is the
+ * primary discovery pattern for a portfolio grid.
+ */
+import { slugify, getPublishedCollection, type ContentCollectionKey } from '../../ts/utils';
+
+interface Props {
+  collectionName: ContentCollectionKey;
+  basePath: string;
+  currentCategory?: string;
+  allLabel?: string;
+  class?: string;
+}
+
+const {
+  collectionName,
+  basePath,
+  currentCategory,
+  allLabel = 'All',
+  class: className = '',
+} = Astro.props as Props;
+
+const allItems = await getPublishedCollection(collectionName);
+const counts = new Map<string, number>();
+for (const item of allItems) {
+  counts.set(item.data.category, (counts.get(item.data.category) ?? 0) + 1);
+}
+const categories = [...counts.keys()];
+
+const chipBase =
+  'inline-flex items-center gap-1.5 min-h-10 px-4 rounded-full border text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+const chipIdle = `${chipBase} border-border text-text-secondary hover:border-primary hover:text-primary`;
+const chipActive = `${chipBase} border-primary bg-primary text-white`;
+---
+
+{categories.length > 0 && (
+<nav aria-label="Filter by category" class={`-mx-4 px-4 overflow-x-auto ${className}`}>
+  <ul class="flex items-center gap-2 py-1 list-none m-0 p-0 w-max">
+    <li>
+      <a
+        href={basePath}
+        class={currentCategory ? chipIdle : chipActive}
+        aria-current={currentCategory ? undefined : 'page'}
+      >
+        {allLabel}
+        <span class="text-xs opacity-70 tabular-nums">{allItems.length}</span>
+      </a>
+    </li>
+    {categories.map((cat) => (
+      <li>
+        <a
+          href={`${basePath}/category/${slugify(cat)}`}
+          class={cat === currentCategory ? chipActive : chipIdle}
+          aria-current={cat === currentCategory ? 'page' : undefined}
+        >
+          {cat}
+          <span class="text-xs opacity-70 tabular-nums">{counts.get(cat)}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+)}

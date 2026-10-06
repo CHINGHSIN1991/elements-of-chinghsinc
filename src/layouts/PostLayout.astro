@@ -1,6 +1,7 @@
 ---
 import BaseContentLayout from "./BaseContentLayout.astro";
 import PostHeader from "../components/layout/PostHeader.astro";
+import { slugify } from "../ts/utils";
 
 interface PostFrontmatter {
   draft: boolean;
@@ -38,6 +39,13 @@ const coverData = image ? { src: image.src, alt: image.alt } : undefined;
 <BaseContentLayout {title} {description} image={image} {images} post={post.data}>
   <PostHeader
     {title} {description} {date} {category} cover={coverData} designers={designers || []}
+    categoryBasePath="/blog/category"
+    breadcrumbs={[
+      { label: 'Home', href: '/' },
+      { label: 'Blog', href: '/blog' },
+      { label: category, href: `/blog/category/${slugify(category)}` },
+      { label: title },
+    ]}
   />
   <div class="flex max-w-7xl mx-auto">
     <div class="flex-grow">

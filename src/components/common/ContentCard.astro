@@ -20,6 +20,8 @@ interface Props {
   href: string;
   title: string;
   time?: string;
+  /** Machine-readable date for <time datetime>. */
+  dateTime?: string;
   description?: string;
   image: ImageMeta;
   category?: string;
@@ -32,6 +34,7 @@ const {
   href,
   title,
   time,
+  dateTime,
   description,
   image,
   category,
@@ -39,20 +42,22 @@ const {
   cta,
   class: customClass = "",
 } = Astro.props as Props;
+
+const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
 ---
 
 <Card class={customClass}>
-  <a
-    slot="image"
-    href={href}
-    class="block relative overflow-hidden"
-  >
-    <div class="aspect-video overflow-hidden">
+  <a slot="image" href={href} class={`block relative overflow-hidden rounded-md ${focusRing}`} tabindex="-1" aria-hidden="true">
+    <!-- 16:9 box reserves space before the image loads (no layout shift). -->
+    <div class="aspect-video overflow-hidden bg-background-tertiary">
       <img
         src={image.src}
-        alt={image.alt}
-        class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+        alt=""
+        width="1200"
+        height="675"
+        class="object-cover w-full h-full motion-safe:transition-transform motion-safe:duration-500 group-hover:scale-[1.03]"
         loading="lazy"
+        decoding="async"
       />
     </div>
 
@@ -63,43 +68,47 @@ const {
     )}
   </a>
 
-  {time && <span slot="time">{time}</span>}
+  {time && (
+    <time slot="time" datetime={dateTime}>{time}</time>
+  )}
 
-  <a slot="title" href={href} class="block">
-    <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-primary transition-colors">
+  <h2 slot="title" class="font-display text-xl font-medium leading-snug mb-2 text-text">
+    <a href={href} class={`block rounded-sm group-hover:text-primary transition-colors ${focusRing}`}>
       {title}
-    </h2>
-  </a>
+    </a>
+  </h2>
 
   {description && (
-    <p slot="description" class="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-4">
+    <p slot="description" class="text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">
       {description}
     </p>
   )}
 
   <div slot="actions">
     {tags.length > 0 && (
-      <div class="flex flex-wrap gap-2 mb-4">
+      <ul class="flex flex-wrap gap-2 mb-2 list-none p-0 m-0" aria-label="Tags">
         {tags.slice(0, 3).map((tag) => (
-          <a
-            href={tag.href}
-            class="text-xs px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-          >
-            #{tag.label}
-          </a>
+          <li>
+            <a
+              href={tag.href}
+              class={`inline-flex items-center min-h-8 text-xs px-3 rounded-full bg-background-tertiary text-text-secondary hover:bg-primary hover:text-white transition-colors ${focusRing}`}
+            >
+              #{tag.label}
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
     )}
 
     {cta && (
       <a
         href={cta.href}
-        class="inline-flex items-center px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-medium text-sm"
+        class={`inline-flex items-center gap-1 min-h-11 px-4 rounded-full bg-primary text-white hover:bg-primary-dark transition-colors font-medium text-sm ${focusRing}`}
       >
         {cta.label}
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"
+          class="h-4 w-4 motion-safe:transition-transform group-hover:translate-x-1"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

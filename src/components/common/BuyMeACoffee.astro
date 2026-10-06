@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   class?: string;
 }
@@ -6,27 +8,16 @@ interface Props {
 const { class: customClass = "" } = Astro.props;
 ---
 
-<div class={`px-2 ${customClass}`}>
-  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Support</h2>
-  <div class="pl-2">
-    <a 
-      href="https://buymeacoffee.com/chinghsinc" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 font-medium text-sm shadow-lg hover:shadow-xl"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4 mr-2"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-      </svg>
-      Buy Me a Coffee
-    </a>
-  </div>
-</div>
-
+<section class={customClass} aria-labelledby="support-title">
+  <h2 id="support-title" class="font-display text-xs uppercase tracking-[0.25em] text-text-muted mb-4">Support</h2>
+  <a
+    href="https://buymeacoffee.com/chinghsinc"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 min-h-11 px-5 rounded-full border border-border text-sm font-medium text-text hover:border-primary hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+  >
+    <Icon name="lets-icons:drink-light" class="w-5 h-5" aria-hidden="true" />
+    Buy me a coffee
+    <span class="sr-only">(opens in a new tab)</span>
+  </a>
+</section>

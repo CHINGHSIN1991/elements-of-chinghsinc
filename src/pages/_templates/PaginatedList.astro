@@ -1,8 +1,11 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import Pagination from '../../components/common/Pagination.astro';
+import PageHeader from '../../components/common/PageHeader.astro';
+import CategoryFilter from '../../components/common/CategoryFilter.astro';
+import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
-import type { GetStaticPathsOptions } from 'astro';
+import type { GetStaticPathsOptions, Page } from 'astro';
 import { getPublishedCollection, sortAndLimit, type ContentCollectionKey } from '../../ts/utils';
 
 export function createGetStaticPaths(collectionName: ContentCollectionKey, pageSize = 6) {
@@ -22,15 +25,28 @@ interface PaginatedListProps<T extends ContentCollectionKey = ContentCollectionK
   collectionName: ContentCollectionKey;
   cardComponent: AstroComponentLike;
   sidebarComponents: Array<{ component: AstroComponentLike; props?: Record<string, unknown> }>;
-  page: {
-    data: CollectionEntry<T>[];
-    url: {
-      prev?: string;
-      next?: string;
-    };
-  };
+  page: Page<CollectionEntry<T>>;
   title?: string;
+  eyebrow?: string;
+  description?: string;
 }
+
+const COPY: Record<ContentCollectionKey, { title: string; eyebrow: string; description: string; unit: string; basePath: string }> = {
+  projects: {
+    title: 'Projects',
+    eyebrow: 'Work',
+    description: 'Selected case studies across product, interface and spatial design — filter by category or browse the full archive.',
+    unit: 'projects',
+    basePath: '/project',
+  },
+  posts: {
+    title: 'Blog',
+    eyebrow: 'Journal',
+    description: 'Notes on design, engineering and the space between them.',
+    unit: 'posts',
+    basePath: '/blog',
+  },
+};
 
 const {
   collectionName,
@@ -38,63 +54,72 @@ const {
   sidebarComponents = [],
   page,
   title,
+  eyebrow,
+  description,
 } = Astro.props as PaginatedListProps;
 
+const copy = COPY[collectionName];
 const itemPropName = collectionName.endsWith('s') ? collectionName.slice(0, -1) : 'item';
 const gridClass = collectionName === 'projects'
-  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12'
+  ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'
   : 'grid grid-cols-1 lg:grid-cols-2 gap-6';
-const cardWrapperClass = collectionName === 'projects'
-  ? 'bg-white dark:bg-background-secondary rounded-lg overflow-hidden shadow-dark border border-gray-100 dark:border-gray-700 hover:shadow-dark-lg transition-all duration-300'
-  : '';
+
+const total = page?.total ?? page?.data?.length ?? 0;
+const meta = total > 0 ? `${total} ${copy.unit}` : undefined;
 ---
 
-<MainLayout {title}>
-  <section
-    class="container mx-auto px-4 py-16"
-  >
-    <div class="flex gap-8 max-w-7xl mx-auto">
-      <aside class="w-64 shrink-0 hidden lg:block">
-        <div class="sticky-navbar-safe space-y-8">
+<MainLayout title={title ?? copy.title} description={description ?? copy.description}>
+  <section class="container py-12 md:py-16">
+    <PageHeader
+      title={title ?? copy.title}
+      eyebrow={eyebrow ?? copy.eyebrow}
+      description={description ?? copy.description}
+      meta={meta}
+    >
+      <CategoryFilter collectionName={collectionName} basePath={copy.basePath} class="mt-8" />
+    </PageHeader>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[14rem_1fr] gap-10 xl:gap-14">
+      <aside class="hidden lg:block">
+        <div class="sticky-navbar-safe space-y-10">
           {sidebarComponents.map(({ component: Component, props }) => (
             <Component {...props} />
           ))}
         </div>
       </aside>
 
-      <div class="flex-grow mt-8">
+      <div class="min-w-0">
         {page && page.data?.length > 0 ? (
           <>
             <div class={gridClass}>
               {page.data.map(item => (
-                cardWrapperClass ? (
-                  <div class={cardWrapperClass}>
-                    <CardComponent {...{ [itemPropName]: item }} />
-                  </div>
-                ) : (
-                  <CardComponent {...{ [itemPropName]: item }} />
-                )
+                <CardComponent {...{ [itemPropName]: item }} />
               ))}
             </div>
 
-            <div class="my-12 flex justify-between">
-              <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+            <div class="mt-12">
+              <Pagination
+                prevUrl={page.url.prev}
+                nextUrl={page.url.next}
+                currentPage={page.currentPage}
+                lastPage={page.lastPage}
+              />
             </div>
           </>
         ) : (
-          <div class="flex flex-col items-center justify-center py-20 text-text-secondary bg-background-secondary rounded-lg shadow-inner">
-            <div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-400 mb-4">
-              <span class="text-2xl">!</span>
-            </div>
-            <h2 class="text-2xl font-semibold mb-2">
+          <div class="flex flex-col items-center justify-center text-center py-20 px-6 rounded-2xl border border-border bg-background-secondary">
+            <span class="inline-flex w-12 h-12 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-primary)_12%,transparent)] text-primary mb-5">
+              <Icon name="lets-icons:folder-open-light" class="w-6 h-6" aria-hidden="true" />
+            </span>
+            <h2 class="font-display text-2xl font-medium text-text mb-2">
               尚無{collectionName === 'posts' ? '文章' : '專案'}
             </h2>
-            <p class="text-center max-w-md mb-8">
+            <p class="max-w-md text-text-secondary mb-8">
               目前尚未有任何{collectionName === 'posts' ? '文章' : '專案作品'}，請稍後再查看。
             </p>
             <a
               href={import.meta.env.BASE_URL}
-              class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+              class="inline-flex items-center gap-2 min-h-11 px-6 rounded-full bg-primary text-white font-medium hover:bg-primary-dark transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               返回首頁
             </a>

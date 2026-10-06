@@ -1,9 +1,12 @@
 ---
 import { type CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import MainLayout from '../../layouts/MainLayout.astro';
 import CategoryList from '../../components/common/CategoryList.astro';
 import LatestItems from '../../components/common/LatestItems.astro';
-import { slugify, getPublishedCollection, type ContentCollectionKey } from '../../ts/utils';
+import PageHeader from '../../components/common/PageHeader.astro';
+import CategoryFilter from '../../components/common/CategoryFilter.astro';
+import { slugify, sortAndLimit, getPublishedCollection, type ContentCollectionKey } from '../../ts/utils';
 
 export function createGetStaticPaths(collection: ContentCollectionKey) {
   return async function getStaticPaths() {
@@ -51,36 +54,52 @@ const {
   allHref
 } = Astro.props as CategoryPageProps;
 
+const sortedItems = sortAndLimit(items);
 const title = `${category} ${itemLabel}分類`;
 const description = `查看所有 ${category} 分類的${itemLabel}`;
+const eyebrow = categoryListProps.collectionName === 'projects' ? 'Work · Category' : 'Journal · Category';
+const gridClass = categoryListProps.collectionName === 'projects'
+  ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'
+  : 'grid grid-cols-1 lg:grid-cols-2 gap-6';
 ---
 
 <MainLayout title={title} description={description}>
-  <section
-    class="container mx-auto px-4 py-16"
-    aria-label={`分類${itemLabel}列表`}
-  >
-    <div class="flex gap-8 max-w-7xl mx-auto">
-      <aside class="w-64 shrink-0 hidden lg:block">
-        <div class="sticky-navbar-safe space-y-8">
-          <CategoryList {...categoryListProps} currentCategory={category} />
+  <section class="container py-12 md:py-16" aria-label={`分類${itemLabel}列表`}>
+    <PageHeader
+      title={category}
+      eyebrow={eyebrow}
+      description={description}
+      meta={`${sortedItems.length} ${itemLabel}`}
+    >
+      <CategoryFilter
+        collectionName={categoryListProps.collectionName}
+        basePath={categoryListProps.basePath}
+        currentCategory={category}
+        class="mt-8"
+      />
+    </PageHeader>
 
+    <div class="grid grid-cols-1 lg:grid-cols-[14rem_1fr] gap-10 xl:gap-14">
+      <aside class="hidden lg:block">
+        <div class="sticky-navbar-safe space-y-10">
+          <CategoryList {...categoryListProps} currentCategory={category} />
           <LatestItems collectionName={categoryListProps.collectionName} linkPrefix={categoryListProps.basePath} limit={5} />
         </div>
       </aside>
 
-      <div class="flex-grow mt-8">
-        <h1 class="text-3xl font-bold mb-6">{title}</h1>
-        <p class="mb-8">{description}</p>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {items.map((item) => (
+      <div class="min-w-0">
+        <div class={gridClass}>
+          {sortedItems.map((item) => (
             <CardComponent {...{ [itemPropName]: item }} />
           ))}
         </div>
 
-        <div class="mt-12 text-center">
-          <a href={allHref} class="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
+        <div class="mt-12">
+          <a
+            href={allHref}
+            class="inline-flex items-center gap-2 min-h-11 px-5 rounded-full border border-border text-sm font-medium text-text hover:border-primary hover:text-primary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <Icon name="lets-icons:expand-left-light" class="w-5 h-5" aria-hidden="true" />
             所有{itemLabel}
           </a>
         </div>

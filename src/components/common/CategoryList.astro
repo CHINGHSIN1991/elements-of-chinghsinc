@@ -22,21 +22,27 @@ const categoryCounts = categories.reduce((acc, category) => {
   };
 }, {} as Record<string, number>);
 ---
-<div class="px-2">
-  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{heading}</h2>
-  <ul class="space-y-1">
-    {categories.map(cat => (
-      <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
-        <a
-          href={`${basePath}/category/${slugify(cat)}`}
-          class={`block hover:text-primary transition-colors flex justify-between items-center text-xs ${cat === currentCategory ? 'text-primary font-medium' : 'text-text-secondary'}`}
-        >
-          <span>{cat}</span>
-          <span class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded-full text-xs opacity-70">
-            {categoryCounts[cat]}
-          </span>
-        </a>
-      </li>
-    ))}
+{categories.length > 0 && (
+<nav aria-label={heading}>
+  <h2 class="font-display text-xs uppercase tracking-[0.25em] text-text-muted mb-4">{heading}</h2>
+  <ul class="space-y-1 list-none m-0 p-0">
+    {categories.map(cat => {
+      const active = cat === currentCategory;
+      return (
+        <li>
+          <a
+            href={`${basePath}/category/${slugify(cat)}`}
+            aria-current={active ? 'page' : undefined}
+            class={`flex items-center justify-between gap-3 -mx-2 px-2 min-h-10 rounded-md text-sm transition-colors duration-200 hover:bg-background-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+              active ? 'text-primary font-medium' : 'text-text-secondary hover:text-text'
+            }`}
+          >
+            <span>{cat}</span>
+            <span class="text-xs tabular-nums text-text-muted">{categoryCounts[cat]}</span>
+          </a>
+        </li>
+      );
+    })}
   </ul>
-</div>
+</nav>
+)}

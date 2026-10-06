@@ -73,10 +73,8 @@ img {
 }
 
 /* navbar related global styles */
-:global(main) {
-  padding-top: var(
-    --navbar-height
-  ); /* ensure main content is not covered by navbar */
+main {
+  padding-top: var(--navbar-height); /* keep content clear of the fixed navbar */
 }
 
 /* sticky element */

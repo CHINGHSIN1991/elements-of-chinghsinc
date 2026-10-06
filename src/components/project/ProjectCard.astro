@@ -1,6 +1,6 @@
 ---
 import ContentCard from "../common/ContentCard.astro";
-import { slugify, formatDate } from "../../ts/utils";
+import { slugify, formatDate, toDateAttr } from "../../ts/utils";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
@@ -22,6 +22,7 @@ const tagLinks = (tags || []).map((tag: string) => ({
   href={href}
   title={title}
   time={formatDate(new Date(date))}
+  dateTime={toDateAttr(date)}
   description={description}
   image={{ src: imageUrl, alt: title }}
   tags={tagLinks}

@@ -1,11 +1,13 @@
 ---
 const { class: customClass = "" } = Astro.props;
 ---
-<article class={`card h-full flex flex-col group bg-background border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 ${customClass}`}>
+<article
+  class={`card group h-full flex flex-col overflow-hidden rounded-2xl border border-border bg-background-secondary motion-safe:transition-[transform,border-color,box-shadow] motion-safe:duration-300 hover:border-primary hover:shadow-md motion-safe:hover:-translate-y-1 ${customClass}`}
+>
   <slot name="image" />
-  <div class="p-5 flex-grow flex flex-col">
+  <div class="p-5 md:p-6 flex-grow flex flex-col">
     <div class="mb-auto">
-      <div class="flex items-center text-text-secondary text-sm mb-2">
+      <div class="flex items-center text-text-muted text-sm mb-2 tabular-nums">
         <slot name="time" />
       </div>
       <slot name="title" />
@@ -16,18 +18,3 @@ const { class: customClass = "" } = Astro.props;
     </div>
   </div>
 </article>
-
-<style>
-  .card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>

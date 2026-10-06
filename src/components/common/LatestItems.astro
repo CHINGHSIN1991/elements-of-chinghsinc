@@ -1,39 +1,39 @@
 ---
-import { slugify, formatDate, sortAndLimit, getPublishedCollection, type ContentCollectionKey } from "../../ts/utils";
+import { slugify, formatDate, toDateAttr, sortAndLimit, getPublishedCollection, type ContentCollectionKey } from "../../ts/utils";
 
 interface Props {
   collectionName: ContentCollectionKey;
   linkPrefix: string;
   limit?: number;
+  heading?: string;
 }
 
-const { collectionName, linkPrefix, limit = 5 } = Astro.props as Props;
+const { collectionName, linkPrefix, limit = 5, heading } = Astro.props as Props;
 
 const allItems = await getPublishedCollection(collectionName);
 
-// 獲取熱門項目（按日期排序，取前N篇）
-const popularItems = sortAndLimit(allItems, limit);
-const title = `Popular ${collectionName.charAt(0).toUpperCase() + collectionName.slice(1)}`;
+// Newest first — the list is sorted by date, so label it as such.
+const latestItems = sortAndLimit(allItems, limit);
+const title = heading ?? `Latest ${collectionName.charAt(0).toUpperCase() + collectionName.slice(1)}`;
 ---
 
-<div class="px-2">
-  <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">{title}</h2>
-  <ul class="space-y-1">
-    {popularItems.map(item => (
-      <li class="hover:bg-gray-100 dark:hover:bg-background-secondary transition-colors duration-300 px-2 py-1 rounded-md">
-        <a
-          href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
-          class="block hover:text-primary transition-colors"
-        >
-          <h3 class="font-normal text-xs line-clamp-2 text-text-secondary">
-            {item.data.title}
-          </h3>
-          <span class="text-xs text-text-muted mt-1 block opacity-70">
-            {formatDate(new Date(item.data.date))}
-          </span>
-        </a>
-      </li>
-    ))}
-  </ul>
-</div>
-
+{latestItems.length > 0 && (
+  <section aria-label={title}>
+    <h2 class="font-display text-xs uppercase tracking-[0.25em] text-text-muted mb-4">{title}</h2>
+    <ul class="space-y-1 list-none m-0 p-0">
+      {latestItems.map(item => (
+        <li>
+          <a
+            href={`${linkPrefix}/${item.id || slugify(item.data.title)}`}
+            class="block -mx-2 px-2 py-2 rounded-md hover:bg-background-secondary transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            <span class="block text-sm text-text-secondary line-clamp-2">{item.data.title}</span>
+            <time datetime={toDateAttr(item.data.date)} class="mt-1 block text-xs text-text-muted tabular-nums">
+              {formatDate(new Date(item.data.date))}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

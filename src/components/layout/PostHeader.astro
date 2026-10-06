@@ -1,5 +1,10 @@
 ---
-import { formatDate } from "../../ts/utils";
+import { formatDate, toDateAttr, slugify } from "../../ts/utils";
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
 
 interface Props {
   title: string;
@@ -11,28 +16,88 @@ interface Props {
     src: string;
     alt: string;
   };
+  /** Where the category chip links to, e.g. "/project/category". */
+  categoryBasePath?: string;
+  /** Breadcrumb trail rendered above the title. The last crumb is the current page. */
+  breadcrumbs?: Crumb[];
 }
 
-const { title, description, date, category, designers, cover } = Astro.props as Props;
+const {
+  title,
+  description,
+  date,
+  category,
+  designers,
+  cover,
+  categoryBasePath,
+  breadcrumbs = [],
+} = Astro.props as Props;
+
+const categoryHref = categoryBasePath ? `${categoryBasePath}/${slugify(category)}` : undefined;
+const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
 ---
 
-<header class="relative h-64 md:h-96">
+<!--
+  Full-bleed cover. Starts under the fixed navbar (main's top padding is
+  cancelled with a negative margin) and reserves its own nav-height padding,
+  so the copy never sits behind the bar.
+-->
+<header class="relative isolate -mt-[var(--navbar-height)] pt-[var(--navbar-height)] min-h-[60svh] md:min-h-[70svh] flex flex-col justify-end bg-background-secondary text-white">
   {cover && (
-    <img src={cover.src} alt={cover.alt} class="absolute inset-0 w-full h-full object-cover" />
+    <img
+      src={cover.src}
+      alt={cover.alt}
+      class="absolute inset-0 -z-20 w-full h-full object-cover"
+      width="1600"
+      height="900"
+      fetchpriority="high"
+      decoding="async"
+    />
   )}
-  <div class="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-white px-4 text-center">
-    <div class="mb-2 flex items-center gap-4">
-      <span class="px-3 py-1 bg-primary rounded-full text-xs">{category}</span>
-      <time class="text-xs">{formatDate(new Date(date))}</time>
+  <!-- Gradient scrim keeps light text at ≥4.5:1 regardless of the photo. -->
+  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-[#0b1020]/95 via-[#0b1020]/60 to-[#0b1020]/25" aria-hidden="true"></div>
+
+  <div class="container pb-10 md:pb-14 pt-10">
+    {breadcrumbs.length > 0 && (
+      <nav aria-label="Breadcrumb" class="mb-6">
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-white/80 list-none m-0 p-0">
+          {breadcrumbs.map((crumb, i) => {
+            const isLast = i === breadcrumbs.length - 1;
+            return (
+              <li class="flex items-center gap-2 min-w-0">
+                {crumb.href && !isLast ? (
+                  <a href={crumb.href} class={`inline-flex items-center min-h-8 rounded-sm hover:text-white underline-offset-4 hover:underline ${focusRing}`}>{crumb.label}</a>
+                ) : (
+                  <span class="inline-flex items-center min-h-8 text-white truncate max-w-[16rem] sm:max-w-none" aria-current={isLast ? 'page' : undefined}>{crumb.label}</span>
+                )}
+                {!isLast && <span aria-hidden="true" class="text-white/50">/</span>}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+    )}
+
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+      {categoryHref ? (
+        <a href={categoryHref} class={`label inline-flex items-center min-h-8 px-3 ${focusRing}`}>{category}</a>
+      ) : (
+        <span class="label inline-flex items-center min-h-8 px-3">{category}</span>
+      )}
+      <time datetime={toDateAttr(date)} class="text-sm text-white/85 tabular-nums">{formatDate(new Date(date))}</time>
     </div>
-    <h1 class="text-3xl md:text-4xl font-bold mb-2">{title}</h1>
-    <p class="max-w-2xl">{description}</p>
+
+    <h1 class="font-display font-medium tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.05] max-w-4xl mb-4">
+      {title}
+    </h1>
+    <p class="max-w-2xl text-base md:text-lg text-white/85 leading-relaxed">{description}</p>
+
     {designers.length > 0 && (
-      <div class="mt-4 flex flex-wrap gap-2">
-        {designers.map((designer: string) => (
-          <span class="bg-primary/70 px-2 py-1 rounded">{designer}</span>
-        ))}
-      </div>
+      <p class="mt-6 text-sm text-white/85">
+        <span class="text-white/60">By</span>
+        {' '}
+        {designers.join(', ')}
+      </p>
     )}
   </div>
 </header>
