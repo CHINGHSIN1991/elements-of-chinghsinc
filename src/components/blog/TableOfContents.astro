@@ -1,0 +1,100 @@
+---
+/**
+ * "On this page" navigation built from the rendered Markdown headings.
+ * Highlights the section currently in view (IntersectionObserver, no motion).
+ */
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  /** Heading depths to include. Defaults to h2 + h3. */
+  minDepth?: number;
+  maxDepth?: number;
+  heading?: string;
+  class?: string;
+}
+
+const {
+  headings,
+  minDepth = 2,
+  maxDepth = 3,
+  heading = 'On this page',
+  class: className = '',
+} = Astro.props as Props;
+
+const items = headings.filter((h) => h.depth >= minDepth && h.depth <= maxDepth);
+
+// Static class map — UnoCSS cannot see classes built from template strings.
+const INDENT: Record<number, string> = { 2: '', 3: 'pl-4', 4: 'pl-8' };
+---
+
+{items.length > 0 && (
+  <nav class={`toc ${className}`} aria-labelledby="toc-title" data-toc>
+    <h2 id="toc-title" class="font-display text-xs uppercase tracking-[0.25em] text-text-muted mb-4">{heading}</h2>
+    <ol class="list-none m-0 p-0 border-l border-border">
+      {items.map((h) => (
+        <li class={INDENT[h.depth] ?? 'pl-8'}>
+          <a
+            href={`#${h.slug}`}
+            data-toc-link={h.slug}
+            class="toc-link block -ml-px border-l-2 border-transparent pl-4 py-1.5 text-sm text-text-secondary hover:text-text transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<style>
+  .toc-link[aria-current='true'] {
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  function setupToc() {
+    const tocs = document.querySelectorAll<HTMLElement>('[data-toc]');
+    if (tocs.length === 0) return;
+
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+    const targets = links
+      .map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+
+    const setActive = (id: string) => {
+      links.forEach((link) => {
+        const active = link.dataset.tocLink === id;
+        if (active) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    // Track every heading's visibility; the active one is the first heading
+    // whose top has passed the (navbar-offset) reading line.
+    const visible = new Map<string, boolean>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => visible.set(e.target.id, e.isIntersecting));
+        const current = targets.find((t) => visible.get(t.id));
+        if (current) {
+          setActive(current.id);
+          return;
+        }
+        // Nothing in the band: pick the last heading above the viewport.
+        const above = targets.filter((t) => t.getBoundingClientRect().top < 120);
+        if (above.length) setActive(above[above.length - 1].id);
+      },
+      { rootMargin: '-96px 0px -70% 0px', threshold: 0 }
+    );
+    targets.forEach((t) => observer.observe(t));
+
+    document.addEventListener('astro:before-swap', () => observer.disconnect(), { once: true });
+  }
+
+  document.addEventListener('astro:page-load', setupToc);
+</script>

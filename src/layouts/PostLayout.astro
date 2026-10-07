@@ -9,6 +9,7 @@ interface PostFrontmatter {
   description: string;
   date: Date;
   category: string;
+  author?: string;
   designers?: string[];
   image?: {
     src: string;
@@ -27,29 +28,30 @@ const {
   description,
   date,
   category,
+  author,
   designers,
   image,
   images,
 } = post.data as PostFrontmatter;
 
 // 處理 cover 屬性
-const coverData = image ? { src: image.src, alt: image.alt } : undefined;
+const coverData = image ? { src: image.src, alt: image.alt || title } : undefined;
+// Posts carry a single `author`; projects carry `designers`. Show whichever exists.
+const byline = designers?.length ? designers : author ? [author] : [];
 ---
 
-<BaseContentLayout {title} {description} image={image} {images} post={post.data}>
-  <PostHeader
-    {title} {description} {date} {category} cover={coverData} designers={designers || []}
-    categoryBasePath="/blog/category"
-    breadcrumbs={[
-      { label: 'Home', href: '/' },
-      { label: 'Blog', href: '/blog' },
-      { label: category, href: `/blog/category/${slugify(category)}` },
-      { label: title },
-    ]}
-  />
-  <div class="flex max-w-7xl mx-auto">
-    <div class="flex-grow">
-      <slot />
-    </div>
-  </div>
+<BaseContentLayout {title} {description} image={coverData} {images} post={post.data}>
+  <article>
+    <PostHeader
+      {title} {description} {date} {category} cover={coverData} designers={byline}
+      categoryBasePath="/blog/category"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Blog', href: '/blog' },
+        { label: category, href: `/blog/category/${slugify(category)}` },
+        { label: title },
+      ]}
+    />
+    <slot />
+  </article>
 </BaseContentLayout>

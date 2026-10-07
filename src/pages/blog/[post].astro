@@ -1,259 +1,170 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import PostLayout from '../../layouts/PostLayout.astro';
-import CategoryList from '../../components/common/CategoryList.astro';
 import RelatedItems from '../../components/common/RelatedItems.astro';
 import TagList from '../../components/common/TagList.astro';
 import BuyMeACoffee from '../../components/common/BuyMeACoffee.astro';
-import { slugify, formatDate, toDateAttr, getPublishedCollection } from '../../ts/utils';
+import TableOfContents from '../../components/blog/TableOfContents.astro';
+import { slugify, sortAndLimit, getPublishedCollection } from '../../ts/utils';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const allPosts = await getPublishedCollection('posts');
-  return allPosts.map((post) => ({
+  // Newest first, so "older" walks back in time like the listing.
+  const allPosts = sortAndLimit(await getPublishedCollection('posts'));
+  return allPosts.map((post, i) => ({
     params: { post: post.id },
-    props: { post }
+    props: {
+      post,
+      newer: allPosts[i - 1],
+      older: allPosts[i + 1],
+    },
   }));
 }
 
 interface PostPageProps {
   post: CollectionEntry<'posts'>;
+  newer?: CollectionEntry<'posts'>;
+  older?: CollectionEntry<'posts'>;
 }
 
-const { post } = Astro.props as PostPageProps;
+const { post, newer, older } = Astro.props as PostPageProps;
 
 if (!post) {
   return Astro.redirect('/404');
 }
 
 const { Content, headings } = await render(post);
+
+// Reading time: CJK is read per character, Latin per word.
+const body = post.body ?? '';
+const cjkChars = (body.match(/[㐀-鿿豈-﫿]/g) ?? []).length;
+const latinWords = body
+  .replace(/[㐀-鿿豈-﫿]/g, ' ')
+  .split(/\s+/)
+  .filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.round(cjkChars / 350 + latinWords / 220));
+
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+
+const focusRing = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+const navCard = `group flex flex-col gap-1 rounded-2xl border border-border bg-background-secondary p-5 min-h-24 hover:border-primary transition-colors duration-200 ${focusRing}`;
 ---
 
 <PostLayout post={post}>
-  <div class="flex max-w-7xl mx-auto">
-    <!-- left sidebar -->
-    <aside class="w-64 shrink-0 hidden md:block py-16 px-2">
-        <div class="sticky-navbar-safe space-y-8">
-        <!-- category list -->
-        <CategoryList
-          collectionName="posts"
-          heading="Categories"
-          basePath="/blog"
-          currentCategory={post.data.category}
-        />
-
-          <!-- related posts -->
-          <RelatedItems currentItem={post} collection="posts" linkPrefix="/blog" limit={3} />
-      </div>
-    </aside>
-
-    <!-- main content -->
-    <div class="flex-grow max-w-3xl py-16 px-4 md:px-8 shadow-dark-lg dark:shadow-dark-xl">
-      
-      <!-- Mobile category and related posts -->
-      <div class="block md:hidden mb-8 space-y-6">
-        <div class="bg-background-secondary p-4 rounded-lg">
-          <CategoryList
-            collectionName="posts"
-            heading="Categories"
-            basePath="/blog"
-            currentCategory={post.data.category}
-          />
-        </div>
-          <div class="bg-background-secondary p-4 rounded-lg">
-            <RelatedItems currentItem={post} collection="posts" linkPrefix="/blog" limit={3} />
-          </div>
-      </div>
-      <!-- article title and basic info -->
-      <header class="mb-8">
-        <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-        <div class="flex flex-wrap gap-4 text-text-secondary">
-          <div class="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <time datetime={toDateAttr(post.data.date)}>{formatDate(new Date(post.data.date))}</time>
-          </div>
-          <div class="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-            </svg>
-            <a href={`/blog/category/${slugify(post.data.category)}`} class="hover:text-primary">
-              {post.data.category}
-            </a>
-          </div>
-        </div>
-      </header>
-      <!-- article description -->
-      <div class="mb-8">
-        <p class="text-lg text-text-secondary italic">
-          {post.data.description}
+  <div class="container py-12 md:py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-12 xl:gap-16">
+      <!-- Article -->
+      <div class="min-w-0 max-w-3xl">
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-text-muted mb-8">
+          <span class="inline-flex items-center gap-1.5">
+            <Icon name="lets-icons:time-light" class="w-4 h-4" aria-hidden="true" />
+            {readingMinutes} min read
+          </span>
+          <span aria-hidden="true">·</span>
+          <span>{tocHeadings.filter((h) => h.depth === 2).length} sections</span>
         </p>
-      </div>
-      <!-- tag list -->
-      {post.data.tags && post.data.tags.length > 0 && (
-        <div class="mb-8">
-          <TagList tags={post.data.tags} basePath="/blog/tag" />
-        </div>
-      )}
-      <!-- article content -->
-      <div class="prose prose-lg dark:prose-invert max-w-none">
-        <Content />
-      </div>
-    </div>
-    <!-- right sidebar -->
-    <aside class="w-64 shrink-0 hidden xl:block py-16 px-2">
-      <div class="sticky-navbar-safe space-y-4">
-        <div class="px-2">
-          <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Table of Contents</h2>
-          <div id="tocContent" class="space-y-4">
-            <div
-              id="tocCollapse"
-              class="toc-collapse"
-              data-state="expanded"
-            >
-              <div>
-                <nav id="tableOfContents" class="table-of-contents">
-                  <ul class="space-y-1">
-                    {headings.map(heading => (
-                      <li class={`pl-${(heading.depth - 1) * 4} hover:bg-background-tertiary transition-colors duration-300 px-2 py-1 rounded-md`}>
-                        <a
-                          href={`#${heading.slug}`}
-                          class="block hover:text-primary transition-colors text-xs text-text-secondary"
-                        >
-                          {heading.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              </div>
-            </div>
-            <div class="pl-2 space-y-0">
-              <button
-                id="backToTop"
-                class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
-              >
-                Back to Top
-              </button>
-              <button
-                id="expandAll"
-                class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
-                aria-expanded="true"
-                aria-controls="tocCollapse"
-              >
-                Expand All
-              </button>
-              <button
-                id="scrollToBottom"
-                class="w-full border-y py-1 text-xs text-text-muted hover:bg-background-secondary transition"
-              >
-                Scroll to Bottom
-              </button>
-            </div>
-          </div>
-        </div>
-        <BuyMeACoffee />
 
-        <div class="px-2">
-          <h2 class="text-lg font-medium mb-3 pl-2 text-text-muted">Article Info</h2>
-          <div class="space-y-2 text-xs pl-2">
-            <div class="flex justify-between">
-              <span class="text-text-muted">Word Count</span>
-              <span class="font-normal text-text-secondary">{post.body?.length || 0}</span>
+        {tocHeadings.length > 0 && (
+          <details class="lg:hidden mb-10 rounded-2xl border border-border bg-background-secondary open:pb-2">
+            <summary class={`flex items-center justify-between gap-3 cursor-pointer list-none min-h-12 px-5 font-medium text-text rounded-2xl ${focusRing} [&::-webkit-details-marker]:hidden`}>
+              On this page
+              <Icon name="lets-icons:expand-down-light" class="w-5 h-5 text-text-muted transition-transform duration-200 [details[open]_&]:rotate-180" aria-hidden="true" />
+            </summary>
+            <div class="px-5 pt-1">
+              <TableOfContents headings={headings} heading="" />
             </div>
-            <div class="flex justify-between">
-              <span class="text-text-muted">Sections</span>
-              <span class="font-normal text-text-secondary">{headings.length}</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-text-muted">Tags</span>
-              <span class="font-normal text-text-secondary">{post.data.tags?.length || 0}</span>
-            </div>
-          </div>
+          </details>
+        )}
+
+        <div class="prose dark:prose-invert max-w-none text-[1.0625rem] md:text-lg leading-relaxed">
+          <Content />
         </div>
+
+        {post.data.tags && post.data.tags.length > 0 && (
+          <footer class="mt-14 pt-8 border-t border-border">
+            <h2 class="font-display text-xs uppercase tracking-[0.25em] text-text-muted mb-4">Tags</h2>
+            <TagList tags={post.data.tags} basePath="/blog/tag" />
+          </footer>
+        )}
       </div>
-    </aside>
+
+      <!-- Sidebar -->
+      <aside class="min-w-0">
+        <div class="lg:sticky lg:top-24 space-y-10">
+          <TableOfContents headings={headings} class="hidden lg:block" />
+          <RelatedItems currentItem={post} collection="posts" linkPrefix="/blog" limit={3} heading="More posts" />
+          <BuyMeACoffee />
+        </div>
+      </aside>
+    </div>
+
+    <!-- Previous / next post -->
+    {(newer || older) && (
+      <nav aria-label="Post navigation" class="mt-16 pt-10 border-t border-border grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {newer ? (
+          <a href={`/blog/${newer.id}`} rel="prev" class={navCard}>
+            <span class="inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-text-muted">
+              <Icon name="lets-icons:expand-left-light" class="w-4 h-4" aria-hidden="true" />
+              Newer
+            </span>
+            <span class="font-display text-lg font-medium text-text group-hover:text-primary transition-colors">{newer.data.title}</span>
+          </a>
+        ) : <span aria-hidden="true"></span>}
+        {older && (
+          <a href={`/blog/${older.id}`} rel="next" class={`${navCard} sm:text-right sm:items-end`}>
+            <span class="inline-flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-text-muted">
+              Older
+              <Icon name="lets-icons:expand-right-light" class="w-4 h-4" aria-hidden="true" />
+            </span>
+            <span class="font-display text-lg font-medium text-text group-hover:text-primary transition-colors">{older.data.title}</span>
+          </a>
+        )}
+      </nav>
+    )}
+
+    <div class="mt-10 flex flex-wrap justify-center gap-4">
+      <a
+        href={`/blog/category/${slugify(post.data.category)}`}
+        class={`inline-flex items-center gap-2 min-h-11 px-5 rounded-full border border-border text-sm font-medium text-text hover:border-primary hover:text-primary transition-colors ${focusRing}`}
+      >
+        <Icon name="lets-icons:expand-left-light" class="w-5 h-5" aria-hidden="true" />
+        More in {post.data.category}
+      </a>
+      <a
+        href="#main-content"
+        class={`inline-flex items-center gap-2 min-h-11 px-5 rounded-full text-sm text-text-muted hover:text-text transition-colors ${focusRing}`}
+      >
+        <Icon name="lets-icons:expand-up-light" class="w-5 h-5" aria-hidden="true" />
+        Back to top
+      </a>
+    </div>
   </div>
 </PostLayout>
 
-<script>
-  import { setupScrollToTop, setupExpandAll, setupScrollToBottom } from '../../ts/scroll-utils';
-
-  setupScrollToTop('backToTop');
-  setupScrollToBottom('scrollToBottom');
-
-  const tocCollapse = document.getElementById('tocCollapse');
-
-  setupExpandAll('expandAll', 'Expand All', 'Collapse All', (expanded) => {
-    if (tocCollapse) {
-      tocCollapse.dataset.state = expanded ? 'expanded' : 'collapsed';
-    }
-  });
-
-  // smooth scroll to anchor
-  document.querySelectorAll('.table-of-contents a').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const href = link.getAttribute('href');
-      if (href) {
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    });
-  });
-</script>
-
-<style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
+<style is:global>
+  /* Article typography: display face for headings, token colours for text. */
   .prose {
-    max-width: none;
+    --un-prose-body: var(--color-text);
+    --un-prose-headings: var(--color-text);
+    --un-prose-links: var(--color-primary);
+    --un-prose-lists: var(--color-text-secondary);
+    --un-prose-hr: var(--color-border);
+    --un-prose-captions: var(--color-text-muted);
+    --un-prose-code: var(--color-text);
+    --un-prose-borders: var(--color-border);
+    --un-prose-bg-soft: var(--color-background-secondary);
   }
-
-  .toc-collapse {
-    display: grid;
-    grid-template-rows: 1fr;
-    transition: grid-template-rows 240ms ease, opacity 240ms ease;
+  .prose :is(h2, h3, h4) {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
-
-  .toc-collapse > div {
-    overflow: hidden;
+  .prose a {
+    text-underline-offset: 4px;
   }
-
-  .toc-collapse[data-state='collapsed'] {
-    grid-template-rows: 0fr;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .toc-collapse {
-      transition: none;
-    }
+  .prose img {
+    border-radius: 1rem;
   }
 </style>

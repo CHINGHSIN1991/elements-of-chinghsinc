@@ -9,14 +9,16 @@ interface Props {
 const { tags = [], basePath } = Astro.props as Props;
 ---
 {tags.length > 0 && (
-  <div class="flex flex-wrap gap-2">
+  <ul class="flex flex-wrap gap-2 list-none m-0 p-0" aria-label="Tags">
     {tags.map((tag: string) => (
-      <a
-        href={`${basePath}/${slugify(tag)}`}
-        class="px-3 py-1 bg-background-tertiary rounded-full text-sm hover:bg-primary hover:text-white transition-colors"
-      >
-        #{tag}
-      </a>
+      <li>
+        <a
+          href={`${basePath}/${slugify(tag)}`}
+          class="inline-flex items-center min-h-9 px-3 rounded-full bg-background-tertiary text-sm text-text-secondary hover:bg-primary hover:text-white transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          #{tag}
+        </a>
+      </li>
     ))}
-  </div>
+  </ul>
 )}
